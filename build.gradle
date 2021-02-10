@@ -23,10 +23,6 @@ subprojects {
 
     buildDir = 'target'
 
-    task hello << {
-        println "${project.name} - ${profile}"
-    }
-
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
     [compileJava, compileTestJava]*.options*.encoding = javaEncoding

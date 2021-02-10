@@ -29,7 +29,6 @@ logger("com.tistory.devyongsik.logger", INFO, ["STDOUT", "FILE"])
 logger("com.tistory.devyongsik.config", INFO, ["STDOUT"])
 logger("com.tistory.devyongsik.highlight", INFO, ["STDOUT"])
 logger("com.tistory.devyongsik.query", INFO, ["STDOUT"])
-logger("org.apache.lucene.analysis.kr", WARN, ["STDOUT"])
 logger("com.tistory.devyongsik", DEBUG, ["STDOUT"])
 logger("com.tistory.devyongsik.admin.IndexFileManageServiceImpl", DEBUG, ["STDOUT"])
 
