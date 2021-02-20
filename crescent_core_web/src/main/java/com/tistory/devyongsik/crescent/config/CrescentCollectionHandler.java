@@ -19,9 +19,12 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.thoughtworks.xstream.XStream;
@@ -35,8 +38,8 @@ import com.tistory.devyongsik.crescent.collection.entity.CrescentSortField;
 public class CrescentCollectionHandler {
 	private  Logger logger = LoggerFactory.getLogger(CrescentCollectionHandler.class);
 
-	@Value("#{systemProperties['runningMode'] == null ? 'real' : systemProperties['runningMode']}")
-	private String mode = null;
+	@Autowired
+	private Environment environment;
 
 	@Value("#{systemProperties['crescentHome'] == null ? 'default' : systemProperties['crescentHome']}")
 	private String crescentHomeLocation = null;
@@ -47,13 +50,14 @@ public class CrescentCollectionHandler {
 	
 	@PostConstruct
 	private void init() {
+		String activeProfile = environment.getActiveProfiles()[0];
 		
 		logger.info("init crescent collection handler....");
-		logger.info("running mode : {}, crescentHomeLocation : {}", mode, crescentHomeLocation);
+		logger.info("running mode : {}, crescentHomeLocation : {}", activeProfile, crescentHomeLocation);
 		
 		String xmlFileName = "collections.xml";
 		
-		if("test".equals(mode)) {
+		if("test".equals(activeProfile)) {
 			xmlFileName = "test-collections.xml";
 		}
 		
@@ -127,27 +131,14 @@ public class CrescentCollectionHandler {
 					Class<Analyzer> analyzerClass = (Class<Analyzer>) Class.forName(className);	
 					
 					if(constructorArgs == null || constructorArgs.trim().length() == 0) {
-						
 						analyzer = analyzerClass.newInstance();
-						
-					} else if ("true".equals(constructorArgs.toLowerCase()) || "false".equals(constructorArgs.toLowerCase())) {
-					
-						boolean booleanStr = Boolean.valueOf(constructorArgs);
-						Class<?>[] intArgsClass = new Class<?>[] {boolean.class};
-						Object[] intArgs = new Object[] {booleanStr};
-						
-						Constructor<Analyzer> intArgsConstructor = analyzerClass.getConstructor(intArgsClass);
-						analyzer = (Analyzer) intArgsConstructor.newInstance(intArgs);
-					
 					} else {
-						
-						Class<?> initArgClass = Class.forName(constructorArgs);
-						
-						Class<?>[] intArgsClass = new Class<?>[] {initArgClass.getClass()};
-						Object[] intArgs = new Object[] {initArgClass.newInstance()};
+						Version version = Version.parseLeniently(constructorArgs);
+						Class<?>[] intArgsClass = new Class<?>[] {Version.class};
+						Object[] initArgs = new Object[] {version};
 						
 						Constructor<Analyzer> intArgsConstructor = analyzerClass.getConstructor(intArgsClass);
-						analyzer = (Analyzer) intArgsConstructor.newInstance(intArgs);
+						analyzer = intArgsConstructor.newInstance(initArgs);
 					}
 					
 					if("indexing".equals(type)) {

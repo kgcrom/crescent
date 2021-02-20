@@ -1,12 +1,5 @@
 package com.tistory.devyongsik.utils;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
@@ -17,13 +10,21 @@ import com.tistory.devyongsik.crescent.index.indexer.CrescentIndexerExecutor;
 import com.tistory.devyongsik.crescent.search.searcher.CrescentDocSearcher;
 import com.tistory.devyongsik.crescent.search.searcher.CrescentSearcherManager;
 import com.tistory.devyongsik.crescent.search.service.SearchService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles(value = "test")
 @ContextConfiguration(locations = { 
 		"classpath:spring/applicationContext.xml",
  		"classpath:spring/action-config.xml"})
 public class CrescentTestCaseUtil {
-	
+
 	@Autowired
 	@Qualifier("crescentSearcherManager")
 	protected CrescentSearcherManager crescentSearcherManager;
@@ -49,10 +50,6 @@ public class CrescentTestCaseUtil {
 			",{\"title\":\"제목 입니다1\",\"dscr\":\"텍스트 입니다1\",\"creuser\":\"creuser1\",\"board_id\":\"1\"}" +
 			",{\"title\":\"제목 입니다2\",\"dscr\":\"텍스트 입니다2\",\"creuser\":\"creuser2\",\"board_id\":\"2\"}]}";
 
-	static {
-		System.setProperty("runningMode","test");
-	}
-	
 	public void init() {
 		initIndexFile();
 	}

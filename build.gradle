@@ -7,7 +7,7 @@ ext {
     DEFAULT_PROFILE = 'local'
     webProjects = ['crescent_core_web']
 
-    javaVersion = '1.7'
+    javaVersion = '1.8'
     javaEncoding = 'UTF-8'
     tmpDir = System.getProperty('java.io.tmpdir')
 }
@@ -29,9 +29,6 @@ subprojects {
 
     repositories {
         maven {
-            url "https://github.com/need4spd/need4spd-maven-repo/raw/master/snapshots"
-        }
-        maven {
             url "http://repository.springsource.com/maven/bundles/release"
         }
         maven {
@@ -45,7 +42,6 @@ subprojects {
         main {
             resources {
                 srcDir "${project.projectDir}/src/main/resources-${profile}"
-                //srcDir "${project.projectDir}/src/main/java"
             }
         }
     }
