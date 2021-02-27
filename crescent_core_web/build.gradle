@@ -1,14 +1,16 @@
-apply plugin: 'eclipse'
-apply plugin: 'eclipse-wtp'
-apply plugin: 'war'
+plugins {
+  id 'org.springframework.boot' version '2.4.3'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'java'
+}
 
 group = 'com.tistory.devyongsik'
 version = '0.5-SNAPSHOT'
 
 def versions = [
     lucene : "4.4.0",
-    slf4j  : "1.6.6",
-    logback: "1.0.13"
+    slf4j  : "1.7.25",
+    logback: "1.2.3"
 ]
 
 configurations {
@@ -19,106 +21,41 @@ configurations {
 
 dependencies {
   annotationProcessor 'org.projectlombok:lombok:1.18.12'
-  compile(
-      [group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'],
-      [group: 'junit', name: 'junit', version: '4.10'],
-      [group: 'org.apache.lucene', name: 'lucene-core', version: "${versions.lucene}"],
-      [group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: "${versions.lucene}"],
-      [group: 'org.apache.lucene', name: 'lucene-queries', version: "${versions.lucene}"],
-      [group: 'org.apache.lucene', name: 'lucene-queryparser', version: "${versions.lucene}"],
-      [group: 'org.slf4j', name: 'slf4j-api', version: "${versions.slf4j}"],
-      [group: 'org.apache.lucene', name: 'lucene-highlighter', version: "${versions.lucene}"],
-      [group: 'org.springframework', name: 'org.springframework.web.servlet', version: '3.1.2.RELEASE'],
-      [group: 'org.springframework', name: 'org.springframework.web', version: '3.1.2.RELEASE'],
-      [group: 'org.springframework', name: 'org.springframework.core', version: '3.1.2.RELEASE'],
-      [group: 'org.springframework', name: 'org.springframework.test', version: '3.1.2.RELEASE'],
-      [group: 'jaxen', name: 'jaxen', version: '1.1.4'],
-      [group: 'dom4j', name: 'dom4j', version: '1.6.1'],
-      [group: 'javax.servlet', name: 'servlet-api', version: '2.5'],
-      [group: 'commons-lang', name: 'commons-lang', version: '2.6'],
-      [group: 'commons-logging', name: 'commons-logging', version: '1.1.1'],
-      [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.3'],
-      [group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.0'],
-      [group: 'javax.servlet', name: 'jstl', version: '1.2'],
-      [group: 'ch.qos.logback', name: 'logback-core', version: "${versions.logback}"],
-      [group: 'ch.qos.logback', name: 'logback-classic', version: "${versions.logback}"],
-      [group: 'org.slf4j', name: 'log4j-over-slf4j', version: '1.7.5'],
-      [group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.1.6'],
-      [group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'],
-      [group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'],
-      [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
-      [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3'],
-      [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3'],
-      [group: 'org.projectlombok', name: 'lombok', version: '1.18.12']
-  )
+  annotationProcessor('org.springframework.boot:spring-boot-configuration-processor')
 
-  testRuntime(
-      [group: 'junit', name: 'junit', version: '4.10'],
-      [group: 'org.apache.lucene', name: 'lucene-core', version: "${versions.lucene}"],
-      [group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: "${versions.lucene}"],
-      [group: 'org.apache.lucene', name: 'lucene-queries', version: "${versions.lucene}"],
-      [group: 'org.apache.lucene', name: 'lucene-queryparser', version: "${versions.lucene}"],
-      [group: 'org.slf4j', name: 'slf4j-api', version: "${versions.slf4j}"],
-      [group: 'org.apache.lucene', name: 'lucene-highlighter', version: "${versions.lucene}"],
-      [group: 'org.springframework', name: 'org.springframework.web.servlet', version: '3.1.2.RELEASE'],
-      [group: 'org.springframework', name: 'org.springframework.web', version: '3.1.2.RELEASE'],
-      [group: 'org.springframework', name: 'org.springframework.core', version: '3.1.2.RELEASE'],
-      [group: 'org.springframework', name: 'org.springframework.test', version: '3.1.2.RELEASE'],
-      [group: 'jaxen', name: 'jaxen', version: '1.1.4'],
-      [group: 'dom4j', name: 'dom4j', version: '1.6.1'],
-      [group: 'javax.servlet', name: 'servlet-api', version: '2.5'],
-      [group: 'commons-lang', name: 'commons-lang', version: '2.6'],
-      [group: 'commons-logging', name: 'commons-logging', version: '1.1.1'],
-      [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.3'],
-      [group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.0'],
-      [group: 'ch.qos.logback', name: 'logback-core', version: "${versions.logback}"],
-      [group: 'ch.qos.logback', name: 'logback-classic', version: "${versions.logback}"],
-      [group: 'org.slf4j', name: 'log4j-over-slf4j', version: '1.7.5'],
-      [group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.1.6'],
-      [group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'],
-      [group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'],
-      [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
-      [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3'],
-      [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3']
-  )
+  implementation('org.springframework.boot:spring-boot-starter-web')
+  implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
 
+  implementation('junit:junit:4.10')
+  implementation("org.apache.lucene:lucene-core:${versions.lucene}")
+  implementation("org.apache.lucene:lucene-analyzers-common:${versions.lucene}")
+  implementation("org.apache.lucene:lucene-queries:${versions.lucene}")
+  implementation("org.apache.lucene:lucene-queryparser:${versions.lucene}")
+  implementation("org.apache.lucene:lucene-highlighter:${versions.lucene}")
+  implementation("org.slf4j:slf4j-api:${versions.slf4j}")
+  implementation('org.slf4j:log4j-over-slf4j:1.7.5')
+  implementation('jaxen:jaxen:1.1.4')
+  implementation('dom4j:dom4j:1.6.1')
+
+  implementation('commons-lang:commons-lang:2.6')
+  implementation('commons-logging:commons-logging:1.1.1')
+
+  implementation("ch.qos.logback:logback-core:${versions.logback}")
+  implementation("ch.qos.logback:logback-classic:${versions.logback}")
+  implementation('com.thoughtworks.xstream:xstream:1.4.3')
+  implementation('net.htmlparser.jericho:jericho-html:3.0')
+
+  implementation('org.codehaus.groovy:groovy-all:2.5.8')
+  implementation('org.codehaus.jackson:jackson-mapper-asl:1.9.13')
+  implementation('org.codehaus.jackson:jackson-core-asl:1.9.13')
+  implementation('com.fasterxml.jackson.core:jackson-core:2.11.2')
+  implementation('com.fasterxml.jackson.core:jackson-databind:2.11.2')
+  implementation('com.fasterxml.jackson.core:jackson-annotations:2.11.2')
+  implementation('javax.annotation:javax.annotation-api:1.3.2')
+
+  testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
-tasks.eclipse.dependsOn cleanEclipse
-
-eclipse {
-  classpath {
-    downloadSources = true
-  }
-
-  jdt {
-    file {
-      withProperties {
-        properties ->
-          properties.setProperty("encoding//src/main/java", "utf-8")
-          properties.setProperty("encoding//src/main/resources", "utf-8")
-          properties.setProperty("encoding//src/test/java", "utf-8")
-          properties.setProperty("encoding//src/test/resources", "utf-8")
-      }
-    }
-  }
-
-  wtp {
-    component {
-      contextPath = '/'
-    }
-
-    facet {
-      facets = facets
-
-      //facet name: 'jst.web', version: '2.5'
-      facet name: 'jst.java', version: '7.0'
-    }
-  }
-
-  project {
-    natures 'com.google.gwt.eclipse.core.gwtNature'
-    natures 'org.springframework.ide.eclipse.core.springnature'
-    buildCommand 'org.springframework.ide.eclipse.core.springbuilder'
-  }
+test {
+  useJUnitPlatform()
 }

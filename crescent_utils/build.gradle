@@ -4,53 +4,57 @@ group = 'com.tistory.devyongsik'
 version = '0.5-SNAPSHOT'
 
 dependencies {
-	compile(
-		[group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'],
-		[group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.3'],
-		[group: 'commons-pool', name: 'commons-pool', version: '1.6'],
-		[group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.0.6.v20130930'],
-		[group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'],
-		[group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'],	
-		[group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
-		[group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3'],
-		[group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3']
-	)
+  compile(
+      [group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'],
+      [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.3'],
+      [group: 'commons-pool', name: 'commons-pool', version: '1.6'],
+      [group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.0.6.v20130930'],
+      [group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'],
+      [group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'],
+      [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
+      [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3'],
+      [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3'],
+      [group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1']
 
-	testRuntime(
-       [group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'],
-       [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.3'],
-	   [group: 'commons-pool', name: 'commons-pool', version: '1.6'],
-	   [group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.0.6.v20130930'],
-	   [group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'],
-	   [group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'],	
-	   [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
-	   [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3'],
-	   [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3']
-    )
+  )
+
+  testRuntime(
+      [group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'],
+      [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.3'],
+      [group: 'commons-pool', name: 'commons-pool', version: '1.6'],
+      [group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.0.6.v20130930'],
+      [group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'],
+      [group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'],
+      [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
+      [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3'],
+      [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3'],
+      [group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1']
+  )
 
 }
 
 tasks.eclipse.dependsOn cleanEclipse
 
 eclipse {
-	classpath {
-		downloadSources=true
-	}
+  classpath {
+    downloadSources = true
+  }
 
-	jdt {
-		file {
-			withProperties { 
-				properties -> properties.setProperty("encoding//src/main/java", "utf-8")
-					      properties.setProperty("encoding//src/main/resources", "utf-8")
-					      properties.setProperty("encoding//src/test/java", "utf-8")
-					      properties.setProperty("encoding//src/test/resources", "utf-8")
-			}
-		}
-	}
+  jdt {
+    file {
+      withProperties {
+        properties ->
+          properties.setProperty("encoding//src/main/java", "utf-8")
+          properties.setProperty("encoding//src/main/resources", "utf-8")
+          properties.setProperty("encoding//src/test/java", "utf-8")
+          properties.setProperty("encoding//src/test/resources", "utf-8")
+      }
+    }
+  }
 
-	project {
-    	natures 'com.google.gwt.eclipse.core.gwtNature'
-    	natures 'org.springframework.ide.eclipse.core.springnature'
-    	buildCommand 'org.springframework.ide.eclipse.core.springbuilder'
-  	}
+  project {
+    natures 'com.google.gwt.eclipse.core.gwtNature'
+    natures 'org.springframework.ide.eclipse.core.springnature'
+    buildCommand 'org.springframework.ide.eclipse.core.springbuilder'
+  }
 }

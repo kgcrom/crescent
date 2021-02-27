@@ -60,10 +60,3 @@ subprojects {
         //testReport = false
     }
 }
-
-//configure Web Projects
-configure(subprojects.findAll { webProjects.contains(it.name) }) {
-    apply plugin: 'war'
-
-    webAppDirName = 'webapp'
-}
