@@ -50,7 +50,7 @@ public class CrescentCollectionHandler {
 	
 	@PostConstruct
 	private void init() {
-		String activeProfile = environment.getActiveProfiles()[0];
+		String activeProfile = environment.getActiveProfiles().length < 1 ? "local" : environment.getActiveProfiles()[0];
 		
 		logger.info("init crescent collection handler....");
 		logger.info("running mode : {}, crescentHomeLocation : {}", activeProfile, crescentHomeLocation);

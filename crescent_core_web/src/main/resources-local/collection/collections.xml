@@ -3,14 +3,10 @@
 <collections>
   <collection name="sample">
     <analyzers>
-      <!--
-      <analyzer type="indexing" className="org.apache.lucene.analysis.WhitespaceAnalyzer" constructor-args="org.apache.lucene.util.Version.LUCENE_36" />
-      <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
-     -->
       <analyzer type="indexing" className="org.apache.lucene.analysis.en.EnglishAnalyzer"
-        constructor-args="true"/>
+        constructor-args="4.4"/>
       <analyzer type="search" className="org.apache.lucene.analysis.en.EnglishAnalyzer"
-        constructor-args="false"/>
+        constructor-args="4.4"/>
     </analyzers>
     <indexingDirectory>d:/Programming/Java/crescent_index/sample</indexingDirectory>
     <searcherReloadScheduleMin>50</searcherReloadScheduleMin>
@@ -36,14 +32,10 @@
   </collection>
   <collection name="sample_wiki">
     <analyzers>
-      <!--
-      <analyzer type="indexing" className="org.apache.lucene.analysis.WhitespaceAnalyzer" constructor-args="org.apache.lucene.util.Version.LUCENE_36" />
-      <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
-     -->
-      <analyzer type="indexing" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer"
-        constructor-args="true"/>
-      <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer"
-        constructor-args="false"/>
+      <analyzer type="indexing" className="org.apache.lucene.analysis.en.EnglishAnalyzer"
+        constructor-args="4.4"/>
+      <analyzer type="search" className="org.apache.lucene.analysis.en.EnglishAnalyzer"
+        constructor-args="4.4"/>
     </analyzers>
     <indexingDirectory>d:/Programming/Java/crescent_index/sample_wiki</indexingDirectory>
     <searcherReloadScheduleMin>50</searcherReloadScheduleMin>
