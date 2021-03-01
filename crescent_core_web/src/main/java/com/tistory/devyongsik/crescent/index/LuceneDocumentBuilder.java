@@ -22,11 +22,11 @@ public class LuceneDocumentBuilder {
 												   Map<String, CrescentCollectionField> fieldsByName) {
 		
 		Logger logger = LoggerFactory.getLogger(LuceneDocumentBuilder.class);
-		
+
 		List<Document> documentList = new ArrayList<Document>();
-		
+
 		LuceneFieldBuilder luceneFieldBuilder = new LuceneFieldBuilder();
-		
+
 		for(Map<String, String> doc : docList) {
 			//data filed에 있는 필드들..
 			Set<String> fieldNamesFromDataFile = doc.keySet();

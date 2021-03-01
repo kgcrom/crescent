@@ -1,16 +1,13 @@
 package com.tistory.devyongsik.crescent.search.service;
 
-import java.io.IOException;
-
-import javax.annotation.PostConstruct;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.crescent.search.entity.SearchResult;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
+import java.io.IOException;
+import javax.annotation.PostConstruct;
+import org.junit.jupiter.api.Test;
 
 public class SearchServiceImplTest extends CrescentTestCaseUtil {
 
@@ -27,6 +24,6 @@ public class SearchServiceImplTest extends CrescentTestCaseUtil {
 		
 		SearchResult searchResult = searchService.search(searchRequest);
 		
-		Assert.assertTrue(searchResult.getTotalHitsCount() > 0);	
+		assertTrue(searchResult.getTotalHitsCount() > 0);
 	}
 }

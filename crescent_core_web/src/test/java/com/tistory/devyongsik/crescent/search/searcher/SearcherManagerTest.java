@@ -1,16 +1,17 @@
 package com.tistory.devyongsik.crescent.search.searcher;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
-import junit.framework.Assert;
 
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.SearcherManager;
-import org.junit.Test;
 
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
+import org.junit.jupiter.api.Test;
 
 public class SearcherManagerTest extends CrescentTestCaseUtil {
 
@@ -22,7 +23,7 @@ public class SearcherManagerTest extends CrescentTestCaseUtil {
 	@Test
 	public void initSearcherManager() {
 		
-		Assert.assertNotNull(crescentSearcherManager);
+		assertNotNull(crescentSearcherManager);
 	}
 	
 	@Test
@@ -32,6 +33,6 @@ public class SearcherManagerTest extends CrescentTestCaseUtil {
 		
 		indexSearcher = searcherManager.acquire();
 		
-		Assert.assertNotNull(indexSearcher);
+		assertNotNull(indexSearcher);
 	}
 }

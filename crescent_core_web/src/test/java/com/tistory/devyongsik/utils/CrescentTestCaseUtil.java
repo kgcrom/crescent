@@ -10,39 +10,30 @@ import com.tistory.devyongsik.crescent.index.indexer.CrescentIndexerExecutor;
 import com.tistory.devyongsik.crescent.search.searcher.CrescentDocSearcher;
 import com.tistory.devyongsik.crescent.search.searcher.CrescentSearcherManager;
 import com.tistory.devyongsik.crescent.search.service.SearchService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 @ActiveProfiles(value = "test")
-@ContextConfiguration(locations = { 
-		"classpath:spring/applicationContext.xml",
- 		"classpath:spring/action-config.xml"})
 public class CrescentTestCaseUtil {
 
 	@Autowired
-	@Qualifier("crescentSearcherManager")
 	protected CrescentSearcherManager crescentSearcherManager;
 	
 	@Autowired
-	@Qualifier("crescentCollectionHandler")
 	protected CrescentCollectionHandler collectionHandler;
 	
 	@Autowired
-	@Qualifier("crescentIndexerExecutor")
 	protected CrescentIndexerExecutor executor;
 	
 	@Autowired
-	@Qualifier("crescentDefaultDocSearcher")
 	protected CrescentDocSearcher crescentDocSearcher;
 	
 	@Autowired
-	@Qualifier("searchService")
 	protected SearchService searchService;
 	
 	private static String bulkIndexingTestText = "{\"command\":\"add\", \"indexingType\":\"bulk\",\"documentList\"" +
@@ -70,6 +61,4 @@ public class CrescentTestCaseUtil {
 		System.out.println("indexing result message : " + message);
 	}
 	
-	@Test
-	public void dummy() {}
 }

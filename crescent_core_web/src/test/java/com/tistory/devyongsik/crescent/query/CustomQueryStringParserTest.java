@@ -1,11 +1,12 @@
 package com.tistory.devyongsik.crescent.query;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 
-import junit.framework.Assert;
 
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause.Occur;
@@ -14,11 +15,12 @@ import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import org.junit.Test;
 
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 
@@ -34,23 +36,23 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		searchRequest.setCustomQuery("board_id:\"[10 TO 100000]\"");
 		
 		CrescentSearchRequestWrapper csrw 
-			= new CrescentSearchRequestWrapper(searchRequest);
+			= new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
 		
 		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("board_id:[10 TO 100000]", query.toString());
+		Assertions.assertEquals("board_id:[10 TO 100000]", query.toString());
 	}
 	
-	@Test(expected = CrescentInvalidRequestException.class)
+	@Test
 	public void rangeQueryNoSearchField() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("field1:\"[10 TO 100000]\"");
 		
 		CrescentSearchRequestWrapper csrw 
-			= new CrescentSearchRequestWrapper(searchRequest);
+			= new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
 		
 		Query query = csrw.getQuery();
 		
@@ -65,13 +67,13 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		searchRequest.setCustomQuery("dscr:\"파이썬 프로그래밍 공부\"");
 		
 		CrescentSearchRequestWrapper csrw 
-			= new CrescentSearchRequestWrapper(searchRequest);
+			= new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
 		
 		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("dscr:파이썬 dscr:파이 dscr:프로그래밍 dscr:공부", query.toString());
+		Assertions.assertEquals("dscr:파이썬 dscr:파이 dscr:프로그래밍 dscr:공부", query.toString());
 	}
 	
 	@Test
@@ -81,13 +83,13 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부\"");
 		
 		CrescentSearchRequestWrapper csrw 
-			= new CrescentSearchRequestWrapper(searchRequest);
+			= new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
 		
 		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("title:파이썬^2.0 title:파이^2.0 title:프로그래밍^2.0 title:공부^2.0", query.toString());
+		Assertions.assertEquals("title:파이썬^2.0 title:파이^2.0 title:프로그래밍^2.0 title:공부^2.0", query.toString());
 	}
 	
 	@Test
@@ -97,13 +99,13 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부\" +dscr:\"자바 병렬 프로그래밍\"");
 		
 		CrescentSearchRequestWrapper csrw 
-			= new CrescentSearchRequestWrapper(searchRequest);
+			= new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
 		
 		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("title:파이썬^2.0 title:파이^2.0 title:프로그래밍^2.0 title:공부^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍", query.toString());
+		Assertions.assertEquals("title:파이썬^2.0 title:파이^2.0 title:프로그래밍^2.0 title:공부^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍", query.toString());
 	}
 	
 	@Test
@@ -113,13 +115,13 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		searchRequest.setCustomQuery("dscr:\"파이썬 프로그래밍 공부^10\"");
 		
 		CrescentSearchRequestWrapper csrw 
-			= new CrescentSearchRequestWrapper(searchRequest);
+			= new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
 		
 		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0", query.toString());
+		Assertions.assertEquals("dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0", query.toString());
 	}
 	
 	@Test
@@ -129,29 +131,31 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부^10\" dscr:\"파이썬 프로그래밍 공부^10\"");
 		
 		CrescentSearchRequestWrapper csrw 
-			= new CrescentSearchRequestWrapper(searchRequest);
+			= new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
 		
 		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0", query.toString());
+		Assertions.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0", query.toString());
 	}
 	
-	@Test(expected = CrescentInvalidRequestException.class)
+	@Test
 	public void complexQueryWithDefaultFieldBoostAndCustomBoostException() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부^10\" dscr:\"파이썬 프로그래밍 공부^10\" title:\"[50 TO 50000]\"");
 		
 		CrescentSearchRequestWrapper csrw 
-			= new CrescentSearchRequestWrapper(searchRequest);
-		
-		Query query = csrw.getQuery();
-		
-		System.out.println(query);
-		
-		Assert.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0 title:[50 TO 50000]", query.toString());
+			= new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
+
+		assertThrows(CrescentInvalidRequestException.class, () -> {
+			Query query = csrw.getQuery();
+			System.out.println(query);
+
+			Assertions.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0 title:[50 TO 50000]", query.toString());
+		});
+
 	}
 	
 	@Test
@@ -161,13 +165,13 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부^10\" dscr:\"파이썬 프로그래밍 공부^10\" board_id:\"[50 TO 50000]\"");
 		
 		CrescentSearchRequestWrapper csrw 
-			= new CrescentSearchRequestWrapper(searchRequest);
+			= new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
 		
 		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0 board_id:[50 TO 50000]", query.toString());
+		Assertions.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0 board_id:[50 TO 50000]", query.toString());
 	}
 	
 	@Test
@@ -177,13 +181,13 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		searchRequest.setFilter("title:\"python\"");
 		
 		CrescentSearchRequestWrapper csrw 
-			= new CrescentSearchRequestWrapper(searchRequest);
+			= new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
 		
 		Filter filter = csrw.getFilter();
 		
 		System.out.println(filter);
 		
-		Assert.assertEquals("QueryWrapperFilter(title:python^2.0)", filter.toString());
+		Assertions.assertEquals("QueryWrapperFilter(title:python^2.0)", filter.toString());
 	}
 	
 	@Test

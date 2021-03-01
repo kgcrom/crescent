@@ -1,21 +1,19 @@
 package com.tistory.devyongsik.crescent.config;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.tistory.devyongsik.crescent.collection.entity.CrescentAnalyzerHolder;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ActiveProfiles(value = "test")
-@ContextConfiguration(locations = {
-    "classpath:spring/applicationContext.xml",
-    "classpath:spring/action-config.xml"})
 public class CrescentCollectionHandlerTest {
 
   @Autowired
@@ -25,12 +23,13 @@ public class CrescentCollectionHandlerTest {
   public void test_XML로_Collection정보로드() {
     CrescentCollections collections = handler.getCrescentCollections();
 
-    Assert.assertNotNull(collections);
-    Assert.assertEquals(1, collections.getCrescentCollections().size());
+    assertNotNull(collections);
+    assertEquals(1, collections.getCrescentCollections().size());
 
-    List<CrescentAnalyzerHolder> analyzers = collections.getCrescentCollections().get(0).getAnalyzers();
-    Assert.assertEquals(2, analyzers.size());
-    Assert.assertEquals("org.apache.lucene.analysis.en.EnglishAnalyzer", analyzers.get(0).getClassName());
+    List<CrescentAnalyzerHolder> analyzers = collections.getCrescentCollections().get(0)
+        .getAnalyzers();
+    assertEquals(2, analyzers.size());
+    assertEquals("org.apache.lucene.analysis.en.EnglishAnalyzer", analyzers.get(0).getClassName());
   }
 
 }

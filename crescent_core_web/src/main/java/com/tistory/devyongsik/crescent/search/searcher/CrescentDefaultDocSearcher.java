@@ -38,6 +38,10 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 	@Autowired
 	@Qualifier("crescentSearcherManager")
 	private CrescentSearcherManager crescentSearcherManager;
+
+	@Autowired
+	@Qualifier("crescentCollectionHandler")
+	private CrescentCollectionHandler collectionHandler;
 	
 	@Override
 	public SearchResult search(CrescentSearchRequestWrapper csrw) throws IOException {
@@ -132,8 +136,6 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 				
 				CrescentFastVectorHighlighter highlighter = new CrescentFastVectorHighlighter();
 				
-				CrescentCollectionHandler collectionHandler 
-				= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 				CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(csrw.getCollectionName());
 				
 				//int docnum = 0;

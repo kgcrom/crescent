@@ -1,15 +1,13 @@
 package com.tistory.devyongsik.crescent.collection.entity;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
+import org.junit.jupiter.api.Test;
 
 
 public class CrescentCollectionFieldTest extends CrescentTestCaseUtil {
@@ -22,10 +20,7 @@ public class CrescentCollectionFieldTest extends CrescentTestCaseUtil {
 	@Test
 	public void collectionFieldTest() {
 
-		CrescentCollectionHandler collectionHandler 
-		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-		
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		CrescentCollections crescentCollections = this.collectionHandler.getCrescentCollections();
 
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
 
@@ -38,7 +33,7 @@ public class CrescentCollectionFieldTest extends CrescentTestCaseUtil {
 
 		for(String fieldName : fieldNames) {
 			CrescentCollectionField field = fieldsByName.get(fieldName);
-			Assert.assertNotNull(field);
+			assertNotNull(field);
 		}
 	}
 }

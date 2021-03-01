@@ -1,17 +1,14 @@
 package com.tistory.devyongsik.crescent.search.searcher;
 
-import java.io.IOException;
-
-import javax.annotation.PostConstruct;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.tistory.devyongsik.crescent.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.crescent.search.entity.SearchResult;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
+import java.io.IOException;
+import javax.annotation.PostConstruct;
+import org.junit.jupiter.api.Test;
 
 public class CrescentDefaultDocSearcherTest extends CrescentTestCaseUtil {
 
@@ -26,10 +23,10 @@ public class CrescentDefaultDocSearcherTest extends CrescentTestCaseUtil {
 		searchRequest.setKeyword("1");
 		searchRequest.setCollectionName("sample");
 		
-		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
 		
 		SearchResult searchResult = crescentDocSearcher.search(csrw);
 		
-		Assert.assertTrue(searchResult.getResultList().size() > 0);
+		assertTrue(searchResult.getResultList().size() > 0);
 	}
 }

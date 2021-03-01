@@ -1,10 +1,10 @@
 package com.tistory.devyongsik.crescent.search.searcher;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 
 import javax.annotation.PostConstruct;
-
-import junit.framework.Assert;
 
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
@@ -12,9 +12,9 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
-import org.junit.Test;
 
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
+import org.junit.jupiter.api.Test;
 
 public class IndexSearcherTest extends CrescentTestCaseUtil {
 
@@ -28,7 +28,7 @@ public class IndexSearcherTest extends CrescentTestCaseUtil {
 		SearcherManager searcherManager = crescentSearcherManager.getSearcherManager("sample");
 		IndexSearcher indexSearcher = searcherManager.acquire();
 		
-		Term t = new Term("title", "2");
+		Term t = new Term("board_id", "2");
 		Query q = new TermQuery(t);
 		
 		TopDocs topDocs = indexSearcher.search(q, 5);
@@ -37,6 +37,6 @@ public class IndexSearcherTest extends CrescentTestCaseUtil {
 		
 		System.out.print("total count : " + totalCount);
 		
-		Assert.assertTrue(totalCount > 0);
+		assertTrue(totalCount > 0);
 	}
 }
