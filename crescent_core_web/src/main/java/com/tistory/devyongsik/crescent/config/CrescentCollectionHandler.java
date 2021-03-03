@@ -133,6 +133,7 @@ public class CrescentCollectionHandler {
 					if(constructorArgs == null || constructorArgs.trim().length() == 0) {
 						analyzer = analyzerClass.newInstance();
 					} else {
+						// TODO version 하드코딩이 아니라 다양한 analyzer에 맞도록 로직 수정
 						Version version = Version.parseLeniently(constructorArgs);
 						Class<?>[] intArgsClass = new Class<?>[] {Version.class};
 						Object[] initArgs = new Object[] {version};

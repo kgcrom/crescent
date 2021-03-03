@@ -21,10 +21,7 @@ public class CrescentCollectionTest extends CrescentTestCaseUtil {
 
 	@Test
 	public void collectionTest() {
-		CrescentCollectionHandler collectionHandler 
-		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-		
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		CrescentCollections crescentCollections = this.collectionHandler.getCrescentCollections();
 
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
 

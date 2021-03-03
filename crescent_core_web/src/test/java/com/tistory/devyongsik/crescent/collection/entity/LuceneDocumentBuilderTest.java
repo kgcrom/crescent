@@ -2,19 +2,14 @@ package com.tistory.devyongsik.crescent.collection.entity;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.tistory.devyongsik.crescent.index.LuceneDocumentBuilder;
+import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.PostConstruct;
-
 import org.apache.lucene.document.Document;
-
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
-import com.tistory.devyongsik.crescent.index.LuceneDocumentBuilder;
-import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import org.junit.jupiter.api.Test;
 
 public class LuceneDocumentBuilderTest extends CrescentTestCaseUtil {
@@ -36,10 +31,7 @@ public class LuceneDocumentBuilderTest extends CrescentTestCaseUtil {
 		
 		docList.add(doc);
 		
-		CrescentCollectionHandler collectionHandler 
-		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-		
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		CrescentCollections crescentCollections = this.collectionHandler.getCrescentCollections();
 
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
 

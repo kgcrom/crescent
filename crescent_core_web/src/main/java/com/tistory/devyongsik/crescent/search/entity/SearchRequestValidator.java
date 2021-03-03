@@ -11,11 +11,7 @@ import org.apache.commons.lang.StringUtils;
 
 public class SearchRequestValidator {
 	
-	public boolean isValid(SearchRequest searchRequest) throws CrescentInvalidRequestException {
-		
-		//collection name
-		CrescentCollectionHandler collectionHandler 
-		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+	public boolean isValid(SearchRequest searchRequest, CrescentCollectionHandler collectionHandler) throws CrescentInvalidRequestException {
 		
 		CrescentCollection collection = collectionHandler.getCrescentCollections()
 													.getCrescentCollection(searchRequest.getCollectionName());

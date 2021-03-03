@@ -44,7 +44,7 @@ public class SearchServiceImpl implements SearchService {
 		try {
 			
 			SearchRequestValidator validator = new SearchRequestValidator();
-			validator.isValid(searchRequest);
+			validator.isValid(searchRequest, collectionHandler);
 			
 			
 			query = csrw.getQuery();
