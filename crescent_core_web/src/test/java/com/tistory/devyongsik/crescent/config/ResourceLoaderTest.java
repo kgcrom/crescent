@@ -1,11 +1,12 @@
 package com.tistory.devyongsik.crescent.config;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.List;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * author : need4spd, need4spd@naver.com, 2012. 2. 26.
@@ -17,7 +18,7 @@ public class ResourceLoaderTest {
 		ResourceLoader resourceLoader = new ResourceLoader("collection/test-collections.xml");
 		Document document = resourceLoader.getDocument();
 		
-		Assert.assertNotNull(document);
+		assertNotNull(document);
 	}
 	
 	@Test

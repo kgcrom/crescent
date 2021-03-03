@@ -1,12 +1,10 @@
 package com.tistory.devyongsik.crescent.search.entity;
 
-import junit.framework.Assert;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
-
-import com.tistory.devyongsik.crescent.search.entity.RequestBuilder;
-import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 
 public class RequestBuilderTest {
 
@@ -18,7 +16,7 @@ public class RequestBuilderTest {
 		RequestBuilder<SearchRequest> builder = new RequestBuilder<SearchRequest>();
 		SearchRequest searchRequest = builder.mappingRequestParam(request, SearchRequest.class);
 		
-		Assert.assertEquals("nike", searchRequest.getKeyword());
+		assertEquals("nike", searchRequest.getKeyword());
 	}
 	
 	@Test
@@ -29,7 +27,7 @@ public class RequestBuilderTest {
 		RequestBuilder<SearchRequest> builder = new RequestBuilder<SearchRequest>();
 		SearchRequest searchRequest = builder.mappingRequestParam(request, SearchRequest.class);
 		
-		Assert.assertEquals("test", searchRequest.getCollectionName());
+		assertEquals("test", searchRequest.getCollectionName());
 	}
 	
 	@Test
@@ -40,7 +38,7 @@ public class RequestBuilderTest {
 		RequestBuilder<SearchRequest> builder = new RequestBuilder<SearchRequest>();
 		SearchRequest searchRequest = builder.mappingRequestParam(request, SearchRequest.class);
 		
-		Assert.assertEquals("50", searchRequest.getPageSize());
+		assertEquals("50", searchRequest.getPageSize());
 	}
 	
 	@Test
@@ -51,7 +49,7 @@ public class RequestBuilderTest {
 		RequestBuilder<SearchRequest> builder = new RequestBuilder<SearchRequest>();
 		SearchRequest searchRequest = builder.mappingRequestParam(request, SearchRequest.class);
 		
-		Assert.assertEquals("name desc", searchRequest.getSort());
+		assertEquals("name desc", searchRequest.getSort());
 	}
 	
 	@Test
@@ -62,7 +60,7 @@ public class RequestBuilderTest {
 		RequestBuilder<SearchRequest> builder = new RequestBuilder<SearchRequest>();
 		SearchRequest searchRequest = builder.mappingRequestParam(request, SearchRequest.class);
 		
-		Assert.assertEquals("title, contents", searchRequest.getSearchField());
+		assertEquals("title, contents", searchRequest.getSearchField());
 	}
 	
 	@Test
@@ -73,6 +71,6 @@ public class RequestBuilderTest {
 		RequestBuilder<SearchRequest> builder = new RequestBuilder<SearchRequest>();
 		SearchRequest searchRequest = builder.mappingRequestParam(request, SearchRequest.class);
 		
-		Assert.assertEquals("title:\"jang\"", searchRequest.getCustomQuery());
+		assertEquals("title:\"jang\"", searchRequest.getCustomQuery());
 	}
 }

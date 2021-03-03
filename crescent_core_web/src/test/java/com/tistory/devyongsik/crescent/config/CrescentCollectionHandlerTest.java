@@ -1,55 +1,37 @@
 package com.tistory.devyongsik.crescent.config;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import javax.annotation.PostConstruct;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentAnalyzerHolder;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
-import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-public class CrescentCollectionHandlerTest extends CrescentTestCaseUtil {
+@ExtendWith(SpringExtension.class)
+@ActiveProfiles(value = "test")
+@SpringBootTest
+public class CrescentCollectionHandlerTest {
 
-	@PostConstruct
-	public void init() {
-		super.init();
-	}
-	
-	@Test
-	public void loadFromXML() {
-		CrescentCollectionHandler collectionHandler 
-			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-		
-		CrescentCollections collections = collectionHandler.getCrescentCollections();
-		
-		System.out.println(collections);
-		
-		Assert.assertNotNull(collections);
-		
-		List<CrescentCollection> collectionList = collections.getCrescentCollections();
-		
-		Assert.assertTrue(collectionList.size() > 0);
-	}
-	
-	@Test
-	public void writeToXML() {
-		CrescentCollectionHandler collectionHandler 
-			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-		
-		CrescentCollections collections = collectionHandler.getCrescentCollections();
-		
-		System.out.println(collections);
-		
-		Assert.assertNotNull(collections);
-		
-		collectionHandler.writeToXML();
-		collectionHandler.reloadCollectionsXML();
-		
-		CrescentCollections collections2 = collectionHandler.getCrescentCollections();
-		
-		System.out.println(collections2);
-	}
+  @Autowired
+  private CrescentCollectionHandler handler;
+
+  @Test
+  public void test_XML로_Collection정보로드() {
+    CrescentCollections collections = handler.getCrescentCollections();
+
+    assertNotNull(collections);
+    assertEquals(1, collections.getCrescentCollections().size());
+
+    List<CrescentAnalyzerHolder> analyzers = collections.getCrescentCollections().get(0)
+        .getAnalyzers();
+    assertEquals(2, analyzers.size());
+    assertEquals("org.apache.lucene.analysis.en.EnglishAnalyzer", analyzers.get(0).getClassName());
+  }
+
 }

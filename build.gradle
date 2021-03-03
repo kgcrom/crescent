@@ -7,7 +7,7 @@ ext {
     DEFAULT_PROFILE = 'local'
     webProjects = ['crescent_core_web']
 
-    javaVersion = '1.7'
+    javaVersion = '1.8'
     javaEncoding = 'UTF-8'
     tmpDir = System.getProperty('java.io.tmpdir')
 }
@@ -23,18 +23,11 @@ subprojects {
 
     buildDir = 'target'
 
-    task hello << {
-        println "${project.name} - ${profile}"
-    }
-
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
     [compileJava, compileTestJava]*.options*.encoding = javaEncoding
 
     repositories {
-        maven {
-            url "https://github.com/need4spd/need4spd-maven-repo/raw/master/snapshots"
-        }
         maven {
             url "http://repository.springsource.com/maven/bundles/release"
         }
@@ -49,7 +42,6 @@ subprojects {
         main {
             resources {
                 srcDir "${project.projectDir}/src/main/resources-${profile}"
-                //srcDir "${project.projectDir}/src/main/java"
             }
         }
     }
@@ -67,11 +59,4 @@ subprojects {
         logging.captureStandardOutput(LogLevel.INFO)
         //testReport = false
     }
-}
-
-//configure Web Projects
-configure(subprojects.findAll { webProjects.contains(it.name) }) {
-    apply plugin: 'war'
-
-    webAppDirName = 'webapp'
 }

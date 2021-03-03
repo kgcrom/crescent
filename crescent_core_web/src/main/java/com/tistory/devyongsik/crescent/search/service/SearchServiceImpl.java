@@ -1,5 +1,6 @@
 package com.tistory.devyongsik.crescent.search.service;
 
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,18 +29,22 @@ public class SearchServiceImpl implements SearchService {
 	@Autowired
 	@Qualifier("crescentDefaultDocSearcher")
 	private CrescentDocSearcher crescentDocSearcher;
+
+	@Autowired
+	@Qualifier("crescentCollectionHandler")
+	private CrescentCollectionHandler collectionHandler;
 	
 	@Override
 	public SearchResult search(SearchRequest searchRequest) throws IOException {
 		
 		Query query = null;
 		CrescentSearchRequestWrapper csrw 
-				= new CrescentSearchRequestWrapper(searchRequest);
+				= new CrescentSearchRequestWrapper(searchRequest, collectionHandler);
 	
 		try {
 			
 			SearchRequestValidator validator = new SearchRequestValidator();
-			validator.isValid(searchRequest);
+			validator.isValid(searchRequest, collectionHandler);
 			
 			
 			query = csrw.getQuery();

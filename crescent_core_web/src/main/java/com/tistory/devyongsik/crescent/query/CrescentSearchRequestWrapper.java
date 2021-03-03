@@ -20,6 +20,7 @@ import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class CrescentSearchRequestWrapper {
 	private Logger logger = LoggerFactory.getLogger(CrescentSearchRequestWrapper.class);
@@ -39,11 +40,9 @@ public class CrescentSearchRequestWrapper {
 
 	private CrescentCollection collection = null;
 	private Map<String, CrescentCollectionField> collectionFieldsMap = null;
-	
-	public CrescentSearchRequestWrapper(SearchRequest searchRequest) {
+
+	public CrescentSearchRequestWrapper(SearchRequest searchRequest, CrescentCollectionHandler collectionHandler) {
 		this.searchRequest = searchRequest;	
-		CrescentCollectionHandler collectionHandler 
-		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		this.collection = collectionHandler.getCrescentCollections().getCrescentCollection(searchRequest.getCollectionName());
 		this.collectionFieldsMap = collection.getCrescentFieldByName();
 	}

@@ -20,45 +20,46 @@ public class LuceneFieldBuilder {
 	private Logger logger = LoggerFactory.getLogger(LuceneFieldBuilder.class);
 
 	public IndexableField create(CrescentCollectionField collectionField, String value) {
-		
+
 		FieldType fieldType = new FieldType();
 		fieldType.setIndexed(collectionField.isIndex());
 		fieldType.setStored(collectionField.isStore());
 		fieldType.setTokenized(collectionField.isAnalyze());
 		fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
 		fieldType.setStoreTermVectors(collectionField.isTermvector());
-		
+
 		if("STRING".equalsIgnoreCase(collectionField.getType())) {
 			Field f = new Field(collectionField.getName(),
 					StringUtils.defaultString(value, ""),
 					fieldType);
 
 			f.setBoost(collectionField.getBoost());
-			
+
 			logger.debug("Field : {}", f);
+
 
 			return f;
 
 		} else if("LONG".equalsIgnoreCase(collectionField.getType())) {
 			fieldType.setNumericType(NumericType.LONG);
-			
+
 			Field f = new LongField(collectionField.getName(),
 					Long.parseLong(value),
 					fieldType);
-			
+
 			logger.debug("Field : {}", f);
-			
+
 			return f;
-		
+
 		} else if ("INTEGER".equalsIgnoreCase(collectionField.getType())){
 			fieldType.setNumericType(NumericType.INT);
-			
+
 			Field f = new IntField(collectionField.getName(),
 					Integer.parseInt(value),
 					fieldType);
-			
+
 			logger.debug("Field : {}", f);
-			
+
 			return f;
 		}else {
 			return null;

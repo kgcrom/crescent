@@ -2,21 +2,16 @@ package com.tistory.devyongsik.crescent.search.entity;
 
 import java.util.Map;
 
-import org.apache.lucene.analysis.kr.utils.StringUtil;
-
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
 import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
+import org.apache.commons.lang.StringUtils;
 
 public class SearchRequestValidator {
 	
-	public boolean isValid(SearchRequest searchRequest) throws CrescentInvalidRequestException {
-		
-		//collection name
-		CrescentCollectionHandler collectionHandler 
-		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+	public boolean isValid(SearchRequest searchRequest, CrescentCollectionHandler collectionHandler) throws CrescentInvalidRequestException {
 		
 		CrescentCollection collection = collectionHandler.getCrescentCollections()
 													.getCrescentCollection(searchRequest.getCollectionName());
@@ -41,7 +36,7 @@ public class SearchRequestValidator {
 		
 		//page num
 		if(searchRequest.getPageNum() != null) {
-			if(!StringUtil.isNumeric(searchRequest.getPageNum())) {
+			if(!StringUtils.isNumeric(searchRequest.getPageNum())) {
 				throw new CrescentInvalidRequestException("Page_Num parameter value is must positive number: " + searchRequest.getPageNum());
 			}
 		}
