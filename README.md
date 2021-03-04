@@ -1,3 +1,6 @@
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/81bd6d81fa664ae7b3515d39d94d69be)](https://app.codacy.com/gh/kgcrom/crescent?utm_source=github.com&utm_medium=referral&utm_content=kgcrom/crescent&utm_campaign=Badge_Grade_Settings)
+
 Crescent (Search Engine)
 
 1. Http기반으로 작동하는 검색엔진입니다.
