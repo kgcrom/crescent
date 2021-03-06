@@ -8,6 +8,7 @@ import com.tistory.devyongsik.crescent.search.entity.SearchResult;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import java.io.IOException;
 import javax.annotation.PostConstruct;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class CrescentDefaultDocSearcherTest extends CrescentTestCaseUtil {
@@ -16,7 +17,8 @@ public class CrescentDefaultDocSearcherTest extends CrescentTestCaseUtil {
 	public void init() {
 		super.init();
 	}
-	
+
+	@Disabled
 	@Test
 	public void search() throws IOException {
 		SearchRequest searchRequest = new SearchRequest();

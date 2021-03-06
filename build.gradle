@@ -1,26 +1,11 @@
-/*
-=== 프로젝트 프라퍼티 ===
-  - -Pprofile=값 : 프로젝트 프로필. 없으면 기본 dev
-*/
-
 ext {
-    DEFAULT_PROFILE = 'local'
-    webProjects = ['crescent_core_web']
-
     javaVersion = '1.8'
     javaEncoding = 'UTF-8'
-    tmpDir = System.getProperty('java.io.tmpdir')
-}
-
-allprojects {
-    if (!project.hasProperty('profile') || !profile) {
-        ext.profile = DEFAULT_PROFILE
-    }
 }
 
 subprojects {
     apply plugin: 'java'
-
+    apply plugin: 'jacoco'
     buildDir = 'target'
 
     sourceCompatibility = javaVersion
@@ -37,15 +22,6 @@ subprojects {
         mavenCentral()
     }
 
-    sourceSets {
-        // SQL Mapper의 *.xml때문에 java 디렉토리를 resource에 추가해야한다.
-        main {
-            resources {
-                srcDir "${project.projectDir}/src/main/resources-${profile}"
-            }
-        }
-    }
-
     task compile(dependsOn: ['compileJava', 'compileTestJava']) {
         description = 'Compile all main/test sources'
         group = 'build'
@@ -58,5 +34,45 @@ subprojects {
         jvmArgs = ['-ea', '-Xmx256m']
         logging.captureStandardOutput(LogLevel.INFO)
         //testReport = false
+    }
+
+    jacoco {
+        toolVersion = '0.8.6'
+    }
+
+    jacocoTestReport {
+        reports {
+            html.enabled true
+            xml.enabled true
+            csv.enabled false
+        }
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                element = 'CLASS'
+
+//        TODO ratio가 0.5 넘으면 limit 설정
+//        limit {
+//          counter = 'BRANCH'
+//          value = 'COVEREDRATIO'
+//          minimum = 0.60
+//        }
+            }
+        }
+    }
+
+    task testAndSendCodacy(type: Exec) {
+        group 'verification'
+        description 'Run the unit tests and send report to codacy'
+
+        // set CODACY_PROJECT_TOKEN environment variable
+        workingDir "$rootDir"
+        project.ext.reportFile = "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+        commandLine './send_codacy.sh', project.ext.reportFile
+
+        dependsOn('test', 'jacocoTestReport', 'jacocoTestCoverageVerification')
     }
 }

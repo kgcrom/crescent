@@ -14,6 +14,7 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class IndexSearcherTest extends CrescentTestCaseUtil {
@@ -23,6 +24,7 @@ public class IndexSearcherTest extends CrescentTestCaseUtil {
 		super.init();
 	}
 
+	@Disabled
 	@Test
 	public void defaultSearch() throws IOException {
 		SearcherManager searcherManager = crescentSearcherManager.getSearcherManager("sample");

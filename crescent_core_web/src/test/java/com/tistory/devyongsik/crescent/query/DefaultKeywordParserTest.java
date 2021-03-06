@@ -7,6 +7,7 @@ import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestEx
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import javax.annotation.PostConstruct;
 import org.apache.lucene.search.Query;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class DefaultKeywordParserTest extends CrescentTestCaseUtil {
@@ -16,6 +17,7 @@ public class DefaultKeywordParserTest extends CrescentTestCaseUtil {
 		super.init();
 	}
 
+	@Disabled
 	@Test
 	public void keywordParse() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();

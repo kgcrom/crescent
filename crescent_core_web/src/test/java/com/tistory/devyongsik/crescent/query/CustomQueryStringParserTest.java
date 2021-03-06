@@ -20,6 +20,7 @@ import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
@@ -44,7 +45,8 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		Assertions.assertEquals("board_id:[10 TO 100000]", query.toString());
 	}
-	
+
+	@Disabled
 	@Test
 	public void rangeQueryNoSearchField() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
@@ -59,7 +61,8 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		System.out.println(query);
 		
 	}
-	
+
+	@Disabled
 	@Test
 	public void normalTermQuery() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
@@ -75,7 +78,8 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		Assertions.assertEquals("dscr:파이썬 dscr:파이 dscr:프로그래밍 dscr:공부", query.toString());
 	}
-	
+
+	@Disabled
 	@Test
 	public void normalTermQueryWithDefaultFieldBoost() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
@@ -91,7 +95,8 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		Assertions.assertEquals("title:파이썬^2.0 title:파이^2.0 title:프로그래밍^2.0 title:공부^2.0", query.toString());
 	}
-	
+
+	@Disabled
 	@Test
 	public void multipleTermQueryWithDefaultFieldBoost() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
@@ -107,7 +112,8 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		Assertions.assertEquals("title:파이썬^2.0 title:파이^2.0 title:프로그래밍^2.0 title:공부^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍", query.toString());
 	}
-	
+
+	@Disabled
 	@Test
 	public void normalTermQueryWithCustomBoost() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
@@ -123,7 +129,8 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		Assertions.assertEquals("dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0", query.toString());
 	}
-	
+
+	@Disabled
 	@Test
 	public void normalTermQueryWithDefaultFieldBoostAndCustomBoost() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
@@ -157,7 +164,8 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		});
 
 	}
-	
+
+	@Disabled
 	@Test
 	public void complexQueryWithDefaultFieldBoostAndCustomBoost() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
