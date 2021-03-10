@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +27,9 @@ import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 
+@Slf4j
 @Controller
 public class MorphAdminMainController {
-	private Logger logger = LoggerFactory.getLogger(MorphAdminMainController.class);
 
 	@Autowired
 	@Qualifier("morphService")
@@ -78,7 +79,7 @@ public class MorphAdminMainController {
 		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
 		
 		
-		logger.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
+		log.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
 		
 		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true, selectedCollectionName);
 		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false, selectedCollectionName);
@@ -97,7 +98,7 @@ public class MorphAdminMainController {
 		String keyword = request.getParameter("keyword");
 		String selectedCollectionName = request.getParameter("collectionName");
 		
-		logger.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
+		log.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
@@ -139,7 +140,7 @@ public class MorphAdminMainController {
 		ObjectMapper mapper = new ObjectMapper();
 		String morphResult = mapper.writeValueAsString(morphTestResultSet);
 		
-		logger.info("morphResult : {}", morphResult);
+		log.info("morphResult : {}", morphResult);
 		
 		response.setContentType("application/json;  charset=UTF-8");
 		PrintWriter writer = response.getWriter();

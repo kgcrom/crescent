@@ -18,6 +18,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
@@ -34,9 +35,9 @@ import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentSortField;
 
+@Slf4j
 @Component("crescentCollectionHandler")
 public class CrescentCollectionHandler {
-	private  Logger logger = LoggerFactory.getLogger(CrescentCollectionHandler.class);
 
 	@Autowired
 	private Environment environment;
@@ -52,8 +53,8 @@ public class CrescentCollectionHandler {
 	private void init() {
 		String activeProfile = environment.getActiveProfiles().length < 1 ? "local" : environment.getActiveProfiles()[0];
 		
-		logger.info("init crescent collection handler....");
-		logger.info("running mode : {}, crescentHomeLocation : {}", activeProfile, crescentHomeLocation);
+		log.info("init crescent collection handler....");
+		log.info("running mode : {}, crescentHomeLocation : {}", activeProfile, crescentHomeLocation);
 		
 		String xmlFileName = "collections.xml";
 		
@@ -67,7 +68,7 @@ public class CrescentCollectionHandler {
 			collectionsXmlLocation = crescentHomeLocation+"/"+xmlFileName;
 		}
 		
-		logger.info("collectionsXmlLocation : {}", collectionsXmlLocation);
+		log.info("collectionsXmlLocation : {}", collectionsXmlLocation);
 		
 		
 		loadFromXML();
@@ -83,7 +84,7 @@ public class CrescentCollectionHandler {
 		stream.alias( "collections", CrescentCollections.class );
 		stream.addImplicitCollection( CrescentCollections.class, "crescentCollections" );
 		
-		logger.info("collectionsXmlLocation : {}", collectionsXmlLocation);
+		log.info("collectionsXmlLocation : {}", collectionsXmlLocation);
 		
 		ResourceLoader resourceLoader = new ResourceLoader(collectionsXmlLocation);
 		InputStream inputStream = resourceLoader.getInputStream();
@@ -92,7 +93,7 @@ public class CrescentCollectionHandler {
 		
 		if(crescentCollections == null) {
 			String errorMsg = "Crescent Collections is not loaded from xml : ["+collectionsXmlLocation+"]";
-			logger.error(errorMsg);
+			log.error(errorMsg);
 			
 			throw new IllegalStateException(errorMsg);
 		}
@@ -112,7 +113,7 @@ public class CrescentCollectionHandler {
 		try {
 			inputStream.close();
 		} catch (Exception e) {
-			logger.error("stream close error ; ", e);
+			log.error("stream close error ; ", e);
 		}
 		
 		//Analyzer 생성
@@ -189,14 +190,14 @@ public class CrescentCollectionHandler {
 		XStream stream = new XStream();
 		stream.processAnnotations(CrescentCollections.class);
 		
-		logger.debug("collectionXmlUrl : {}", collectionXmlUrl);
+		log.debug("collectionXmlUrl : {}", collectionXmlUrl);
 		
 		try {
 			
 			File collectionsXmlFile = new File(collectionXmlUrl.toURI());
 			
-			logger.debug("collectionXmlUrl to URI: {}", collectionXmlUrl.toURI());
-			logger.debug("collectionsXmlFile : {}", collectionsXmlFile);
+			log.debug("collectionXmlUrl to URI: {}", collectionXmlUrl.toURI());
+			log.debug("collectionsXmlFile : {}", collectionsXmlFile);
 			
 			FileOutputStream fos = new FileOutputStream(collectionsXmlFile, false);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos, Charset.forName("utf-8")));
@@ -208,15 +209,15 @@ public class CrescentCollectionHandler {
 		
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			logger.error("error : ", e);
+			log.error("error : ", e);
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			logger.error("error : ", e);
+			log.error("error : ", e);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.error("error : ", e);
+			log.error("error : ", e);
 			
 		}	
 	}
@@ -226,7 +227,7 @@ public class CrescentCollectionHandler {
 		
 		if(crescentCollectionList.size() == 0) {
 			String errorMsg = "There are no Crescent collections!!";
-			logger.error(errorMsg);
+			log.error(errorMsg);
 			
 			throw new IllegalStateException(errorMsg);
 		}
@@ -270,7 +271,7 @@ public class CrescentCollectionHandler {
 					fieldMap.put(sortField.getDest(), newSortField);
 					
 				} catch (CloneNotSupportedException e1) {
-					logger.error("error : ", e1);
+					log.error("error : ", e1);
 				}
 				
 			}

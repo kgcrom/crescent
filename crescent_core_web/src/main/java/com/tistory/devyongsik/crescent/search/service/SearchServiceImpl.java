@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +22,10 @@ import com.tistory.devyongsik.crescent.search.entity.SearchResult;
 import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.crescent.search.searcher.CrescentDocSearcher;
 
+@Slf4j
 @Service("searchService")
 public class SearchServiceImpl implements SearchService {
 
-	private Logger logger = LoggerFactory.getLogger(SearchServiceImpl.class);
-	
 	@Autowired
 	@Qualifier("crescentDefaultDocSearcher")
 	private CrescentDocSearcher crescentDocSearcher;
@@ -60,7 +60,7 @@ public class SearchServiceImpl implements SearchService {
 			result.put("error_code", -1);
 			result.put("error_msg", e.getMessage());
 			
-			logger.error("검색 중 에러 발생함." , e);
+			log.error("검색 중 에러 발생함." , e);
 			
 			searchResult.setErrorCode(-1);
 			searchResult.setErrorMsg(e.getMessage());
@@ -70,7 +70,7 @@ public class SearchServiceImpl implements SearchService {
 			return searchResult;
 		}
 		
-		logger.debug("query : {}" , query);
+		log.debug("query : {}" , query);
 		
 		SearchResult searchResult = crescentDocSearcher.search(csrw);
 		

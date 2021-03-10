@@ -1,36 +1,30 @@
 package com.tistory.devyongsik.crescent.search.highlight;
 
-import java.io.IOException;
-import java.io.StringReader;
-
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
-import org.apache.lucene.search.highlight.QueryScorer;
-import org.apache.lucene.search.highlight.SimpleFragmenter;
-import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.lucene.search.highlight.*;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
-import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
+import java.io.IOException;
+import java.io.StringReader;
 
+@Slf4j
 @Deprecated
 public class CrescentHighlighter {
-	private Logger logger = LoggerFactory.getLogger(CrescentHighlighter.class);
 
 	private SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<b>","</b>");
 
 	public String getBestFragment(CrescentCollectionField field, String value, Query query, Analyzer analyzer) throws CrescentInvalidRequestException {
 		String fragment = "";
 
-		logger.debug("fieldName : {}", field.getName());
+		log.debug("fieldName : {}", field.getName());
 
 		try {
 			
-			logger.debug("query for highlighter : {}" , query);
+			log.debug("query for highlighter : {}" , query);
 
 			QueryScorer scorer = new QueryScorer(query);
 
@@ -53,13 +47,13 @@ public class CrescentHighlighter {
 			
 		} catch (IOException e) {
 
-			logger.error("error in crescent highlighter", e);
+			log.error("error in crescent highlighter", e);
 
 			return value;
 			
 		} catch (InvalidTokenOffsetsException e) {
 
-			logger.error("error in crescent highlighter", e);
+			log.error("error in crescent highlighter", e);
 
 			return value;
 		}

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
@@ -29,11 +30,10 @@ import com.tistory.devyongsik.crescent.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.crescent.search.entity.SearchResult;
 import com.tistory.devyongsik.crescent.search.highlight.CrescentFastVectorHighlighter;
 
+@Slf4j
 @Component("crescentDefaultDocSearcher")
 public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 
-	private Logger logger = LoggerFactory.getLogger(CrescentDefaultDocSearcher.class);
-	
 	@Autowired
 	@Qualifier("crescentSearcherManager")
 	private CrescentSearcherManager crescentSearcherManager;
@@ -62,9 +62,9 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			Filter filter = csrw.getFilter();
 			Sort sort = csrw.getSort();
 			
-			logger.debug("query : {}" , query);
-			logger.debug("filter : {}" , filter);
-			logger.debug("sort : {}" , sort);
+			log.debug("query : {}" , query);
+			log.debug("filter : {}" , filter);
+			log.debug("sort : {}" , sort);
 			
 			long startTime = System.currentTimeMillis();
 			TopDocs topDocs = null;
@@ -96,7 +96,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			CrescentLogger.logging(logInfo);
 			
 			
-			logger.debug("Total Hits Count : {} ", totalHitsCount);
+			log.debug("Total Hits Count : {} ", totalHitsCount);
 			
 			ScoreDoc[] hits = topDocs.scoreDocs;
 			
@@ -104,7 +104,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			int endOffset = Math.min(totalHitsCount, csrw.getStartOffSet() + csrw.getHitsForPage());
 			
 			if(endOffset > hits.length) {
-				logger.debug("기본 설정된 검색건수보다 더 검색을 원하므로, 전체를 대상으로 검색합니다.");
+				log.debug("기본 설정된 검색건수보다 더 검색을 원하므로, 전체를 대상으로 검색합니다.");
 				
 				if(sort == null) {
 					topDocs = indexSearcher.search(query, filter, totalHitsCount);
@@ -123,10 +123,10 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			//	resultDocumentList.add(doc);
 			//}
 			
-			logger.debug("start offset : [{}], end offset : [{}], total : [{}], numOfHits :[{}]"
+			log.debug("start offset : [{}], end offset : [{}], total : [{}], numOfHits :[{}]"
 							,new Object[]{csrw.getStartOffSet(), endOffset, totalHitsCount, numOfHits});
-			logger.debug("hits count : [{}]", hits.length);
-			logger.debug("startOffset + hitsPerPage : [{}]", csrw.getStartOffSet() + csrw.getHitsForPage());
+			log.debug("hits count : [{}]", hits.length);
+			log.debug("startOffset + hitsPerPage : [{}]", csrw.getStartOffSet() + csrw.getHitsForPage());
 			
 			
 			if(totalHitsCount > 0) { 
@@ -168,7 +168,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 				result.put("error_code", errorCode);
 				result.put("error_msg", errorMessage);
 				
-				logger.debug("result list {}", resultList);
+				log.debug("result list {}", resultList);
 				
 				searchResult.setResultList(resultList);
 				searchResult.setTotalHitsCount(totalHitsCount);
@@ -186,7 +186,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 				result.put("error_msg", errorMessage);
 				
 				
-				logger.debug("result list {}", resultList);
+				log.debug("result list {}", resultList);
 				
 				searchResult.setResultList(resultList);
 				searchResult.setTotalHitsCount(0);
@@ -197,7 +197,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			
 		} catch (Exception e) {
 			
-			logger.error("error in CrescentDefaultDocSearcher : ", e);
+			log.error("error in CrescentDefaultDocSearcher : ", e);
 			
 			Map<String, Object> result = new HashMap<String, Object>();
 			List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
@@ -207,7 +207,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			result.put("error_code", errorCode);
 			result.put("error_msg", errorMessage);
 			
-			logger.error("검색 중 에러 발생함. {}", e);
+			log.error("검색 중 에러 발생함. {}", e);
 			
 			searchResult.setErrorCode(errorCode);
 			searchResult.setErrorMsg(errorMessage);

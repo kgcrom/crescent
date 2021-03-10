@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,9 @@ import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.crescent.search.entity.SearchResult;
 import com.tistory.devyongsik.crescent.search.service.SearchService;
 
+@Slf4j
 @Controller
 public class SearchTestMainController {
-	private Logger logger = LoggerFactory.getLogger(SearchTestMainController.class);
 
 	@Autowired
 	@Qualifier("searchService")
@@ -54,7 +55,7 @@ public class SearchTestMainController {
 		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
 		modelAndView.setViewName("/admin/searchTestMain");
 		
-		logger.debug("search Test main");
+		log.debug("search Test main");
 
 		return modelAndView;
 	}

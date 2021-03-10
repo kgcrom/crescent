@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
@@ -19,19 +20,12 @@ import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
 
-/**
- * Query 생성 클래스
- *
- * @author : 장용석, 2008. 12. 29., need4spd@google.com
- */
-
+@Slf4j
 public class DefaultKeywordParser {
 
-	private Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
-	
 	protected Query parse(List<CrescentCollectionField> searchFields, String keyword, Analyzer analyzer) {
 	
-		logger.debug("search fields : {}", searchFields);
+		log.debug("search fields : {}", searchFields);
 		
 		BooleanQuery resultQuery = new BooleanQuery();
 
@@ -66,14 +60,13 @@ public class DefaultKeywordParser {
 		}
 
 		//TODO 테스트 해볼 것
-		logger.debug("검색 쿼리 : {}", resultQuery);
+		log.debug("검색 쿼리 : {}", resultQuery);
 
 		return resultQuery;
 	}
 
 	private ArrayList<String> analyzedTokenList(Analyzer analyzer, String splitedKeyword) {
-		Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
-		
+
 		ArrayList<String> rst = new ArrayList<String>();
 		//split된 검색어를 Analyze..
 		TokenStream stream = null;
@@ -81,7 +74,7 @@ public class DefaultKeywordParser {
 		try {
 			stream = analyzer.tokenStream("", new StringReader(splitedKeyword));
 		} catch (IOException e1) {
-			logger.error("Error in analyzed Token List", e1);
+			log.error("Error in analyzed Token List", e1);
 			throw new IllegalStateException("키워드 분석 중 에러가 발생하였습니다. [" + splitedKeyword + "]");	
 		}
 		
@@ -98,11 +91,11 @@ public class DefaultKeywordParser {
 			stream.close();
 			
 		} catch (IOException e) {
-			logger.error("error in DefaultKeywordParser : ", e);
+			log.error("error in DefaultKeywordParser : ", e);
 			throw new RuntimeException(e);
 		}
 
-		logger.debug("[{}] 에서 추출된 명사 : [{}]", new Object[]{splitedKeyword, rst.toString()});
+		log.debug("[{}] 에서 추출된 명사 : [{}]", new Object[]{splitedKeyword, rst.toString()});
 			
 
 		return rst;

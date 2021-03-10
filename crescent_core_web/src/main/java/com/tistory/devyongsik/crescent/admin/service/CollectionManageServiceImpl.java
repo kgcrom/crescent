@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +23,9 @@ import com.tistory.devyongsik.crescent.collection.entity.CrescentDefaultSearchFi
 import com.tistory.devyongsik.crescent.collection.entity.CrescentSortField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 
+@Slf4j
 @Service("collectionManageService")
 public class CollectionManageServiceImpl implements CollectionManageService {
-
-	private Logger logger = LoggerFactory.getLogger(CollectionManageMainCotroller.class);
 
 	@Autowired
 	@Qualifier("crescentCollectionHandler")
@@ -38,7 +38,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		
 		String selectedCollectionName = request.getParameter("collectionName");
 
-		logger.debug("selectedCollectionName : " + selectedCollectionName);
+		log.debug("selectedCollectionName : " + selectedCollectionName);
 
 		String indexingModeAnalyzer = request.getParameter("indexingModeAnalyzer");
 		String searchModeAnalyzer = request.getParameter("searchModeAnalyzer");
@@ -68,17 +68,17 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		
 		selectedCollection.setSearcherReloadScheduleMin(StringUtils.defaultIfEmpty(request.getParameter("searcherReloadScheduleMin"), "10"));
 
-		if(logger.isDebugEnabled()) {
-			logger.debug("analyzer : {} ", request.getParameter("analyzer"));
-			logger.debug("collection Name : {} ", request.getParameter("collectionName"));
-			logger.debug("indexing Directory : {} ", request.getParameter("indexingDirectory"));
-			logger.debug("searcher reload schedule min : {} ", request.getParameter("searcherReloadScheduleMin"));
-			logger.debug("indexingModeAnalyzer : {} ", request.getParameter("indexingModeAnalyzer"));
-			logger.debug("searchModeAnalyzer : {} ", request.getParameter("searchModeAnalyzer"));
-			logger.debug("indexingModeAnalyzerType : {} ", request.getParameter("indexingModeAnalyzerType"));
-			logger.debug("searchModeAnalyzerType : {} ", request.getParameter("searchModeAnalyzerType"));
-			logger.debug("indexingModeAnalyzerConstArgs : {} ", request.getParameter("indexingModeAnalyzerConstArgs"));
-			logger.debug("searchModeAnalyzerConstArgs : {} ", request.getParameter("searchModeAnalyzerConstArgs"));
+		if(log.isDebugEnabled()) {
+			log.debug("analyzer : {} ", request.getParameter("analyzer"));
+			log.debug("collection Name : {} ", request.getParameter("collectionName"));
+			log.debug("indexing Directory : {} ", request.getParameter("indexingDirectory"));
+			log.debug("searcher reload schedule min : {} ", request.getParameter("searcherReloadScheduleMin"));
+			log.debug("indexingModeAnalyzer : {} ", request.getParameter("indexingModeAnalyzer"));
+			log.debug("searchModeAnalyzer : {} ", request.getParameter("searchModeAnalyzer"));
+			log.debug("indexingModeAnalyzerType : {} ", request.getParameter("indexingModeAnalyzerType"));
+			log.debug("searchModeAnalyzerType : {} ", request.getParameter("searchModeAnalyzerType"));
+			log.debug("indexingModeAnalyzerConstArgs : {} ", request.getParameter("indexingModeAnalyzerConstArgs"));
+			log.debug("searchModeAnalyzerConstArgs : {} ", request.getParameter("searchModeAnalyzerConstArgs"));
 		}
 
 		List<CrescentCollectionField> crescentCollectionFieldList = selectedCollection.getFields();
@@ -94,7 +94,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			}
 		}
 
-		logger.debug("add field name list : {}", addFieldNameList);
+		log.debug("add field name list : {}", addFieldNameList);
 
 		for(String fieldName :addFieldNameList) {
 			CrescentCollectionField crescentField = new CrescentCollectionField();
@@ -145,21 +145,21 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 				}
 			}
 
-			if(logger.isDebugEnabled()) {
-				logger.debug("crescentField Name {} = {}", crescentField.getName(), "sortField : " + request.getParameter(crescentField.getName()+"-sortField"));
-				logger.debug("crescentField Name {} = {}", crescentField.getName(), "defaultSearchField : "+ request.getParameter(crescentField.getName()+"-defaultSearchField"));
+			if(log.isDebugEnabled()) {
+				log.debug("crescentField Name {} = {}", crescentField.getName(), "sortField : " + request.getParameter(crescentField.getName()+"-sortField"));
+				log.debug("crescentField Name {} = {}", crescentField.getName(), "defaultSearchField : "+ request.getParameter(crescentField.getName()+"-defaultSearchField"));
 			}
 
-			if(logger.isDebugEnabled()) {
-				logger.debug("crescentField Name {} = {}", crescentField.getName(), "analyze : " + request.getParameter(crescentField.getName()+"-analyze"));
-				logger.debug("crescentField Name {} = {}", crescentField.getName(), "index : " + request.getParameter(crescentField.getName()+"-index"));
-				logger.debug("crescentField Name {} = {}", crescentField.getName(), "must : " + request.getParameter(crescentField.getName()+"-must"));
-				logger.debug("crescentField Name {} = {}", crescentField.getName(), "store : " + request.getParameter(crescentField.getName()+"-store"));
-				logger.debug("crescentField Name {} = {}", crescentField.getName(), "termoffset : " + request.getParameter(crescentField.getName()+"-termoffset"));
-				logger.debug("crescentField Name {} = {}", crescentField.getName(), "termposition : " + request.getParameter(crescentField.getName()+"-termposition"));
-				logger.debug("crescentField Name {} = {}", crescentField.getName(), "termvector : " + request.getParameter(crescentField.getName()+"-termvector"));
-				logger.debug("crescentField Name {} = {}", crescentField.getName(), "boost : " + request.getParameter(crescentField.getName()+"-boost"));
-				logger.debug("crescentField Name {} = {}", crescentField.getName(), "type : " + request.getParameter(crescentField.getName()+"-type"));
+			if(log.isDebugEnabled()) {
+				log.debug("crescentField Name {} = {}", crescentField.getName(), "analyze : " + request.getParameter(crescentField.getName()+"-analyze"));
+				log.debug("crescentField Name {} = {}", crescentField.getName(), "index : " + request.getParameter(crescentField.getName()+"-index"));
+				log.debug("crescentField Name {} = {}", crescentField.getName(), "must : " + request.getParameter(crescentField.getName()+"-must"));
+				log.debug("crescentField Name {} = {}", crescentField.getName(), "store : " + request.getParameter(crescentField.getName()+"-store"));
+				log.debug("crescentField Name {} = {}", crescentField.getName(), "termoffset : " + request.getParameter(crescentField.getName()+"-termoffset"));
+				log.debug("crescentField Name {} = {}", crescentField.getName(), "termposition : " + request.getParameter(crescentField.getName()+"-termposition"));
+				log.debug("crescentField Name {} = {}", crescentField.getName(), "termvector : " + request.getParameter(crescentField.getName()+"-termvector"));
+				log.debug("crescentField Name {} = {}", crescentField.getName(), "boost : " + request.getParameter(crescentField.getName()+"-boost"));
+				log.debug("crescentField Name {} = {}", crescentField.getName(), "type : " + request.getParameter(crescentField.getName()+"-type"));
 			}
 		}
 			
@@ -182,7 +182,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		
 		String selectedCollectionName = request.getParameter("collectionName");
 
-		logger.debug("selectedCollectionName : " + selectedCollectionName);
+		log.debug("selectedCollectionName : " + selectedCollectionName);
 		
 		CrescentCollection newCollection = new CrescentCollection();
 		newCollection.setName(selectedCollectionName);
@@ -212,17 +212,17 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		searchModeAnalyzerHolder.setType(searchModelAnalyzerType);
 		analyzerHolderList.add(searchModeAnalyzerHolder);
 		
-		if(logger.isDebugEnabled()) {
-			logger.debug("analyzer : {} ", request.getParameter("analyzer"));
-			logger.debug("collection Name : {} ", request.getParameter("collectionName"));
-			logger.debug("indexing Directory : {} ", request.getParameter("indexingDirectory"));
-			logger.debug("searcher reload schedule min : {} ", request.getParameter("searcherReloadScheduleMin"));
-			logger.debug("indexingModeAnalyzer : {} ", request.getParameter("indexingModeAnalyzer"));
-			logger.debug("searchModeAnalyzer : {} ", request.getParameter("searchModeAnalyzer"));
-			logger.debug("indexingModeAnalyzerType : {} ", request.getParameter("indexingModeAnalyzerType"));
-			logger.debug("searchModelAnalyzerType : {} ", request.getParameter("searchModelAnalyzerType"));
-			logger.debug("indexingModeAnalyzerConstArgs : {} ", request.getParameter("indexingModeAnalyzerConstArgs"));
-			logger.debug("searchModeAnalyzerConstArgs : {} ", request.getParameter("searchModeAnalyzerConstArgs"));
+		if(log.isDebugEnabled()) {
+			log.debug("analyzer : {} ", request.getParameter("analyzer"));
+			log.debug("collection Name : {} ", request.getParameter("collectionName"));
+			log.debug("indexing Directory : {} ", request.getParameter("indexingDirectory"));
+			log.debug("searcher reload schedule min : {} ", request.getParameter("searcherReloadScheduleMin"));
+			log.debug("indexingModeAnalyzer : {} ", request.getParameter("indexingModeAnalyzer"));
+			log.debug("searchModeAnalyzer : {} ", request.getParameter("searchModeAnalyzer"));
+			log.debug("indexingModeAnalyzerType : {} ", request.getParameter("indexingModeAnalyzerType"));
+			log.debug("searchModelAnalyzerType : {} ", request.getParameter("searchModelAnalyzerType"));
+			log.debug("indexingModeAnalyzerConstArgs : {} ", request.getParameter("indexingModeAnalyzerConstArgs"));
+			log.debug("searchModeAnalyzerConstArgs : {} ", request.getParameter("searchModeAnalyzerConstArgs"));
 		}
 
 		//필드들을 걸러낸다.
@@ -278,21 +278,21 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			}
 			
 
-			if(logger.isDebugEnabled()) {
-				logger.debug("crescentField Name {} = {}", fieldName, "sortField : " + request.getParameter(fieldName+"-sortField"));
-				logger.debug("crescentField Name {} = {}", fieldName, "defaultSearchField : "+ request.getParameter(fieldName+"-defaultSearchField"));
+			if(log.isDebugEnabled()) {
+				log.debug("crescentField Name {} = {}", fieldName, "sortField : " + request.getParameter(fieldName+"-sortField"));
+				log.debug("crescentField Name {} = {}", fieldName, "defaultSearchField : "+ request.getParameter(fieldName+"-defaultSearchField"));
 			}
 
-			if(logger.isDebugEnabled()) {
-				logger.debug("crescentField Name {} = {}", fieldName, "analyze : " + request.getParameter(fieldName+"-analyze"));
-				logger.debug("crescentField Name {} = {}", fieldName, "index : " + request.getParameter(fieldName+"-index"));
-				logger.debug("crescentField Name {} = {}", fieldName, "must : " + request.getParameter(fieldName+"-must"));
-				logger.debug("crescentField Name {} = {}", fieldName, "store : " + request.getParameter(fieldName+"-store"));
-				logger.debug("crescentField Name {} = {}", fieldName, "termoffset : " + request.getParameter(fieldName+"-termoffset"));
-				logger.debug("crescentField Name {} = {}", fieldName, "termposition : " + request.getParameter(fieldName+"-termposition"));
-				logger.debug("crescentField Name {} = {}", fieldName, "termvector : " + request.getParameter(fieldName+"-termvector"));
-				logger.debug("crescentField Name {} = {}", fieldName, "boost : " + request.getParameter(fieldName+"-boost"));
-				logger.debug("crescentField Name {} = {}", fieldName, "type : " + request.getParameter(fieldName+"-type"));
+			if(log.isDebugEnabled()) {
+				log.debug("crescentField Name {} = {}", fieldName, "analyze : " + request.getParameter(fieldName+"-analyze"));
+				log.debug("crescentField Name {} = {}", fieldName, "index : " + request.getParameter(fieldName+"-index"));
+				log.debug("crescentField Name {} = {}", fieldName, "must : " + request.getParameter(fieldName+"-must"));
+				log.debug("crescentField Name {} = {}", fieldName, "store : " + request.getParameter(fieldName+"-store"));
+				log.debug("crescentField Name {} = {}", fieldName, "termoffset : " + request.getParameter(fieldName+"-termoffset"));
+				log.debug("crescentField Name {} = {}", fieldName, "termposition : " + request.getParameter(fieldName+"-termposition"));
+				log.debug("crescentField Name {} = {}", fieldName, "termvector : " + request.getParameter(fieldName+"-termvector"));
+				log.debug("crescentField Name {} = {}", fieldName, "boost : " + request.getParameter(fieldName+"-boost"));
+				log.debug("crescentField Name {} = {}", fieldName, "type : " + request.getParameter(fieldName+"-type"));
 			}
 		}
 		
@@ -326,7 +326,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		if(targetIndex > 0) {
 			collectionList.remove(targetIndex);
 		} else {
-			logger.error("삭제하려는 컬렉션이 존재하지 않습니다. [{}]", collectionName);
+			log.error("삭제하려는 컬렉션이 존재하지 않습니다. [{}]", collectionName);
 			throw new IllegalArgumentException("삭제하려는 컬렉션이 존재하지 않습니다.");
 		}
 		

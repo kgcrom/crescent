@@ -1,34 +1,26 @@
 package com.tistory.devyongsik.crescent.admin.controller;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Writer;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.crescent.data.handler.Handler;
 import com.tistory.devyongsik.crescent.data.handler.JsonDataHandler;
 import com.tistory.devyongsik.crescent.index.entity.IndexingRequestForm;
 import com.tistory.devyongsik.crescent.index.indexer.CrescentIndexerExecutor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * author : need4spd, need4spd@naver.com, 2012. 8. 15.
- */
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Writer;
 
+@Slf4j
 @Controller
 public class UpdateController {
-	
-	private Logger logger = LoggerFactory.getLogger(UpdateController.class);
 	
 	@Autowired
 	@Qualifier("crescentCollectionHandler")
@@ -52,7 +44,7 @@ public class UpdateController {
 		
 		String collectionName = request.getParameter("collection_name");
 		
-		logger.info("collection name : {}", collectionName);
+		log.info("collection name : {}", collectionName);
 		
 		StringBuilder text = new StringBuilder();
 		
@@ -85,7 +77,7 @@ public class UpdateController {
 			writer.close();
 			
 		} catch (IOException e) {
-			logger.error("error : ", e);
+			log.error("error : ", e);
 		}
 	}
 }

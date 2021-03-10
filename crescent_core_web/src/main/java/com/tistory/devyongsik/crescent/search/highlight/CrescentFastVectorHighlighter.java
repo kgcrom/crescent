@@ -1,18 +1,20 @@
 package com.tistory.devyongsik.crescent.search.highlight;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.vectorhighlight.FastVectorHighlighter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Slf4j
 public class CrescentFastVectorHighlighter {
-	private Logger logger = LoggerFactory.getLogger(CrescentFastVectorHighlighter.class);
+
 	private FastVectorHighlighter highlighter = new FastVectorHighlighter();
 	
 	public String getBestFragment(IndexReader indexReader, int docId, Query query, String fieldName) {
 		
-		logger.debug("get highlight... {}, {}", docId, query);
+		log.debug("get highlight... {}, {}", docId, query);
 		
 		try {
 			
@@ -22,7 +24,7 @@ public class CrescentFastVectorHighlighter {
 			return fragment;
 			
 		} catch (Exception e) {
-			logger.error("highlighter error : ", e);
+			log.error("highlighter error : ", e);
 			
 			return "";
 		}

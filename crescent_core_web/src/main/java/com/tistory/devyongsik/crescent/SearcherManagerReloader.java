@@ -1,30 +1,27 @@
 package com.tistory.devyongsik.crescent;
 
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.crescent.search.searcher.CrescentSearcherManager;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.search.SearcherManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.SmartLifecycle;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.search.SearcherManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.SmartLifecycle;
-import org.springframework.stereotype.Component;
-
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.search.searcher.CrescentSearcherManager;
-
+@Slf4j
 @Component
 public class SearcherManagerReloader implements SmartLifecycle {
 
-	private Logger logger = LoggerFactory.getLogger(SearcherManagerReloader.class);
-	
 	@Autowired
 	@Qualifier("crescentSearcherManager")
 	private CrescentSearcherManager crescentSearcherManager;
@@ -45,7 +42,7 @@ public class SearcherManagerReloader implements SmartLifecycle {
 		
 		List<CrescentCollection> crescentCollectionList = crescentCollectionHandler.getCrescentCollections().getCrescentCollections();
 
-		logger.info("reloader start.....[{}]", crescentCollectionList);
+		log.info("reloader start.....[{}]", crescentCollectionList);
 		
 
 		for(CrescentCollection collection : crescentCollectionList) {
@@ -61,7 +58,7 @@ public class SearcherManagerReloader implements SmartLifecycle {
 		for(ScheduledThreadPoolExecutor exec : execList) {
 			List<Runnable> rList = exec.shutdownNow();
 			
-			logger.info("Reloader Shutdown.. {}", rList.toString());
+			log.info("Reloader Shutdown.. {}", rList.toString());
 		}
 		
 		List<CrescentCollection> crescentCollectionList = crescentCollectionHandler.getCrescentCollections().getCrescentCollections();
@@ -77,7 +74,7 @@ public class SearcherManagerReloader implements SmartLifecycle {
 				e.printStackTrace();
 			}
 			
-			logger.error("IndexWriter close....{}", collection.getName());
+			log.error("IndexWriter close....{}", collection.getName());
 		}
 	}
 	
@@ -88,7 +85,7 @@ public class SearcherManagerReloader implements SmartLifecycle {
 		public Reloader(String collectionName) {
 			this.collectionName = collectionName;
 			
-			logger.info("Reloader Start {} ", collectionName);
+			log.info("Reloader Start {} ", collectionName);
 		}
 		
 		@Override
@@ -101,10 +98,10 @@ public class SearcherManagerReloader implements SmartLifecycle {
 				refreshed = searcherManager.maybeRefresh();
 				
 			} catch (IOException e) {
-				logger.error("Searcher Manager Reloader Error!", e);
+				log.error("Searcher Manager Reloader Error!", e);
 			}
 			
-			logger.info("Searcher Manager Reloaded..{}, {}", collectionName, refreshed);
+			log.info("Searcher Manager Reloaded..{}, {}", collectionName, refreshed);
 		}	
 	}
 

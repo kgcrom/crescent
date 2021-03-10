@@ -1,15 +1,13 @@
 package com.tistory.devyongsik.crescent.search;
 
+import lombok.extern.slf4j.Slf4j;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import java.io.IOException;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+@Slf4j
 public class JsonFormConverter {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
-	
 	public String convert(Object targetObject) {
 		
 		try {
@@ -19,7 +17,7 @@ public class JsonFormConverter {
 			return json;
 			
 		} catch (IOException e) {
-			logger.error("Exception while make json form string.", e);
+			log.error("Exception while make json form string.", e);
 			throw new IllegalStateException("Exception while make json form string.", e);
 		}
 	}

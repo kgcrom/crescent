@@ -5,14 +5,14 @@ import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapperImpl;
 
+@Slf4j
 public class RequestBuilder<T> {
 	
-	private Logger logger = LoggerFactory.getLogger(RequestBuilder.class);
-
 	public T mappingRequestParam(HttpServletRequest request, Class<T> clazz) throws Exception {
 		
 		T returnObject = clazz.newInstance();
@@ -40,7 +40,7 @@ public class RequestBuilder<T> {
 				paramValue = URLDecoder.decode(paramValue, "utf-8");
 			}
 			
-			logger.debug("field name : {}, paramName : {}, defaultValue : {}", new Object[]{field.getName(), paramName, paramValue});
+			log.debug("field name : {}, paramName : {}, defaultValue : {}", new Object[]{field.getName(), paramName, paramValue});
 			
 			beanWrapperImpl.setPropertyValue(field.getName(), paramValue);
 		}
