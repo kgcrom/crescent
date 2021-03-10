@@ -1,34 +1,23 @@
 package com.tistory.devyongsik.crescent.search.searcher;
 
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.crescent.query.CrescentSearchRequestWrapper;
+import com.tistory.devyongsik.crescent.search.entity.SearchResult;
+import com.tistory.devyongsik.crescent.search.highlight.CrescentFastVectorHighlighter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.search.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.search.Filter;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.SearcherManager;
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.TopDocs;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.logger.CrescentLogger;
-import com.tistory.devyongsik.crescent.logger.LogInfo;
-import com.tistory.devyongsik.crescent.query.CrescentSearchRequestWrapper;
-import com.tistory.devyongsik.crescent.search.entity.SearchResult;
-import com.tistory.devyongsik.crescent.search.highlight.CrescentFastVectorHighlighter;
 
 @Slf4j
 @Component("crescentDefaultDocSearcher")
@@ -78,24 +67,9 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			long endTime = System.currentTimeMillis();
 			
 			//전체 검색 건수
+			// TODO logging search result
+			// csrw에 정보와 elapsed time, query, total hit
 			totalHitsCount = topDocs.totalHits;
-			
-			LogInfo logInfo = new LogInfo();
-			logInfo.setCollectionName(csrw.getCollectionName());
-			logInfo.setElaspedTimeMil(endTime - startTime);
-			logInfo.setKeyword(csrw.getKeyword());
-			logInfo.setPageNum(csrw.getPageNum());
-			logInfo.setPcid(csrw.getPcId());
-			logInfo.setQuery(query);
-			logInfo.setSort(csrw.getSort());
-			logInfo.setTotalCount(totalHitsCount);
-			logInfo.setUserId(csrw.getUserId());
-			logInfo.setUserIp(csrw.getUserIp());
-			logInfo.setFilter(csrw.getFilter());
-			
-			CrescentLogger.logging(logInfo);
-			
-			
 			log.debug("Total Hits Count : {} ", totalHitsCount);
 			
 			ScoreDoc[] hits = topDocs.scoreDocs;
@@ -118,11 +92,6 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			int startOffset = csrw.getStartOffSet();
 			endOffset = Math.min(hits.length, startOffset + csrw.getHitsForPage());
 									
-			//for(int i = startOffset; i < endOffset; i++) {
-			//	Document doc = indexSearcher.doc(hits[i].doc);
-			//	resultDocumentList.add(doc);
-			//}
-			
 			log.debug("start offset : [{}], end offset : [{}], total : [{}], numOfHits :[{}]"
 							,new Object[]{csrw.getStartOffSet(), endOffset, totalHitsCount, numOfHits});
 			log.debug("hits count : [{}]", hits.length);
@@ -215,11 +184,8 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			searchResult.setResultList(resultList);
 			
 			return searchResult;
-			
-			
 		} finally {
 			searcherManager.release(indexSearcher);
-			indexSearcher = null;
 		}
 		
 		return searchResult;
