@@ -17,10 +17,8 @@ import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentDefaultSearchField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class CrescentSearchRequestWrapper {
 	private Logger logger = LoggerFactory.getLogger(CrescentSearchRequestWrapper.class);

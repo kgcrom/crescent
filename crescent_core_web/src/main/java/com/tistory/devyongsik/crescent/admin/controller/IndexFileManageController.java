@@ -1,13 +1,9 @@
 package com.tistory.devyongsik.crescent.admin.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.tistory.devyongsik.crescent.admin.entity.IndexInfo;
+import com.tistory.devyongsik.crescent.admin.service.IndexFileManageService;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -15,46 +11,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tistory.devyongsik.crescent.admin.entity.IndexInfo;
-import com.tistory.devyongsik.crescent.admin.service.IndexFileManageService;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class IndexFileManageController {
-	
+
 	@Autowired
 	@Qualifier("indexFileManageService")
 	private IndexFileManageService indexFileManageService;
-	
-	@RequestMapping("/indexFileManageMain")
-	public ModelAndView indexFileManageMain(@RequestParam(value="selectCollectionName",required=false) String selectCollectionName
-											, @RequestParam(value="selectTopField", required=false) String selectTopField) throws Exception {
 
-        ModelAndView modelAndView = new ModelAndView();
+	@Autowired
+	private CrescentCollectionHandler collectionHandler;
+
+	@RequestMapping("/indexFileManageMain")
+	public ModelAndView indexFileManageMain(@RequestParam(value = "selectCollectionName", required = false) String selectCollectionName
+			, @RequestParam(value = "selectTopField", required = false) String selectTopField) throws Exception {
+
+		ModelAndView modelAndView = new ModelAndView();
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		modelAndView.setViewName("/admin/indexFileManageMain");
 
-        CrescentCollectionHandler collectionHandler
-                = SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-        List<String> collectionNames = new ArrayList<String>();
+		List<String> collectionNames = new ArrayList<String>();
 
-        for (CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
-            collectionNames.add(crescentCollection.getName());
-        }
-        
-        if (selectCollectionName == null) {
-        	selectCollectionName = collectionNames.get(0);
-        }
-        CrescentCollection selectCollection = collectionHandler
-                                                    .getCrescentCollections()
-                                                    .getCrescentCollection(selectCollectionName);
-        
-        if (selectTopField == null) {
-        	selectTopField = selectCollection.getFields().get(0).getName();
-        }
+		for (CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
+			collectionNames.add(crescentCollection.getName());
+		}
+
+		if (selectCollectionName == null) {
+			selectCollectionName = collectionNames.get(0);
+		}
+		CrescentCollection selectCollection = collectionHandler
+				.getCrescentCollections()
+				.getCrescentCollection(selectCollectionName);
+
+		if (selectTopField == null) {
+			selectTopField = selectCollection.getFields().get(0).getName();
+		}
 		IndexInfo indexInfo = indexFileManageService.getIndexInfo(selectCollection, selectTopField);
 
 		result.put("collectionNames", collectionNames);
@@ -77,11 +73,11 @@ public class IndexFileManageController {
 		modelAndView.addObject("RESULT", result);
 		return modelAndView;
 	}
-	
+
 	@RequestMapping("/indexFileManageDoc")
 	public ModelAndView indexFileManageDoc() throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
-		
+
 		return modelAndView;
 	}
 }

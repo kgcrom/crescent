@@ -5,7 +5,6 @@ import java.util.Map;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
 import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
 import org.apache.commons.lang.StringUtils;
 

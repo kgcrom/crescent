@@ -23,7 +23,6 @@ import org.springframework.stereotype.Component;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
 import com.tistory.devyongsik.crescent.logger.CrescentLogger;
 import com.tistory.devyongsik.crescent.logger.LogInfo;
 import com.tistory.devyongsik.crescent.query.CrescentSearchRequestWrapper;
