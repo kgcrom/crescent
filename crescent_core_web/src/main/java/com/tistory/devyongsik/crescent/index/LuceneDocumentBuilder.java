@@ -1,19 +1,15 @@
 package com.tistory.devyongsik.crescent.index;
 
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import lombok.extern.slf4j.Slf4j;
+import net.htmlparser.jericho.Source;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexableField;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import lombok.extern.slf4j.Slf4j;
-import net.htmlparser.jericho.Source;
-
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexableField;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
 
 @Slf4j
 public class LuceneDocumentBuilder {

@@ -43,8 +43,6 @@ public class CrescentSearcherManager {
 		
 		Set<String> collectionNames = collectionsMap.keySet();
 		
-//		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
-		
 		for(String collectionName : collectionNames) {
 			
 			log.info("collection name {}", collectionName);

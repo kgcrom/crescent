@@ -1,14 +1,11 @@
 package com.tistory.devyongsik.crescent.search.entity;
 
-import java.lang.reflect.Field;
-import java.net.URLDecoder;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanWrapperImpl;
 
 import javax.servlet.http.HttpServletRequest;
-
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapperImpl;
+import java.lang.reflect.Field;
+import java.net.URLDecoder;
 
 @Slf4j
 public class RequestBuilder<T> {

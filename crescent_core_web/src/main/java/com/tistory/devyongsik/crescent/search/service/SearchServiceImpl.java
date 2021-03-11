@@ -1,26 +1,23 @@
 package com.tistory.devyongsik.crescent.search.service;
 
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.search.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import com.tistory.devyongsik.crescent.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequestValidator;
 import com.tistory.devyongsik.crescent.search.entity.SearchResult;
 import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.crescent.search.searcher.CrescentDocSearcher;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.search.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service("searchService")

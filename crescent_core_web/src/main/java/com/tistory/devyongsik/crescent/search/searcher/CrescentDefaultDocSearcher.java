@@ -8,7 +8,13 @@ import com.tistory.devyongsik.crescent.search.entity.SearchResult;
 import com.tistory.devyongsik.crescent.search.highlight.CrescentFastVectorHighlighter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.Filter;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.SearcherManager;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.TopDocs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -55,7 +61,6 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			log.debug("filter : {}" , filter);
 			log.debug("sort : {}" , sort);
 			
-			long startTime = System.currentTimeMillis();
 			TopDocs topDocs = null;
 			
 			if(sort == null) {
@@ -63,8 +68,6 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			} else {
 				topDocs = indexSearcher.search(query, filter, numOfHits, sort);
 			}
-			
-			long endTime = System.currentTimeMillis();
 			
 			//전체 검색 건수
 			// TODO logging search result

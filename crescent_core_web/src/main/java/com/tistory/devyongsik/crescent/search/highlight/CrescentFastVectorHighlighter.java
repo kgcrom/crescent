@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.vectorhighlight.FastVectorHighlighter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class CrescentFastVectorHighlighter {

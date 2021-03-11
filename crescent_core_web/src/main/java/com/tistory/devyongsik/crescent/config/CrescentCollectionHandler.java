@@ -1,5 +1,20 @@
 package com.tistory.devyongsik.crescent.config;
 
+import com.thoughtworks.xstream.XStream;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentAnalyzerHolder;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentSortField;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.util.Version;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,25 +30,6 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
-import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.util.Version;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
-
-import com.thoughtworks.xstream.XStream;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentAnalyzerHolder;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentSortField;
 
 @Slf4j
 @Component("crescentCollectionHandler")

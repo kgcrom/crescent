@@ -1,10 +1,6 @@
 package com.tistory.devyongsik.crescent.query;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -15,10 +11,11 @@ import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class DefaultKeywordParser {
