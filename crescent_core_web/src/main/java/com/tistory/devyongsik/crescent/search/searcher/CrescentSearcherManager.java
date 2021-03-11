@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.search.SearcherFactory;
 import org.apache.lucene.search.SearcherManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -19,18 +17,18 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@Component("crescentSearcherManager")
+@Component
 public class CrescentSearcherManager {
 
 	private Map<String, SearcherManager> searcherManagerByCollection = new ConcurrentHashMap<String, SearcherManager>();
 
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
-	private CrescentCollectionHandler collectionHandler;
-	
-	@Autowired
-	@Qualifier("indexWriterManager")
-	private IndexWriterManager indexWriterManager;
+	private final CrescentCollectionHandler collectionHandler;
+	private final IndexWriterManager indexWriterManager;
+
+	public CrescentSearcherManager(CrescentCollectionHandler collectionHandler, IndexWriterManager indexWriterManager) {
+		this.collectionHandler = collectionHandler;
+		this.indexWriterManager = indexWriterManager;
+	}
 
 	@PostConstruct
 	private void indexSearcherInit() {

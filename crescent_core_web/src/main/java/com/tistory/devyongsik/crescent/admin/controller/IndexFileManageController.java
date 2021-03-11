@@ -20,8 +20,7 @@ import java.util.Map;
 public class IndexFileManageController {
 
 	@Autowired
-	@Qualifier("indexFileManageService")
-	private IndexFileManageService indexFileManageService;
+	private IndexFileManageService indexFileManageServiceImpl;
 
 	@Autowired
 	private CrescentCollectionHandler collectionHandler;
@@ -51,7 +50,7 @@ public class IndexFileManageController {
 		if (selectTopField == null) {
 			selectTopField = selectCollection.getFields().get(0).getName();
 		}
-		IndexInfo indexInfo = indexFileManageService.getIndexInfo(selectCollection, selectTopField);
+		IndexInfo indexInfo = indexFileManageServiceImpl.getIndexInfo(selectCollection, selectTopField);
 
 		result.put("collectionNames", collectionNames);
 		result.put("selectCollectionName", selectCollectionName);

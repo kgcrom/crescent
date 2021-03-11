@@ -10,20 +10,20 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Slf4j
-@Component("crescentIndexerExecutor")
+@Component
 public class CrescentIndexerExecutor {
 
-	@Autowired
-	@Qualifier("crescentIndexer")
-	private CrescentIndexer crescentIndexer;
-	
+	private final CrescentIndexer crescentIndexer;
+
+	public CrescentIndexerExecutor(CrescentIndexer crescentIndexer) {
+		this.crescentIndexer = crescentIndexer;
+	}
+
 	public String indexing(CrescentCollection collection, IndexingRequestForm indexingRequestForm) {
 		
 		log.info("indexingRequestForm : {}", indexingRequestForm);

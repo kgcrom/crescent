@@ -10,8 +10,6 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,13 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Service("morphService")
+@Service
 public class MorphServiceImpl implements MorphService {
 
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
-	private CrescentCollectionHandler collectionHandler;
-	
+	private final CrescentCollectionHandler collectionHandler;
+
+	public MorphServiceImpl(CrescentCollectionHandler collectionHandler) {
+		this.collectionHandler = collectionHandler;
+	}
+
 	@Override
 	public List<MorphToken> getTokens(String keyword, boolean isIndexingMode, String collectionName) throws IOException {
 		StringReader reader = new StringReader(keyword);

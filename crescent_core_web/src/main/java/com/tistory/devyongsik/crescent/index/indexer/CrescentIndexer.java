@@ -7,8 +7,6 @@ import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -21,13 +19,15 @@ import java.util.Map;
 
 
 @Slf4j
-@Component("crescentIndexer")
+@Component
 public class CrescentIndexer {
 
-	@Autowired
-	@Qualifier("indexWriterManager")
-	private IndexWriterManager indexWriterManager;
-	
+	private final IndexWriterManager indexWriterManager;
+
+	public CrescentIndexer(IndexWriterManager indexWriterManager) {
+		this.indexWriterManager = indexWriterManager;
+	}
+
 	public void addDocument(List<Document> documentList, String collectionName) {
 		
 		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);

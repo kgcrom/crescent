@@ -7,8 +7,6 @@ import com.tistory.devyongsik.crescent.data.handler.JsonDataHandler;
 import com.tistory.devyongsik.crescent.index.entity.IndexingRequestForm;
 import com.tistory.devyongsik.crescent.index.indexer.CrescentIndexerExecutor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,14 +20,14 @@ import java.io.Writer;
 @Controller
 public class UpdateController {
 	
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
-	private CrescentCollectionHandler collectionHandler;
-	
-	@Autowired
-	@Qualifier("crescentIndexerExecutor")
-	private CrescentIndexerExecutor crescentIndexerExecutor;
-	
+	private final CrescentCollectionHandler collectionHandler;
+	private final CrescentIndexerExecutor crescentIndexerExecutor;
+
+	public UpdateController(CrescentCollectionHandler collectionHandler, CrescentIndexerExecutor crescentIndexerExecutor) {
+		this.collectionHandler = collectionHandler;
+		this.crescentIndexerExecutor = crescentIndexerExecutor;
+	}
+
 	@RequestMapping("/update")
 	public void updateDocument(HttpServletRequest request, HttpServletResponse response) {
 		

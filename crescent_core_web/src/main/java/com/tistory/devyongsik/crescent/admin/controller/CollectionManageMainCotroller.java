@@ -1,33 +1,29 @@
 package com.tistory.devyongsik.crescent.admin.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.tistory.devyongsik.crescent.admin.service.CollectionManageService;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tistory.devyongsik.crescent.admin.service.CollectionManageService;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 public class CollectionManageMainCotroller {
 
-	@Autowired
-	@Qualifier("collectionManageService")
-	private CollectionManageService collectionManageService;
-	
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
-	private CrescentCollectionHandler collectionHandler;
-	
+	private final CollectionManageService collectionManageServiceImpl;
+	private final CrescentCollectionHandler collectionHandler;
+
+	public CollectionManageMainCotroller(CollectionManageService collectionManageServiceImpl, CrescentCollectionHandler collectionHandler) {
+		this.collectionManageServiceImpl = collectionManageServiceImpl;
+		this.collectionHandler = collectionHandler;
+	}
+
 	@RequestMapping("/collectionManageMain")
 	public ModelAndView collectionManageMain(@RequestParam(value="collectionName", required=false) String selectedCollectionName) throws Exception {
 		
@@ -56,7 +52,7 @@ public class CollectionManageMainCotroller {
 
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
-		CrescentCollection selectedCollection = collectionManageService.updateCollectionInfo(request);
+		CrescentCollection selectedCollection = collectionManageServiceImpl.updateCollectionInfo(request);
 		
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -85,7 +81,7 @@ public class CollectionManageMainCotroller {
 	@RequestMapping("/collectionAdd")
 	public ModelAndView collectionAdd(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		CrescentCollection selectedCollection = collectionManageService.addCollectionInfo(request);
+		CrescentCollection selectedCollection = collectionManageServiceImpl.addCollectionInfo(request);
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 	
 		ModelAndView modelAndView = new ModelAndView();
@@ -104,7 +100,7 @@ public class CollectionManageMainCotroller {
 	@RequestMapping("/deleteCollection")
 	public ModelAndView deleteCollection(@RequestParam(value="collectionName") String collectionName ) throws Exception {
 		
-		collectionManageService.deleteCollectionInfo(collectionName);
+		collectionManageServiceImpl.deleteCollectionInfo(collectionName);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		

@@ -27,13 +27,13 @@ import java.util.Map;
 @Controller
 public class MorphAdminMainController {
 
-	@Autowired
-	@Qualifier("morphService")
-	private MorphService morphService = null;
-	
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
+	private MorphService morphServiceImpl;
 	private CrescentCollectionHandler collectionHandler;
+
+	public MorphAdminMainController(MorphService morphServiceImpl, CrescentCollectionHandler collectionHandler) {
+		this.morphServiceImpl = morphServiceImpl;
+		this.collectionHandler = collectionHandler;
+	}
 
 	@RequestMapping("/morphMain")
 	public ModelAndView morphMain(@RequestParam(value="col_name", required=false) String selectedCollectionName) throws Exception {
@@ -77,8 +77,8 @@ public class MorphAdminMainController {
 		
 		log.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
 		
-		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true, selectedCollectionName);
-		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false, selectedCollectionName);
+		List<MorphToken> resultTokenListIndexingMode = morphServiceImpl.getTokens(keyword, true, selectedCollectionName);
+		List<MorphToken> resultTokenListQueryMode = morphServiceImpl.getTokens(keyword, false, selectedCollectionName);
 		
 		modelAndView.setViewName("/admin/morphMain");
 
@@ -102,8 +102,8 @@ public class MorphAdminMainController {
 			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
 		}
 		
-		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true, selectedCollectionName);
-		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false, selectedCollectionName);
+		List<MorphToken> resultTokenListIndexingMode = morphServiceImpl.getTokens(keyword, true, selectedCollectionName);
+		List<MorphToken> resultTokenListQueryMode = morphServiceImpl.getTokens(keyword, false, selectedCollectionName);
 		
 		List<MorphResult> morphIndexingTestResult = new ArrayList<MorphResult>();
 		List<MorphResult> morphQueryTestResult = new ArrayList<MorphResult>();

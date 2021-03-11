@@ -9,8 +9,6 @@ import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestEx
 import com.tistory.devyongsik.crescent.search.searcher.CrescentDocSearcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.Query;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,17 +18,17 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Service("searchService")
+@Service
 public class SearchServiceImpl implements SearchService {
 
-	@Autowired
-	@Qualifier("crescentDefaultDocSearcher")
-	private CrescentDocSearcher crescentDocSearcher;
+	private final CrescentDocSearcher crescentDocSearcher;
+	private final CrescentCollectionHandler collectionHandler;
 
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
-	private CrescentCollectionHandler collectionHandler;
-	
+	public SearchServiceImpl(CrescentDocSearcher crescentDocSearcher, CrescentCollectionHandler collectionHandler) {
+		this.crescentDocSearcher = crescentDocSearcher;
+		this.collectionHandler = collectionHandler;
+	}
+
 	@Override
 	public SearchResult search(SearchRequest searchRequest) throws IOException {
 		

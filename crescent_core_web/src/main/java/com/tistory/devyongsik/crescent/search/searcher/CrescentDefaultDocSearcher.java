@@ -15,8 +15,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TopDocs;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,17 +24,17 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Component("crescentDefaultDocSearcher")
+@Component
 public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 
-	@Autowired
-	@Qualifier("crescentSearcherManager")
-	private CrescentSearcherManager crescentSearcherManager;
+	private final CrescentSearcherManager crescentSearcherManager;
+	private final CrescentCollectionHandler collectionHandler;
 
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
-	private CrescentCollectionHandler collectionHandler;
-	
+	public CrescentDefaultDocSearcher(CrescentSearcherManager crescentSearcherManager, CrescentCollectionHandler collectionHandler) {
+		this.crescentSearcherManager = crescentSearcherManager;
+		this.collectionHandler = collectionHandler;
+	}
+
 	@Override
 	public SearchResult search(CrescentSearchRequestWrapper csrw) throws IOException {
 		

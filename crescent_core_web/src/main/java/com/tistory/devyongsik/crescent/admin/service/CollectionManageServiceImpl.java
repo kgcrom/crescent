@@ -1,20 +1,5 @@
 package com.tistory.devyongsik.crescent.admin.service;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
-import com.tistory.devyongsik.crescent.admin.controller.CollectionManageMainCotroller;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentAnalyzerHolder;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
@@ -22,15 +7,25 @@ import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentDefaultSearchField;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentSortField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 @Slf4j
-@Service("collectionManageService")
+@Service
 public class CollectionManageServiceImpl implements CollectionManageService {
 
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
-	private CrescentCollectionHandler collectionHandler;
-	
+	private final CrescentCollectionHandler collectionHandler;
+
+	public CollectionManageServiceImpl(CrescentCollectionHandler collectionHandler) {
+		this.collectionHandler = collectionHandler;
+	}
+
 	@Override
 	public CrescentCollection updateCollectionInfo(HttpServletRequest request) {
 		

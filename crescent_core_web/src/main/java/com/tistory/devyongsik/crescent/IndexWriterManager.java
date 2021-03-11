@@ -10,8 +10,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -20,15 +18,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@Component("indexWriterManager")
+@Component
 public class IndexWriterManager {
-
 	private Map<String, IndexWriter> indexWritersByCollectionName = new ConcurrentHashMap<String, IndexWriter>();
 
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
-	private CrescentCollectionHandler collectionHandler;
-	
+	private final CrescentCollectionHandler collectionHandler;
+
+	public IndexWriterManager(CrescentCollectionHandler collectionHandler) {
+		this.collectionHandler = collectionHandler;
+	}
+
 	@PostConstruct
 	private void initIndexWriter() {
 		

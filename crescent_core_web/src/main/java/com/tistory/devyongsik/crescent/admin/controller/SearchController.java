@@ -7,7 +7,6 @@ import com.tistory.devyongsik.crescent.search.entity.SearchResult;
 import com.tistory.devyongsik.crescent.search.service.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -21,8 +20,7 @@ import java.io.PrintWriter;
 public class SearchController {
 
 	@Autowired
-	@Qualifier("searchService")
-	private SearchService searchService;
+	private SearchService searchServiceImpl;
 	
 	@RequestMapping("/search")
 	public void searchDocument(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -30,7 +28,7 @@ public class SearchController {
 		RequestBuilder<SearchRequest> requestBuilder = new RequestBuilder<SearchRequest>();
 		SearchRequest searchRequest = requestBuilder.mappingRequestParam(request, SearchRequest.class);
 		
-		SearchResult searchResult = searchService.search(searchRequest);
+		SearchResult searchResult = searchServiceImpl.search(searchRequest);
 		
 		log.debug("search result : {}", searchResult.getResultList());
 		
