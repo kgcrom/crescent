@@ -1,41 +1,39 @@
 package com.tistory.devyongsik.crescent.index.indexer;
 
-import java.util.List;
-
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TermQuery;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.index.LuceneDocumentBuilder;
 import com.tistory.devyongsik.crescent.index.entity.IndexingCommand;
 import com.tistory.devyongsik.crescent.index.entity.IndexingRequestForm;
 import com.tistory.devyongsik.crescent.index.entity.IndexingType;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
+import org.springframework.stereotype.Component;
 
-@Component("crescentIndexerExecutor")
+import java.util.List;
+
+@Slf4j
+@Component
 public class CrescentIndexerExecutor {
-	private Logger logger = LoggerFactory.getLogger(CrescentIndexerExecutor.class);
-	
-	@Autowired
-	@Qualifier("crescentIndexer")
-	private CrescentIndexer crescentIndexer;
-	
+
+	private final CrescentIndexer crescentIndexer;
+
+	public CrescentIndexerExecutor(CrescentIndexer crescentIndexer) {
+		this.crescentIndexer = crescentIndexer;
+	}
+
 	public String indexing(CrescentCollection collection, IndexingRequestForm indexingRequestForm) {
 		
-		logger.info("indexingRequestForm : {}", indexingRequestForm);
+		log.info("indexingRequestForm : {}", indexingRequestForm);
 		
 		IndexingType indexingType = IndexingType.valueOf(indexingRequestForm.getIndexingType().toUpperCase());
 		IndexingCommand indexingCommand = IndexingCommand.valueOf(indexingRequestForm.getCommand().toUpperCase());
 		String query = indexingRequestForm.getQuery();
 		
-		logger.info("Indexing type : {} , Indexing command : {} ", indexingType, indexingCommand);
-		logger.info("Query : {}", query);
+		log.info("Indexing type : {} , Indexing command : {} ", indexingType, indexingCommand);
+		log.info("Query : {}", query);
 		
 		String resultMessage = "Nothing To Execute...";
 		
@@ -52,7 +50,7 @@ public class CrescentIndexerExecutor {
 			List<Document> documentList = LuceneDocumentBuilder.buildDocumentList(indexingRequestForm.getDocumentList(), collection.getCrescentFieldByName());
 			
 			if(documentList.size() == 0) {
-				logger.error("업데이트 할 document가 없습니다.");
+				log.error("업데이트 할 document가 없습니다.");
 				throw new IllegalStateException("업데이트 할 document가 없습니다.");
 			}
 			
@@ -60,13 +58,13 @@ public class CrescentIndexerExecutor {
 			
 			String[] splitQuery = query.split(":");
 			if(splitQuery.length != 2) {
-				logger.error("Update 대상 문서를 찾을 Query식이 잘못되었습니다. [{}]", query);
+				log.error("Update 대상 문서를 찾을 Query식이 잘못되었습니다. [{}]", query);
 				throw new IllegalStateException("Update 대상 문서를 찾을 Query식이 잘못되었습니다. ["+query+"]");
 			}
 			String field = query.split(":")[0];
 			String value = query.split(":")[1];
 			
-			logger.info("field : {}, value : {}", field, value);
+			log.info("field : {}, value : {}", field, value);
 			
 			Term updateTerm = new Term(field, value);
 			
@@ -79,20 +77,20 @@ public class CrescentIndexerExecutor {
 			List<Document> documentList = LuceneDocumentBuilder.buildDocumentList(indexingRequestForm.getDocumentList(), collection.getCrescentFieldByName());
 			
 			if(documentList.size() == 0) {
-				logger.error("업데이트 할 document가 없습니다.");
+				log.error("업데이트 할 document가 없습니다.");
 				throw new IllegalStateException("업데이트 할 document가 없습니다.");
 			}
 			
 			String field = query.split(":")[0];
 			String value = query.split(":")[1];
 			
-			logger.info("field : {}, value : {}", field, value);
+			log.info("field : {}, value : {}", field, value);
 			
 			for(Document document : documentList) {
 				value = document.get(field);
 				
 				if(value == null || value.length() == 0) {
-					logger.error("Update 대상 문서를 찾을 field지이 잘못되었거나 field : [{}], value가 없습니다. value : [{}]", field, value);
+					log.error("Update 대상 문서를 찾을 field지이 잘못되었거나 field : [{}], value가 없습니다. value : [{}]", field, value);
 					throw new IllegalStateException("pdate 대상 문서를 찾을 field지이 잘못되었거나 field : ["+field+"], value가 없습니다. value : ["+value+"]");
 				}
 				
@@ -106,13 +104,13 @@ public class CrescentIndexerExecutor {
 			
 			String[] splitQuery = query.split(":");
 			if(splitQuery.length != 2) {
-				logger.error("Delete 대상 문서를 찾을 Query식이 잘못되었습니다. [{}]", query);
+				log.error("Delete 대상 문서를 찾을 Query식이 잘못되었습니다. [{}]", query);
 				throw new IllegalStateException("Delete 대상 문서를 찾을 Query식이 잘못되었습니다. ["+query+"]");
 			}
 			String field = query.split(":")[0];
 			String value = query.split(":")[1];
 			
-			logger.info("field : {}, value : {}", field, value);
+			log.info("field : {}, value : {}", field, value);
 			
 			Term deleteTerm = new Term(field, value);
 			Query deleteTermQuery = new TermQuery(deleteTerm);

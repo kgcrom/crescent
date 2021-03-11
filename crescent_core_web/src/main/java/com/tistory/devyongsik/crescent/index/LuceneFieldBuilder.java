@@ -1,5 +1,7 @@
 package com.tistory.devyongsik.crescent.index;
 
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
@@ -8,16 +10,9 @@ import org.apache.lucene.document.IntField;
 import org.apache.lucene.document.LongField;
 import org.apache.lucene.index.FieldInfo.IndexOptions;
 import org.apache.lucene.index.IndexableField;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
-
-/**
- * author : need4spd, need4spd@naver.com, 2012. 3. 4.
- */
+@Slf4j
 public class LuceneFieldBuilder {
-	private Logger logger = LoggerFactory.getLogger(LuceneFieldBuilder.class);
 
 	public IndexableField create(CrescentCollectionField collectionField, String value) {
 
@@ -35,7 +30,7 @@ public class LuceneFieldBuilder {
 
 			f.setBoost(collectionField.getBoost());
 
-			logger.debug("Field : {}", f);
+			log.debug("Field : {}", f);
 
 
 			return f;
@@ -47,7 +42,7 @@ public class LuceneFieldBuilder {
 					Long.parseLong(value),
 					fieldType);
 
-			logger.debug("Field : {}", f);
+			log.debug("Field : {}", f);
 
 			return f;
 
@@ -58,7 +53,7 @@ public class LuceneFieldBuilder {
 					Integer.parseInt(value),
 					fieldType);
 
-			logger.debug("Field : {}", f);
+			log.debug("Field : {}", f);
 
 			return f;
 		}else {

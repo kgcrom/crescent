@@ -1,35 +1,32 @@
 package com.tistory.devyongsik.crescent.admin.service;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.tistory.devyongsik.crescent.admin.entity.MorphToken;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.tistory.devyongsik.crescent.admin.entity.MorphToken;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
-@Service("morphService")
+@Slf4j
+@Service
 public class MorphServiceImpl implements MorphService {
 
-	private Logger logger = LoggerFactory.getLogger(MorphServiceImpl.class);
-	
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
-	private CrescentCollectionHandler collectionHandler;
-	
+	private final CrescentCollectionHandler collectionHandler;
+
+	public MorphServiceImpl(CrescentCollectionHandler collectionHandler) {
+		this.collectionHandler = collectionHandler;
+	}
+
 	@Override
 	public List<MorphToken> getTokens(String keyword, boolean isIndexingMode, String collectionName) throws IOException {
 		StringReader reader = new StringReader(keyword);
@@ -55,7 +52,7 @@ public class MorphServiceImpl implements MorphService {
 		while(stream.incrementToken()) {
 			Token t = new Token(charTermAtt.toString(), offSetAtt.startOffset(), offSetAtt.endOffset(), typeAtt.type());
 			
-			logger.debug("termAtt : {}, startOffset : {}, endOffset : {}, typeAtt : {}", 
+			log.debug("termAtt : {}, startOffset : {}, endOffset : {}, typeAtt : {}",
 					new Object[] {charTermAtt.toString(),offSetAtt.startOffset(), offSetAtt.endOffset(), typeAtt.type()});
 			
 			MorphToken mt = new MorphToken();

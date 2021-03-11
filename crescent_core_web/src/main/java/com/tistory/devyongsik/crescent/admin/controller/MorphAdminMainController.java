@@ -1,17 +1,13 @@
 package com.tistory.devyongsik.crescent.admin.controller;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.tistory.devyongsik.crescent.admin.entity.MorphResult;
+import com.tistory.devyongsik.crescent.admin.entity.MorphToken;
+import com.tistory.devyongsik.crescent.admin.service.MorphService;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -19,24 +15,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tistory.devyongsik.crescent.admin.entity.MorphResult;
-import com.tistory.devyongsik.crescent.admin.entity.MorphToken;
-import com.tistory.devyongsik.crescent.admin.service.MorphService;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @Controller
 public class MorphAdminMainController {
-	private Logger logger = LoggerFactory.getLogger(MorphAdminMainController.class);
 
-	@Autowired
-	@Qualifier("morphService")
-	private MorphService morphService = null;
-	
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
+	private MorphService morphServiceImpl;
 	private CrescentCollectionHandler collectionHandler;
+
+	public MorphAdminMainController(MorphService morphServiceImpl, CrescentCollectionHandler collectionHandler) {
+		this.morphServiceImpl = morphServiceImpl;
+		this.collectionHandler = collectionHandler;
+	}
 
 	@RequestMapping("/morphMain")
 	public ModelAndView morphMain(@RequestParam(value="col_name", required=false) String selectedCollectionName) throws Exception {
@@ -78,10 +75,10 @@ public class MorphAdminMainController {
 		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
 		
 		
-		logger.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
+		log.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
 		
-		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true, selectedCollectionName);
-		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false, selectedCollectionName);
+		List<MorphToken> resultTokenListIndexingMode = morphServiceImpl.getTokens(keyword, true, selectedCollectionName);
+		List<MorphToken> resultTokenListQueryMode = morphServiceImpl.getTokens(keyword, false, selectedCollectionName);
 		
 		modelAndView.setViewName("/admin/morphMain");
 
@@ -97,7 +94,7 @@ public class MorphAdminMainController {
 		String keyword = request.getParameter("keyword");
 		String selectedCollectionName = request.getParameter("collectionName");
 		
-		logger.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
+		log.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
@@ -105,8 +102,8 @@ public class MorphAdminMainController {
 			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
 		}
 		
-		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true, selectedCollectionName);
-		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false, selectedCollectionName);
+		List<MorphToken> resultTokenListIndexingMode = morphServiceImpl.getTokens(keyword, true, selectedCollectionName);
+		List<MorphToken> resultTokenListQueryMode = morphServiceImpl.getTokens(keyword, false, selectedCollectionName);
 		
 		List<MorphResult> morphIndexingTestResult = new ArrayList<MorphResult>();
 		List<MorphResult> morphQueryTestResult = new ArrayList<MorphResult>();
@@ -139,7 +136,7 @@ public class MorphAdminMainController {
 		ObjectMapper mapper = new ObjectMapper();
 		String morphResult = mapper.writeValueAsString(morphTestResultSet);
 		
-		logger.info("morphResult : {}", morphResult);
+		log.info("morphResult : {}", morphResult);
 		
 		response.setContentType("application/json;  charset=UTF-8");
 		PrintWriter writer = response.getWriter();

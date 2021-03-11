@@ -1,29 +1,25 @@
 package com.tistory.devyongsik.crescent.query;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentDefaultSearchField;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
+import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentDefaultSearchField;
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
-import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
-import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+@Slf4j
 public class CrescentSearchRequestWrapper {
-	private Logger logger = LoggerFactory.getLogger(CrescentSearchRequestWrapper.class);
 
 	private SearchRequest searchRequest = null;
 
@@ -82,7 +78,7 @@ public class CrescentSearchRequestWrapper {
 	public Sort getSort() {
 		String sortQueryString = searchRequest.getSort();
 
-		logger.debug("소트 파라미터 : {}", sortQueryString);
+		log.debug("소트 파라미터 : {}", sortQueryString);
 
 		if(sortQueryString == null || "".equals(sortQueryString) || "null".equals(sortQueryString)) return null;
 
@@ -94,7 +90,7 @@ public class CrescentSearchRequestWrapper {
 		for(int i = 0; i < parts.length; i++) {
 			String part = parts[i].trim(); //part = field desc
 
-			logger.debug("part : {}", part);
+			log.debug("part : {}", part);
 
 			boolean descending = true;
 
@@ -116,8 +112,8 @@ public class CrescentSearchRequestWrapper {
 				throw new IllegalStateException("Order 조건이 없습니다.");
 			}
 
-			if(logger.isDebugEnabled())
-				logger.debug("part order 제거 후: " + part);
+			if(log.isDebugEnabled())
+				log.debug("part order 제거 후: " + part);
 
 			if("score".equals(part)) {
 				if(descending) {
@@ -136,9 +132,9 @@ public class CrescentSearchRequestWrapper {
 			}
 		}//end for
 
-		if(logger.isDebugEnabled()) {
+		if(log.isDebugEnabled()) {
 			for(int i=0; i < lst.length; i++) {
-				logger.debug(lst[i].getField());
+				log.debug(lst[i].getField());
 			}
 		}
 		
@@ -160,7 +156,7 @@ public class CrescentSearchRequestWrapper {
 				resultQuery = queryParser.getQuery(getIndexedFields(), customQueryString, collection.getSearchModeAnalyzer(), regexQueryString);
 			
 			} catch (Exception e) {
-				logger.error("Error In getQuery ", e);
+				log.error("Error In getQuery ", e);
 				throw new CrescentInvalidRequestException(e.getMessage());
 			}
 			
@@ -195,7 +191,7 @@ public class CrescentSearchRequestWrapper {
 				return filter;
 				
 			} catch (Exception e) {
-				logger.error("Error In getFilter ", e);
+				log.error("Error In getFilter ", e);
 				throw new CrescentInvalidRequestException(e.getMessage());
 			}
 			

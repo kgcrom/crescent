@@ -1,11 +1,8 @@
 package com.tistory.devyongsik.crescent;
 
-import java.io.File;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.PostConstruct;
-
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
@@ -13,35 +10,34 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import javax.annotation.PostConstruct;
+import java.io.File;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Component("indexWriterManager")
+@Slf4j
+@Component
 public class IndexWriterManager {
-
 	private Map<String, IndexWriter> indexWritersByCollectionName = new ConcurrentHashMap<String, IndexWriter>();
-	private Logger logger = LoggerFactory.getLogger(IndexWriterManager.class);
-	
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
-	private CrescentCollectionHandler collectionHandler;
-	
+
+	private final CrescentCollectionHandler collectionHandler;
+
+	public IndexWriterManager(CrescentCollectionHandler collectionHandler) {
+		this.collectionHandler = collectionHandler;
+	}
+
 	@PostConstruct
 	private void initIndexWriter() {
 		
 		for(CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
 			
-			logger.info("collection name {}", crescentCollection.getName());
+			log.info("collection name {}", crescentCollection.getName());
 			
 			String indexDir = crescentCollection.getIndexingDirectory();
 			
-			logger.info("index file dir ; {}", indexDir);
+			log.info("index file dir ; {}", indexDir);
 			
 			Directory dir = null;
 			
@@ -59,10 +55,10 @@ public class IndexWriterManager {
 				IndexWriter indexWriter = new IndexWriter(dir, conf);
 				indexWritersByCollectionName.put(crescentCollection.getName(), indexWriter);
 				
-				logger.info("index writer for collection {} is initialized...", crescentCollection.getName());
+				log.info("index writer for collection {} is initialized...", crescentCollection.getName());
 				
 			}catch(Exception e) {
-				logger.error("index writer init error", e);
+				log.error("index writer init error", e);
 				throw new RuntimeException("index writer init error ", e);
 			}
 		}

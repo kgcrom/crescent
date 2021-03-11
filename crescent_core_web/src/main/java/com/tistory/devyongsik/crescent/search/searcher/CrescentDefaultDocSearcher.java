@@ -1,11 +1,12 @@
 package com.tistory.devyongsik.crescent.search.searcher;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.crescent.query.CrescentSearchRequestWrapper;
+import com.tistory.devyongsik.crescent.search.entity.SearchResult;
+import com.tistory.devyongsik.crescent.search.highlight.CrescentFastVectorHighlighter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
@@ -14,35 +15,26 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TopDocs;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
-import com.tistory.devyongsik.crescent.logger.CrescentLogger;
-import com.tistory.devyongsik.crescent.logger.LogInfo;
-import com.tistory.devyongsik.crescent.query.CrescentSearchRequestWrapper;
-import com.tistory.devyongsik.crescent.search.entity.SearchResult;
-import com.tistory.devyongsik.crescent.search.highlight.CrescentFastVectorHighlighter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-@Component("crescentDefaultDocSearcher")
+@Slf4j
+@Component
 public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 
-	private Logger logger = LoggerFactory.getLogger(CrescentDefaultDocSearcher.class);
-	
-	@Autowired
-	@Qualifier("crescentSearcherManager")
-	private CrescentSearcherManager crescentSearcherManager;
+	private final CrescentSearcherManager crescentSearcherManager;
+	private final CrescentCollectionHandler collectionHandler;
 
-	@Autowired
-	@Qualifier("crescentCollectionHandler")
-	private CrescentCollectionHandler collectionHandler;
-	
+	public CrescentDefaultDocSearcher(CrescentSearcherManager crescentSearcherManager, CrescentCollectionHandler collectionHandler) {
+		this.crescentSearcherManager = crescentSearcherManager;
+		this.collectionHandler = collectionHandler;
+	}
+
 	@Override
 	public SearchResult search(CrescentSearchRequestWrapper csrw) throws IOException {
 		
@@ -63,11 +55,10 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			Filter filter = csrw.getFilter();
 			Sort sort = csrw.getSort();
 			
-			logger.debug("query : {}" , query);
-			logger.debug("filter : {}" , filter);
-			logger.debug("sort : {}" , sort);
+			log.debug("query : {}" , query);
+			log.debug("filter : {}" , filter);
+			log.debug("sort : {}" , sort);
 			
-			long startTime = System.currentTimeMillis();
 			TopDocs topDocs = null;
 			
 			if(sort == null) {
@@ -76,28 +67,11 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 				topDocs = indexSearcher.search(query, filter, numOfHits, sort);
 			}
 			
-			long endTime = System.currentTimeMillis();
-			
 			//전체 검색 건수
+			// TODO logging search result
+			// csrw에 정보와 elapsed time, query, total hit
 			totalHitsCount = topDocs.totalHits;
-			
-			LogInfo logInfo = new LogInfo();
-			logInfo.setCollectionName(csrw.getCollectionName());
-			logInfo.setElaspedTimeMil(endTime - startTime);
-			logInfo.setKeyword(csrw.getKeyword());
-			logInfo.setPageNum(csrw.getPageNum());
-			logInfo.setPcid(csrw.getPcId());
-			logInfo.setQuery(query);
-			logInfo.setSort(csrw.getSort());
-			logInfo.setTotalCount(totalHitsCount);
-			logInfo.setUserId(csrw.getUserId());
-			logInfo.setUserIp(csrw.getUserIp());
-			logInfo.setFilter(csrw.getFilter());
-			
-			CrescentLogger.logging(logInfo);
-			
-			
-			logger.debug("Total Hits Count : {} ", totalHitsCount);
+			log.debug("Total Hits Count : {} ", totalHitsCount);
 			
 			ScoreDoc[] hits = topDocs.scoreDocs;
 			
@@ -105,7 +79,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			int endOffset = Math.min(totalHitsCount, csrw.getStartOffSet() + csrw.getHitsForPage());
 			
 			if(endOffset > hits.length) {
-				logger.debug("기본 설정된 검색건수보다 더 검색을 원하므로, 전체를 대상으로 검색합니다.");
+				log.debug("기본 설정된 검색건수보다 더 검색을 원하므로, 전체를 대상으로 검색합니다.");
 				
 				if(sort == null) {
 					topDocs = indexSearcher.search(query, filter, totalHitsCount);
@@ -119,15 +93,10 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			int startOffset = csrw.getStartOffSet();
 			endOffset = Math.min(hits.length, startOffset + csrw.getHitsForPage());
 									
-			//for(int i = startOffset; i < endOffset; i++) {
-			//	Document doc = indexSearcher.doc(hits[i].doc);
-			//	resultDocumentList.add(doc);
-			//}
-			
-			logger.debug("start offset : [{}], end offset : [{}], total : [{}], numOfHits :[{}]"
+			log.debug("start offset : [{}], end offset : [{}], total : [{}], numOfHits :[{}]"
 							,new Object[]{csrw.getStartOffSet(), endOffset, totalHitsCount, numOfHits});
-			logger.debug("hits count : [{}]", hits.length);
-			logger.debug("startOffset + hitsPerPage : [{}]", csrw.getStartOffSet() + csrw.getHitsForPage());
+			log.debug("hits count : [{}]", hits.length);
+			log.debug("startOffset + hitsPerPage : [{}]", csrw.getStartOffSet() + csrw.getHitsForPage());
 			
 			
 			if(totalHitsCount > 0) { 
@@ -169,7 +138,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 				result.put("error_code", errorCode);
 				result.put("error_msg", errorMessage);
 				
-				logger.debug("result list {}", resultList);
+				log.debug("result list {}", resultList);
 				
 				searchResult.setResultList(resultList);
 				searchResult.setTotalHitsCount(totalHitsCount);
@@ -187,7 +156,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 				result.put("error_msg", errorMessage);
 				
 				
-				logger.debug("result list {}", resultList);
+				log.debug("result list {}", resultList);
 				
 				searchResult.setResultList(resultList);
 				searchResult.setTotalHitsCount(0);
@@ -198,7 +167,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			
 		} catch (Exception e) {
 			
-			logger.error("error in CrescentDefaultDocSearcher : ", e);
+			log.error("error in CrescentDefaultDocSearcher : ", e);
 			
 			Map<String, Object> result = new HashMap<String, Object>();
 			List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
@@ -208,7 +177,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			result.put("error_code", errorCode);
 			result.put("error_msg", errorMessage);
 			
-			logger.error("검색 중 에러 발생함. {}", e);
+			log.error("검색 중 에러 발생함. {}", e);
 			
 			searchResult.setErrorCode(errorCode);
 			searchResult.setErrorMsg(errorMessage);
@@ -216,11 +185,8 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			searchResult.setResultList(resultList);
 			
 			return searchResult;
-			
-			
 		} finally {
 			searcherManager.release(indexSearcher);
-			indexSearcher = null;
 		}
 		
 		return searchResult;

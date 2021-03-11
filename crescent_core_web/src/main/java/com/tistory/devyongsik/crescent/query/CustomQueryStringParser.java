@@ -1,13 +1,8 @@
 package com.tistory.devyongsik.crescent.query;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -21,15 +16,18 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.util.BytesRef;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
-import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+@Slf4j
 public class CustomQueryStringParser {
 
-	private Logger logger = LoggerFactory.getLogger(CustomQueryStringParser.class);
 	private static Pattern pattern = Pattern.compile("(.*?)(:)(\".*?\")");
 	private Query resultQuery = null;
 	
@@ -78,13 +76,13 @@ public class CustomQueryStringParser {
 					isLongField = "LONG".equals(crescentField.getType());
 					isAnalyzed = crescentField.isAnalyze();
 					
-					logger.debug("selected searchTargetField : {} ", searchTargetField);
+					log.debug("selected searchTargetField : {} ", searchTargetField);
 					break;
 				}
 			}
 			
 			if(any) {
-				logger.error("검색 할 수 없는 필드입니다. {} " , fieldName);
+				log.error("검색 할 수 없는 필드입니다. {} " , fieldName);
 				throw new CrescentInvalidRequestException("검색 할 수 없는 필드입니다. [" + fieldName + "]");
 			}
 			
@@ -98,10 +96,10 @@ public class CustomQueryStringParser {
 				boolean isIncludeMax = false;
 				
 				String[] splitQuery = userRequestQuery.split("TO");
-				logger.info("splitQuery : {}", Arrays.toString(splitQuery));
+				log.info("splitQuery : {}", Arrays.toString(splitQuery));
 				
 				if(splitQuery.length != 2) {
-					logger.error("문법 오류 확인바랍니다. {} " , userRequestQuery);
+					log.error("문법 오류 확인바랍니다. {} " , userRequestQuery);
 					throw new CrescentInvalidRequestException("문법 오류 확인바랍니다. [" + userRequestQuery + "]");
 				}
 				
@@ -113,23 +111,23 @@ public class CustomQueryStringParser {
 					isIncludeMax = true;
 				}
 				
-				logger.debug("minInclude : {}, maxInclude : {}", isIncludeMin, isIncludeMax);
+				log.debug("minInclude : {}, maxInclude : {}", isIncludeMin, isIncludeMax);
 				
 				minValue = splitQuery[0].trim().substring(1);
 				maxValue = splitQuery[1].trim().substring(0, splitQuery[1].trim().length() - 1);
 				
-				logger.debug("minValue : {}, maxValue : {}", minValue, maxValue);
+				log.debug("minValue : {}, maxValue : {}", minValue, maxValue);
 				
 				boolean isNumeric = false;
 				isNumeric = StringUtils.isNumeric(minValue) && StringUtils.isNumeric(maxValue);
 				
-				logger.debug("isLongField : {}", isLongField);
-				logger.debug("is numeric : {}", isNumeric);
+				log.debug("isLongField : {}", isLongField);
+				log.debug("is numeric : {}", isNumeric);
 				
 				Query query = null;
 				
 				if(isAnalyzed) {
-					logger.error("범위검색 대상 field는 analyzed값이 false이어야 합니다. {} " , userRequestQuery);
+					log.error("범위검색 대상 field는 analyzed값이 false이어야 합니다. {} " , userRequestQuery);
 					throw new CrescentInvalidRequestException("범위검색 대상 field는 analyzed값이 false이어야 합니다. [" + userRequestQuery + "]");
 				}
 				
@@ -145,7 +143,7 @@ public class CustomQueryStringParser {
 					query = new TermRangeQuery(fieldName, minValBytes, maxValBytes, isIncludeMin, isIncludeMax);
 					
 				} else {
-					logger.error("범위검색은 필드의 타입과 쿼리의 타입이 맞아야 합니다. {} " , userRequestQuery);
+					log.error("범위검색은 필드의 타입과 쿼리의 타입이 맞아야 합니다. {} " , userRequestQuery);
 					throw new CrescentInvalidRequestException("범위검색은 필드의 타입과 쿼리의 타입이 맞아야 합니다. [" + userRequestQuery + "]");
 				}
 				
@@ -155,8 +153,8 @@ public class CustomQueryStringParser {
 				//쿼리 생성..
 				String[] keywords = userRequestQuery.split( " " );
 				
-				if(logger.isDebugEnabled()) {
-					logger.debug("split keyword : {}", Arrays.toString(keywords));
+				if(log.isDebugEnabled()) {
+					log.debug("split keyword : {}", Arrays.toString(keywords));
 				}
 				
 				for(int i = 0; i < keywords.length; i++) {
@@ -177,8 +175,8 @@ public class CustomQueryStringParser {
 						
 						resultQuery.add(query, occur);
 						
-						logger.debug("query : {} ", query.toString());
-						logger.debug("result query : {} ", resultQuery.toString());
+						log.debug("query : {} ", query.toString());
+						log.debug("result query : {} ", resultQuery.toString());
 						
 					} else {
 						
@@ -197,8 +195,8 @@ public class CustomQueryStringParser {
 							
 							resultQuery.add(query, occur);
 							
-							logger.debug("query : {} ", query.toString());
-							logger.debug("result query : {} ", resultQuery.toString());
+							log.debug("query : {} ", query.toString());
+							log.debug("result query : {} ", resultQuery.toString());
 						}
 					}
 				}
@@ -212,13 +210,13 @@ public class CustomQueryStringParser {
 				Term term = new Term(queryAnalysisResult.getFieldName(), queryAnalysisResult.getUserQuery());
 				Query regexQuery = new RegexQuery(term);
 				
-				logger.info("Regex Query : {}", regexQuery);
+				log.info("Regex Query : {}", regexQuery);
 				
 				resultQuery.add(regexQuery, queryAnalysisResult.getOccur());
 			}
 		}
 		
-		logger.info("result query : {} ", resultQuery.toString());
+		log.info("result query : {} ", resultQuery.toString());
 		
 		this.resultQuery = resultQuery;
 		
@@ -226,8 +224,7 @@ public class CustomQueryStringParser {
 	}
 	
 	private ArrayList<String> analyzedTokenList(Analyzer analyzer, String splitedKeyword) {
-		Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
-		
+
 		ArrayList<String> rst = new ArrayList<String>();
 		//split된 검색어를 Analyze..
 		TokenStream stream = null;
@@ -244,11 +241,11 @@ public class CustomQueryStringParser {
 			stream.close();
 			
 		} catch (IOException e) {
-			logger.error("error in DefaultKeywordParser : ", e);
+			log.error("error in DefaultKeywordParser : ", e);
 			throw new RuntimeException(e);
 		}
 
-		logger.debug("[{}] 에서 추출된 명사 : [{}]", new Object[]{splitedKeyword, rst.toString()});
+		log.debug("[{}] 에서 추출된 명사 : [{}]", new Object[]{splitedKeyword, rst.toString()});
 			
 
 		return rst;
@@ -295,8 +292,8 @@ public class CustomQueryStringParser {
 				userRequestQuery = userRequestQuery.substring(0, indexOfBoostSign);
 			}
 			
-			logger.debug("user Request Query : {} ", userRequestQuery);
-			logger.debug("boost : {} ", boost);
+			log.debug("user Request Query : {} ", userRequestQuery);
+			log.debug("boost : {} ", boost);
 			
 			anaysisResult.setFieldName(fieldName);
 			anaysisResult.setBoost(boost);
