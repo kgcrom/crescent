@@ -38,7 +38,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 
     Directory directory = FSDirectory.open(new File(selectCollection.getIndexingDirectory()));
     DirectoryReader directoryReader;
-    if (DirectoryReader.indexExists(directory) == true ) {
+    if (DirectoryReader.indexExists(directory)) {
       directoryReader = DirectoryReader.open(directory);
     } else {
       return null;
@@ -109,7 +109,6 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
     HighFreqTermResult highFreqTermResult = new HighFreqTermResult();
 
     HighFreqTermResult.TermStatsQueue termStatsQueue = highFreqTermResult.getTermStatsQueue();
-    TermsEnum te = null;
     int i = 0;
     Directory directory = null;
     DirectoryReader directoryReader = null;
@@ -122,7 +121,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
         Fields fields = MultiFields.getFields(directoryReader);
         if (fields == null) {
           log.error("Index has no fields.....!");
-          throw new RuntimeException("Index has no fields.....!");
+          throw new Exception();
         }
         Terms terms = MultiFields.getTerms(directoryReader, selectTopField);
         TermsEnum termsEnum = terms.iterator(TermsEnum.EMPTY);
@@ -131,7 +130,6 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 
         BytesRef ref;
         while((ref = termsEnum.next()) != null) {
-          termText = ref.utf8ToString();
           if("LONG".equalsIgnoreCase(crescentField.getType())) {
             termText = String.valueOf(NumericUtils.prefixCodedToLong(ref));
           } else if ("INTEGER".equalsIgnoreCase(crescentField.getType())) {
@@ -143,19 +141,11 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
           termStatsQueue.insertWithOverflow(new CrescentTermStats(selectTopField, termText, termsEnum.docFreq(), termsEnum.totalTermFreq()));
           i++;
         }
-//                for (String field : fieldNames) {
-//                    Terms terms = MultiFields.getTerms(directoryReader, field);
-//                    if (terms != null) {
-//                        te = terms.iterator(te);
-//                        CrescentCollectionField crescentField = selectCollection.getCrescentFieldByName().get(field);
-//                        fillQueue(field, te, highFreqTermResult.getTermStatsQueue(), crescentField.getType());
-//                    }
-//                }
       }
 
     } catch (Exception e) {
       log.error("Error in getHighFreqTerm....!", e);
-      throw new RuntimeException("Error in getHighFreqTerm....!", e);
+      throw new Exception();
     } finally {
       directory.close();
       directoryReader.close();

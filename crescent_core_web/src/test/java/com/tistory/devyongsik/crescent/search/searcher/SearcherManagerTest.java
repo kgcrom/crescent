@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 public class SearcherManagerTest extends CrescentTestCaseUtil {
 
 	@PostConstruct
-	public void init() {
+	public void init() throws Exception {
 		super.init();
 	}
 	

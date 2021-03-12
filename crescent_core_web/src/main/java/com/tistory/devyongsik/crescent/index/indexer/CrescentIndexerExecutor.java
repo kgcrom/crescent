@@ -24,7 +24,7 @@ public class CrescentIndexerExecutor {
 		this.crescentIndexer = crescentIndexer;
 	}
 
-	public String indexing(CrescentCollection collection, IndexingRequestForm indexingRequestForm) {
+	public String indexing(CrescentCollection collection, IndexingRequestForm indexingRequestForm) throws Exception {
 		
 		log.info("indexingRequestForm : {}", indexingRequestForm);
 		
@@ -36,8 +36,6 @@ public class CrescentIndexerExecutor {
 		log.info("Query : {}", query);
 		
 		String resultMessage = "Nothing To Execute...";
-		
-		//CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getName());
 		
 		if(IndexingCommand.ADD == indexingCommand) {
 			List<Document> documentList = LuceneDocumentBuilder.buildDocumentList(indexingRequestForm.getDocumentList(), collection.getCrescentFieldByName());
@@ -53,8 +51,6 @@ public class CrescentIndexerExecutor {
 				log.error("업데이트 할 document가 없습니다.");
 				throw new IllegalStateException("업데이트 할 document가 없습니다.");
 			}
-			
-			//Document updateDoc = documentList.get(0);
 			
 			String[] splitQuery = query.split(":");
 			if(splitQuery.length != 2) {

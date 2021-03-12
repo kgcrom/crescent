@@ -41,15 +41,15 @@ public class CrescentTestCaseUtil {
 			",{\"title\":\"제목 입니다1\",\"dscr\":\"텍스트 입니다1\",\"creuser\":\"creuser1\",\"board_id\":\"1\"}" +
 			",{\"title\":\"제목 입니다2\",\"dscr\":\"텍스트 입니다2\",\"creuser\":\"creuser2\",\"board_id\":\"2\"}]}";
 
-	public void init() {
+	public void init() throws Exception {
 		initIndexFile();
 	}
 	
-	private void initIndexFile() {
+	private void initIndexFile() throws Exception {
 		indexingTestData();
 	}
 
-	private void indexingTestData() {
+	private void indexingTestData() throws Exception {
 		
 		Handler handler = new JsonDataHandler();
 		IndexingRequestForm indexingRequestForm = handler.handledData(bulkIndexingTestText);

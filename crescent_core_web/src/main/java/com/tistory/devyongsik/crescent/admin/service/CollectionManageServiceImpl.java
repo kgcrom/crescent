@@ -121,9 +121,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 				sortField.setSource(crescentField.getName());
 				sortField.setDest(crescentField.getName()+"_sort");
 
-				if(selectedCollection.getSortFields().contains(sortField)) {
-					//Nothing
-				} else {
+				if(selectedCollection.getSortFields().contains(sortField) == false) {
 					selectedCollection.getSortFields().add(sortField);
 				}
 			}
@@ -133,9 +131,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 				CrescentDefaultSearchField defaultSearchField = new CrescentDefaultSearchField();
 				defaultSearchField.setName(crescentField.getName());
 
-				if(selectedCollection.getDefaultSearchFields().contains(defaultSearchField)) {
-					//Nothing
-				} else {
+				if(selectedCollection.getDefaultSearchFields().contains(defaultSearchField) == false) {
 					selectedCollection.getDefaultSearchFields().add(defaultSearchField);
 				}
 			}
@@ -170,11 +166,6 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 	
 	@Override
 	public CrescentCollection addCollectionInfo(HttpServletRequest request) {
-		
-//		CrescentCollectionHandler collectionHandler 
-//			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-	
-		
 		String selectedCollectionName = request.getParameter("collectionName");
 
 		log.debug("selectedCollectionName : " + selectedCollectionName);
@@ -249,8 +240,6 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			newCollectionField.setTermposition("on".equals(request.getParameter(fieldName+"-termposition")) ? true : false);
 			newCollectionField.setTermvector("on".equals(request.getParameter(fieldName+"-termvector")) ? true : false);
 
-			//System.out.println("DDDDDDDDDDDDDD : " + request.getParameter(fieldName+"-boost"));
-			
 			newCollectionField.setBoost(Float.parseFloat(StringUtils.defaultIfEmpty(request.getParameter(fieldName+"-boost"), "0")));
 			newCollectionField.setType(StringUtils.defaultString(request.getParameter(fieldName+"-type"), "STRING"));
 

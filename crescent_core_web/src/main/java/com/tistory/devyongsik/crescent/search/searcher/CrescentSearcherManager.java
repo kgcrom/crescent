@@ -31,7 +31,7 @@ public class CrescentSearcherManager {
 	}
 
 	@PostConstruct
-	private void indexSearcherInit() {
+	private void indexSearcherInit() throws Exception {
 		
 		log.info("indexSearcherManager init start.....");
 		
@@ -55,7 +55,7 @@ public class CrescentSearcherManager {
 			
 			} catch (IOException e) {
 				log.error("index searcher init error ", e);
-				throw new RuntimeException("index searcher init error ", e);
+				throw new Exception();
 			}
 			
 			searcherManagerByCollection.put(collectionName, searcherManager);

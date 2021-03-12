@@ -32,7 +32,7 @@ public class MorphServiceImpl implements MorphService {
 		StringReader reader = new StringReader(keyword);
 		
 		CrescentCollection crescentCollection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
-		Analyzer analyzer = null;
+		Analyzer analyzer;
 		
 		if(isIndexingMode) {
 			analyzer = crescentCollection.getIndexingModeAnalyzer();
@@ -65,8 +65,7 @@ public class MorphServiceImpl implements MorphService {
 		}
 	
 		stream.close();
-		//analyzer.close();
-		
+
 		return resultTokenList;
 	}
 

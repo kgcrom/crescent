@@ -32,7 +32,7 @@ public class SearchTestMainController {
 	}
 
 	@RequestMapping("/searchTestMain")
-	public ModelAndView searchTestMain(@RequestParam(value = "col_name", required = false) String selectedCollectionName) throws Exception {
+	public ModelAndView searchTestMain(@RequestParam(value = "col_name", required = false) String selectedCollectionName) {
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 
 		if (selectedCollectionName == null) {

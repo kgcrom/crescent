@@ -8,8 +8,6 @@ import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +34,7 @@ public class MorphAdminMainController {
 	}
 
 	@RequestMapping("/morphMain")
-	public ModelAndView morphMain(@RequestParam(value="col_name", required=false) String selectedCollectionName) throws Exception {
+	public ModelAndView morphMain(@RequestParam(value="col_name", required=false) String selectedCollectionName) {
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		

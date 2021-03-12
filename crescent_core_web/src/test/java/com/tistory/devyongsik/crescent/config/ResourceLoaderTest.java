@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 public class ResourceLoaderTest {
 
 	@Test
-	public void documentRead() {
+	public void documentRead() throws Exception {
 		ResourceLoader resourceLoader = new ResourceLoader("collection/test-collections.xml");
 		Document document = resourceLoader.getDocument();
 		
@@ -22,7 +22,7 @@ public class ResourceLoaderTest {
 	}
 	
 	@Test
-	public void readElements() {
+	public void readElements() throws Exception {
 		ResourceLoader resourceLoader = new ResourceLoader("collection/test-collections.xml");
 		Document document = resourceLoader.getDocument();
 		

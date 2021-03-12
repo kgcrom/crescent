@@ -29,7 +29,7 @@ public class IndexWriterManager {
 	}
 
 	@PostConstruct
-	private void initIndexWriter() {
+	private void initIndexWriter() throws Exception {
 		
 		for(CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
 			
@@ -50,8 +50,7 @@ public class IndexWriterManager {
 				
 				IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_44, crescentCollection.getIndexingModeAnalyzer());
 				conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
-				//conf.setIndexDeletionPolicy(new LastCommitDeletePolicy());
-				
+
 				IndexWriter indexWriter = new IndexWriter(dir, conf);
 				indexWritersByCollectionName.put(crescentCollection.getName(), indexWriter);
 				
@@ -59,7 +58,7 @@ public class IndexWriterManager {
 				
 			}catch(Exception e) {
 				log.error("index writer init error", e);
-				throw new RuntimeException("index writer init error ", e);
+				throw new Exception();
 			}
 		}
 	}

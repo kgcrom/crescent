@@ -17,7 +17,6 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
-import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -26,12 +25,12 @@ import org.junit.jupiter.api.Test;
 public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 
 	@PostConstruct
-	public void init() {
+	public void init() throws Exception {
 		super.init();
 	}
 
 	@Test
-	public void rangeQuery() throws CrescentInvalidRequestException {
+	public void rangeQuery() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("board_id:\"[10 TO 100000]\"");
@@ -48,7 +47,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 
 	@Disabled
 	@Test
-	public void rangeQueryNoSearchField() throws CrescentInvalidRequestException {
+	public void rangeQueryNoSearchField() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("field1:\"[10 TO 100000]\"");
@@ -64,7 +63,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 
 	@Disabled
 	@Test
-	public void normalTermQuery() throws CrescentInvalidRequestException {
+	public void normalTermQuery() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("dscr:\"파이썬 프로그래밍 공부\"");
@@ -81,7 +80,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 
 	@Disabled
 	@Test
-	public void normalTermQueryWithDefaultFieldBoost() throws CrescentInvalidRequestException {
+	public void normalTermQueryWithDefaultFieldBoost() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부\"");
@@ -98,7 +97,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 
 	@Disabled
 	@Test
-	public void multipleTermQueryWithDefaultFieldBoost() throws CrescentInvalidRequestException {
+	public void multipleTermQueryWithDefaultFieldBoost() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부\" +dscr:\"자바 병렬 프로그래밍\"");
@@ -115,7 +114,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 
 	@Disabled
 	@Test
-	public void normalTermQueryWithCustomBoost() throws CrescentInvalidRequestException {
+	public void normalTermQueryWithCustomBoost() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("dscr:\"파이썬 프로그래밍 공부^10\"");
@@ -132,7 +131,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 
 	@Disabled
 	@Test
-	public void normalTermQueryWithDefaultFieldBoostAndCustomBoost() throws CrescentInvalidRequestException {
+	public void normalTermQueryWithDefaultFieldBoostAndCustomBoost() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부^10\" dscr:\"파이썬 프로그래밍 공부^10\"");
@@ -148,7 +147,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 	}
 	
 	@Test
-	public void complexQueryWithDefaultFieldBoostAndCustomBoostException() throws CrescentInvalidRequestException {
+	public void complexQueryWithDefaultFieldBoostAndCustomBoostException() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부^10\" dscr:\"파이썬 프로그래밍 공부^10\" title:\"[50 TO 50000]\"");
@@ -156,7 +155,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
 
-		assertThrows(CrescentInvalidRequestException.class, () -> {
+		assertThrows(Exception.class, () -> {
 			Query query = csrw.getQuery();
 			System.out.println(query);
 
@@ -167,7 +166,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 
 	@Disabled
 	@Test
-	public void complexQueryWithDefaultFieldBoostAndCustomBoost() throws CrescentInvalidRequestException {
+	public void complexQueryWithDefaultFieldBoostAndCustomBoost() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부^10\" dscr:\"파이썬 프로그래밍 공부^10\" board_id:\"[50 TO 50000]\"");
@@ -183,7 +182,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 	}
 	
 	@Test
-	public void filterQuery() throws CrescentInvalidRequestException {
+	public void filterQuery() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setFilter("title:\"python\"");
@@ -220,9 +219,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		Matcher m = pattern.matcher(query);
 		
 		while(m.find()) {
-			//System.out.println(m.groupCount());
 			System.out.println(m.group(0) + " , " + m.group(1) + " , " + m.group(2) + " , " + m.group(3));
-			
 		}
 		
 		System.out.println(m.groupCount());

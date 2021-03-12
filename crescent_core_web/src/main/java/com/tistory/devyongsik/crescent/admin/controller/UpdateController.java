@@ -52,18 +52,12 @@ public class UpdateController {
 			String tmp = "";
 			while((tmp = reader.readLine()) != null) {
 				text.append(tmp);
-				//logger.info(tmp);
 			}
 			
 			reader.close();
 			IndexingRequestForm indexingRequestForm = handler.handledData(text.toString());
 			
-//			CrescentCollectionHandler collectionHandler 
-//				= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-			
 			CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
-			//CrescentIndexerExecutor executor = new CrescentIndexerExecutor(collection, indexingRequestForm);
-			
 			String message = crescentIndexerExecutor.indexing(collection, indexingRequestForm);
 			
 			Writer writer = null;
@@ -74,8 +68,8 @@ public class UpdateController {
 			writer.flush();
 			writer.close();
 			
-		} catch (IOException e) {
-			log.error("error : ", e);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
