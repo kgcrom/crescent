@@ -70,11 +70,11 @@ public class SearchRequestValidator {
 				CrescentCollectionField f = collectionFields.get(part);
 				
 				if(f == null) {
-					log.error("don't exist field: {}", parts);
+					log.error("don't exist field: {}", String.join(", ", parts));
 					throw new Exception();
 				}
 				if(f.isAnalyze()) {
-					log.error("analyzed filed are not sortable, {}", parts);
+					log.error("analyzed filed are not sortable, {}", String.join(", ", parts));
 					throw new Exception();
 				}
 			}

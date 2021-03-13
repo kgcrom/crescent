@@ -121,7 +121,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 				sortField.setSource(crescentField.getName());
 				sortField.setDest(crescentField.getName()+"_sort");
 
-				if(selectedCollection.getSortFields().contains(sortField) == false) {
+				if(!selectedCollection.getSortFields().contains(sortField)) {
 					selectedCollection.getSortFields().add(sortField);
 				}
 			}
@@ -131,7 +131,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 				CrescentDefaultSearchField defaultSearchField = new CrescentDefaultSearchField();
 				defaultSearchField.setName(crescentField.getName());
 
-				if(selectedCollection.getDefaultSearchFields().contains(defaultSearchField) == false) {
+				if(!selectedCollection.getDefaultSearchFields().contains(defaultSearchField)) {
 					selectedCollection.getDefaultSearchFields().add(defaultSearchField);
 				}
 			}

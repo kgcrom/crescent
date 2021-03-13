@@ -7,11 +7,7 @@ import com.tistory.devyongsik.crescent.admin.entity.IndexInfo;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.Fields;
-import org.apache.lucene.index.MultiFields;
-import org.apache.lucene.index.Terms;
-import org.apache.lucene.index.TermsEnum;
+import org.apache.lucene.index.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
@@ -20,12 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.InvalidParameterException;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -75,7 +67,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 
       List<CrescentTermStats> crescentTermStatsList = new ArrayList<CrescentTermStats>();
 
-      while(q.size() > 0) {
+      while (q.size() > 0) {
         CrescentTermStats stats = q.pop();
 
         crescentTermStatsList.add(stats);
@@ -104,7 +96,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
     return indexInfo;
   }
 
-  private HighFreqTermResult getHighFreqTerms(CrescentCollection selectCollection, String selectTopField) throws Exception {
+  private HighFreqTermResult getHighFreqTerms(CrescentCollection selectCollection, String selectTopField) throws IOException {
 
     HighFreqTermResult highFreqTermResult = new HighFreqTermResult();
 
@@ -112,44 +104,43 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
     int i = 0;
     Directory directory = null;
     DirectoryReader directoryReader = null;
-    try {
 
+    try {
       directory = FSDirectory.open(new File(selectCollection.getIndexingDirectory()));
       directoryReader = DirectoryReader.open(directory);
-
-      if (selectTopField != null) {
-        Fields fields = MultiFields.getFields(directoryReader);
-        if (fields == null) {
-          log.error("Index has no fields.....!");
-          throw new Exception();
-        }
-        Terms terms = MultiFields.getTerms(directoryReader, selectTopField);
-        TermsEnum termsEnum = terms.iterator(TermsEnum.EMPTY);
-        String termText;
-        CrescentCollectionField crescentField = selectCollection.getCrescentFieldByName().get(selectTopField);
-
-        BytesRef ref;
-        while((ref = termsEnum.next()) != null) {
-          if("LONG".equalsIgnoreCase(crescentField.getType())) {
-            termText = String.valueOf(NumericUtils.prefixCodedToLong(ref));
-          } else if ("INTEGER".equalsIgnoreCase(crescentField.getType())) {
-            termText = String.valueOf(NumericUtils.prefixCodedToInt(ref));
-          } else {
-            termText = ref.utf8ToString();
-          }
-
-          termStatsQueue.insertWithOverflow(new CrescentTermStats(selectTopField, termText, termsEnum.docFreq(), termsEnum.totalTermFreq()));
-          i++;
-        }
-      }
-
-    } catch (Exception e) {
-      log.error("Error in getHighFreqTerm....!", e);
-      throw new Exception();
+    } catch (IOException e) {
+      throw e;
     } finally {
       directory.close();
       directoryReader.close();
     }
+
+    if (selectTopField != null) {
+      Fields fields = MultiFields.getFields(directoryReader);
+      if (fields == null) {
+        log.error("Index has no fields.....!");
+        throw new InvalidParameterException();
+      }
+      Terms terms = MultiFields.getTerms(directoryReader, selectTopField);
+      TermsEnum termsEnum = terms.iterator(TermsEnum.EMPTY);
+      String termText;
+      CrescentCollectionField crescentField = selectCollection.getCrescentFieldByName().get(selectTopField);
+
+      BytesRef ref;
+      while ((ref = termsEnum.next()) != null) {
+        if ("LONG".equalsIgnoreCase(crescentField.getType())) {
+          termText = String.valueOf(NumericUtils.prefixCodedToLong(ref));
+        } else if ("INTEGER".equalsIgnoreCase(crescentField.getType())) {
+          termText = String.valueOf(NumericUtils.prefixCodedToInt(ref));
+        } else {
+          termText = ref.utf8ToString();
+        }
+
+        termStatsQueue.insertWithOverflow(new CrescentTermStats(selectTopField, termText, termsEnum.docFreq(), termsEnum.totalTermFreq()));
+        i++;
+      }
+    }
+
 
     log.info("highFreqTermResult count : {}", i);
     return highFreqTermResult;

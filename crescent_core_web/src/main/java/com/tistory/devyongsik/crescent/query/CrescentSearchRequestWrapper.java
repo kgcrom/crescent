@@ -13,6 +13,8 @@ import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 
+import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -140,8 +142,8 @@ public class CrescentSearchRequestWrapper {
 		return new Sort(lst);
 	}
 
-	public Query getQuery() throws Exception {
-		
+	public Query getQuery() throws IOException, InvalidParameterException {
+		// TODO Crescent에서 사용될 Exception 정의하고 적절하게 배치하기
 		Query resultQuery = null;
 		
 		String customQueryString = searchRequest.getCustomQuery();
@@ -151,12 +153,11 @@ public class CrescentSearchRequestWrapper {
 			CustomQueryStringParser queryParser = new CustomQueryStringParser();
 			
 			try {
-				
 				resultQuery = queryParser.getQuery(getIndexedFields(), customQueryString, collection.getSearchModeAnalyzer(), regexQueryString);
-			
-			} catch (Exception e) {
-				log.error("Error In getQuery ", e);
-				throw new Exception();
+			} catch (IOException e) {
+				throw e;
+			} catch (InvalidParameterException e) {
+				throw e;
 			}
 			
 		} else {

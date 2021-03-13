@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,37 +30,27 @@ public class IndexWriterManager {
 	}
 
 	@PostConstruct
-	private void initIndexWriter() throws Exception {
+	private void initIndexWriter() throws IOException {
 		
 		for(CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
-			
 			log.info("collection name {}", crescentCollection.getName());
-			
 			String indexDir = crescentCollection.getIndexingDirectory();
-			
 			log.info("index file dir ; {}", indexDir);
 			
-			Directory dir = null;
-			
-			try {
-				if(indexDir.equals("memory")) {
-					dir = new RAMDirectory();
-				} else {
-					dir = FSDirectory.open(new File(indexDir));
-				}
-				
-				IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_44, crescentCollection.getIndexingModeAnalyzer());
-				conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
-
-				IndexWriter indexWriter = new IndexWriter(dir, conf);
-				indexWritersByCollectionName.put(crescentCollection.getName(), indexWriter);
-				
-				log.info("index writer for collection {} is initialized...", crescentCollection.getName());
-				
-			}catch(Exception e) {
-				log.error("index writer init error", e);
-				throw new Exception();
+			Directory dir;
+			if(indexDir.equals("memory")) {
+				dir = new RAMDirectory();
+			} else {
+				dir = FSDirectory.open(new File(indexDir));
 			}
+
+			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_44, crescentCollection.getIndexingModeAnalyzer());
+			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
+
+			IndexWriter indexWriter = new IndexWriter(dir, conf);
+			indexWritersByCollectionName.put(crescentCollection.getName(), indexWriter);
+
+			log.info("index writer for collection {} is initialized...", crescentCollection.getName());
 		}
 	}
 	

@@ -18,6 +18,7 @@ import org.apache.lucene.util.BytesRef;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,7 @@ public class CustomQueryStringParser {
   private static final Pattern pattern = Pattern.compile("(.*?)(:)(\".*?\")");
   private Query resultQuery = null;
 
-  protected Query getQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer, String regexQueryString) throws Exception {
+  protected Query getQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer, String regexQueryString) throws InvalidParameterException, IOException {
     if (resultQuery != null) {
       return this.resultQuery;
     } else {
@@ -39,7 +40,7 @@ public class CustomQueryStringParser {
   }
 
   private Query getQueryFromCustomQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer, String regexQueryString)
-      throws Exception {
+      throws InvalidParameterException, IOException {
 
     List<QueryAnalysisResult> queryAnalysisResultList = getQueryAnalysisResults(customQueryString);
 
@@ -82,7 +83,7 @@ public class CustomQueryStringParser {
 
       if (any) {
         log.error("검색 할 수 없는 필드입니다. {} ", fieldName);
-        throw new Exception();
+        throw new InvalidParameterException();
       }
 
       //range쿼리인 경우에는 RangeQuery 생성
@@ -99,7 +100,7 @@ public class CustomQueryStringParser {
 
         if (splitQuery.length != 2) {
           log.error("문법 오류 확인바랍니다. {} ", userRequestQuery);
-          throw new Exception();
+          throw new InvalidParameterException();
         }
 
         if (splitQuery[0].trim().startsWith("[")) {
@@ -127,7 +128,7 @@ public class CustomQueryStringParser {
 
         if (isAnalyzed) {
           log.error("범위검색 대상 field는 analyzed값이 false이어야 합니다. {} ", userRequestQuery);
-          throw new Exception();
+          throw new InvalidParameterException();
         }
 
         if (isLongField && isNumeric) {
@@ -143,7 +144,7 @@ public class CustomQueryStringParser {
 
         } else {
           log.error("범위검색은 필드의 타입과 쿼리의 타입이 맞아야 합니다. {} ", userRequestQuery);
-          throw new Exception();
+          throw new InvalidParameterException();
         }
 
         resultQuery.add(query, occur);
@@ -222,7 +223,7 @@ public class CustomQueryStringParser {
     return resultQuery;
   }
 
-  private ArrayList<String> analyzedTokenList(Analyzer analyzer, String splitedKeyword) throws Exception {
+  private ArrayList<String> analyzedTokenList(Analyzer analyzer, String splitedKeyword) throws IOException {
 
     ArrayList<String> rst = new ArrayList<String>();
     //split된 검색어를 Analyze..
@@ -241,7 +242,7 @@ public class CustomQueryStringParser {
 
     } catch (IOException e) {
       log.error("error in DefaultKeywordParser : ", e);
-      throw new Exception();
+      throw e;
     }
 
     log.debug("[{}] 에서 추출된 명사 : [{}]", splitedKeyword, rst.toString());
@@ -250,7 +251,7 @@ public class CustomQueryStringParser {
     return rst;
   }
 
-  private List<QueryAnalysisResult> getQueryAnalysisResults(String analysisTargetString) throws Exception {
+  private List<QueryAnalysisResult> getQueryAnalysisResults(String analysisTargetString) throws InvalidParameterException {
     List<QueryAnalysisResult> queryAnalysisResultList = new ArrayList<QueryAnalysisResult>();
 
     Matcher m = pattern.matcher(analysisTargetString);
@@ -258,7 +259,7 @@ public class CustomQueryStringParser {
     while (m.find()) {
       if (m.groupCount() != 3) {
         log.error("query syntax error: {}", analysisTargetString);
-        throw new Exception();
+        throw new InvalidParameterException();
       }
 
       QueryAnalysisResult anaysisResult = new QueryAnalysisResult();

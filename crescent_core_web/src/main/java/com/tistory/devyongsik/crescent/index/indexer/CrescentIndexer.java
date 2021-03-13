@@ -28,12 +28,11 @@ public class CrescentIndexer {
 		this.indexWriterManager = indexWriterManager;
 	}
 
-	public void addDocument(List<Document> documentList, String collectionName) throws Exception {
+	public void addDocument(List<Document> documentList, String collectionName) throws IOException {
 		
 		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
 		
 		try {
-			
 			log.info("collectionName : {}", collectionName);
 			log.info("add indexing start................");
 			
@@ -51,7 +50,7 @@ public class CrescentIndexer {
 			log.info("end");
 		} catch (IOException e) {
 			log.error("indexer ioexception", e);
-			throw new Exception();
+			throw e;
 			
 		}
 	}

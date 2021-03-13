@@ -1,8 +1,5 @@
 package com.tistory.devyongsik.crescent.index.indexer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
 import com.tistory.devyongsik.crescent.data.handler.Handler;
@@ -13,11 +10,13 @@ import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.crescent.search.entity.SearchResult;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import com.tistory.devyongsik.utils.FormattedTextBuilder;
-import java.io.IOException;
-import java.util.Map;
-import javax.annotation.PostConstruct;
-import org.apache.lucene.index.CorruptIndexException;
 import org.junit.jupiter.api.Test;
+
+import javax.annotation.PostConstruct;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
 

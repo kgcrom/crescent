@@ -31,14 +31,11 @@ public class CrescentSearcherManager {
 	}
 
 	@PostConstruct
-	private void indexSearcherInit() throws Exception {
-		
+	private void indexSearcherInit() throws IOException {
 		log.info("indexSearcherManager init start.....");
 		
 		CrescentCollections collections = collectionHandler.getCrescentCollections();
-		
 		Map<String, CrescentCollection> collectionsMap = collections.getCrescentCollectionsMap();
-		
 		Set<String> collectionNames = collectionsMap.keySet();
 		
 		for(String collectionName : collectionNames) {
@@ -50,16 +47,13 @@ public class CrescentSearcherManager {
 			SearcherManager searcherManager = null;
 			
 			try {
-			
 				searcherManager = new SearcherManager(indexWriter, true, searcherFactory);
-			
 			} catch (IOException e) {
 				log.error("index searcher init error ", e);
-				throw new Exception();
+				throw e;
 			}
 			
 			searcherManagerByCollection.put(collectionName, searcherManager);
-			
 			log.info("searcher manager created....");
 		}
 	}
@@ -68,16 +62,11 @@ public class CrescentSearcherManager {
 		SearcherManager searcherManager = searcherManagerByCollection.get(collectionName);
 		
 		try {
-			
 			searcherManager.maybeRefresh();
-		
 		} catch (IOException e) {
-		
 			log.error("exception in CrescentSearcherManager : {}", e);
 			new IllegalStateException("SearcherManager maybeRefresh Exception in " + collectionName + ".");
-		
 		}
-		
 		return searcherManager;
 	}
 }

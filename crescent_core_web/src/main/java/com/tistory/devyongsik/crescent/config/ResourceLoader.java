@@ -70,14 +70,14 @@ public class ResourceLoader {
 		return url;
 	}
 	
-	private void buildDocument(InputStream is) throws Exception {
+	private void buildDocument(InputStream is) throws DocumentException {
 		SAXReader saxReader = new SAXReader();
     	
     	try {
 			document = saxReader.read(is);
 		} catch (DocumentException e) {
 			log.error("build document {}.xml", name, e);
-			throw new Exception();
+			throw e;
 		}
 	}
 	
@@ -91,7 +91,7 @@ public class ResourceLoader {
 		}
 	}
 	
-	public Document getDocument() throws Exception {
+	public Document getDocument() throws DocumentException {
 		if(document == null) {
 			buildDocument(inputStream);
 		}

@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class DefaultKeywordParser {
 
-	protected Query parse(List<CrescentCollectionField> searchFields, String keyword, Analyzer analyzer) throws Exception {
+	protected Query parse(List<CrescentCollectionField> searchFields, String keyword, Analyzer analyzer) throws IOException {
 	
 		log.debug("search fields : {}", searchFields);
 		
@@ -60,7 +60,7 @@ public class DefaultKeywordParser {
 		return resultQuery;
 	}
 
-	private ArrayList<String> analyzedTokenList(Analyzer analyzer, String splitedKeyword) throws Exception {
+	private ArrayList<String> analyzedTokenList(Analyzer analyzer, String splitedKeyword) throws IOException {
 
 		ArrayList<String> rst = new ArrayList<String>();
 		//split된 검색어를 Analyze..
@@ -87,7 +87,7 @@ public class DefaultKeywordParser {
 			
 		} catch (IOException e) {
 			log.error("error in DefaultKeywordParser : ", e);
-			throw new Exception();
+			throw e;
 		}
 
 		log.debug("[{}] 에서 추출된 명사 : [{}]", new Object[]{splitedKeyword, rst.toString()});
