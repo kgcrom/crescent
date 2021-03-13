@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 public class SearchServiceImplTest extends CrescentTestCaseUtil {
 
 	@PostConstruct
-	public void init() {
+	public void init() throws Exception {
 		super.init();
 	}
 

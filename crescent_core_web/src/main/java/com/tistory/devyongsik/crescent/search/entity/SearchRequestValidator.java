@@ -5,18 +5,20 @@ import java.util.Map;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
+@Slf4j
 public class SearchRequestValidator {
 	
-	public boolean isValid(SearchRequest searchRequest, CrescentCollectionHandler collectionHandler) throws CrescentInvalidRequestException {
+	public boolean isValid(SearchRequest searchRequest, CrescentCollectionHandler collectionHandler) throws Exception {
 		
 		CrescentCollection collection = collectionHandler.getCrescentCollections()
 													.getCrescentCollection(searchRequest.getCollectionName());
 		
 		if(collection == null) {
-			throw new CrescentInvalidRequestException("Wrong Collection Name : " + searchRequest.getCollectionName());
+			log.error("invalid collection name: {}", searchRequest.getCollectionName());
+			throw new Exception();
 		}
 		
 		
@@ -27,17 +29,17 @@ public class SearchRequestValidator {
 			if(requestSearchFieldNames != null && requestSearchFieldNames[0].length() > 0) {
 				for(String requestFieldName : requestSearchFieldNames) {
 					if(!collection.getCrescentFieldByName().containsKey(requestFieldName)) {
-						throw new CrescentInvalidRequestException("Wrong Search Field Name : " + searchRequest.getSearchField());
+						log.error("invalid search field: ", searchRequest.getSearchField());
+						throw new Exception();
 					}
 				}
 			}
 		}
 		
 		//page num
-		if(searchRequest.getPageNum() != null) {
-			if(!StringUtils.isNumeric(searchRequest.getPageNum())) {
-				throw new CrescentInvalidRequestException("Page_Num parameter value is must positive number: " + searchRequest.getPageNum());
-			}
+		if(searchRequest.getPageNum() != null && !StringUtils.isNumeric(searchRequest.getPageNum())) {
+			log.error("invalid page number: {}", searchRequest.getPageNum());
+			throw new Exception();
 		}
 		
 		//request sort field
@@ -48,7 +50,8 @@ public class SearchRequestValidator {
 	
 			String[] parts = sortQueryString.split(",");
 			if(parts.length == 0) {
-				throw new CrescentInvalidRequestException("Wrong Sort Field Name : " + sortQueryString);
+				log.error("invalid sortquery syntax: {}", sortQueryString);
+				throw new Exception();
 			}
 	
 			for(int i = 0; i < parts.length; i++) {
@@ -57,7 +60,8 @@ public class SearchRequestValidator {
 				int idx = part.indexOf( ' ' );
 				
 				if(idx <= 0) {
-					throw new CrescentInvalidRequestException("No Order Condition (DESC/ASC) : " + sortQueryString);
+					log.error("has no order condition: {}", sortQueryString);
+					throw new Exception();
 				}
 				
 				part = part.substring( 0, idx ).trim(); //part = field
@@ -65,8 +69,14 @@ public class SearchRequestValidator {
 				
 				CrescentCollectionField f = collectionFields.get(part);
 				
-				if(f == null) throw new CrescentInvalidRequestException("요청된 필드가 존재하지 않습니다. ["+part+"]");
-				if(f.isAnalyze()) throw new CrescentInvalidRequestException("Analyze 된 필드는 Sort가 불가능합니다. ["+part+"]");
+				if(f == null) {
+					log.error("don't exist field: {}", String.join(", ", parts));
+					throw new Exception();
+				}
+				if(f.isAnalyze()) {
+					log.error("analyzed filed are not sortable, {}", String.join(", ", parts));
+					throw new Exception();
+				}
 			}
 		}
 		

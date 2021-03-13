@@ -5,7 +5,6 @@ import com.tistory.devyongsik.crescent.admin.service.IndexFileManageService;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,7 +73,7 @@ public class IndexFileManageController {
 	}
 
 	@RequestMapping("/indexFileManageDoc")
-	public ModelAndView indexFileManageDoc() throws Exception {
+	public ModelAndView indexFileManageDoc() {
 		ModelAndView modelAndView = new ModelAndView();
 
 		return modelAndView;

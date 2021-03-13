@@ -1,35 +1,14 @@
 package com.tistory.devyongsik.crescent.admin.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class MorphResult {
-	String word;
-	String type;
-	int startOffset;
-	int endOffset;
-	
-	public String getWord() {
-		return word;
-	}
-	public void setWord(String word) {
-		this.word = word;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public int getStartOffset() {
-		return startOffset;
-	}
-	public void setStartOffset(int startOffset) {
-		this.startOffset = startOffset;
-	}
-	public int getEndOffset() {
-		return endOffset;
-	}
-	public void setEndOffset(int endOffset) {
-		this.endOffset = endOffset;
-	}
-	
+	private String word;
+	private String type;
+	private int startOffset;
+	private int endOffset;
 	
 }

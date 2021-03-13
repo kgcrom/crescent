@@ -3,7 +3,6 @@ package com.tistory.devyongsik.crescent.query;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
-import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import javax.annotation.PostConstruct;
 import org.apache.lucene.search.Query;
@@ -13,13 +12,13 @@ import org.junit.jupiter.api.Test;
 public class DefaultKeywordParserTest extends CrescentTestCaseUtil {
 
 	@PostConstruct
-	public void init() {
+	public void init() throws Exception {
 		super.init();
 	}
 
 	@Disabled
 	@Test
-	public void keywordParse() throws CrescentInvalidRequestException {
+	public void keywordParse() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setKeyword("나이키청바지");

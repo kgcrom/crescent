@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
-import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -18,7 +17,7 @@ import org.junit.jupiter.api.Test;
 public class CrescentSearchRequestWrapperTest extends CrescentTestCaseUtil {
 
 	@PostConstruct
-	public void init() {
+	public void init() throws Exception {
 		super.init();
 	}
 
@@ -85,7 +84,7 @@ public class CrescentSearchRequestWrapperTest extends CrescentTestCaseUtil {
 
 	@Disabled
 	@Test
-	public void getFilter() throws CrescentInvalidRequestException {
+	public void getFilter() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setFilter("title:\"파이썬 프로그래밍 공부\" +dscr:\"자바 병렬 프로그래밍\"");
@@ -102,7 +101,7 @@ public class CrescentSearchRequestWrapperTest extends CrescentTestCaseUtil {
 
 	@Disabled
 	@Test
-	public void getQuery() throws CrescentInvalidRequestException {
+	public void getQuery() throws Exception {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부\" +dscr:\"자바 병렬 프로그래밍\"");

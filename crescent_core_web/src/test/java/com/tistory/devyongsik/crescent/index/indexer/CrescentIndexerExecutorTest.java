@@ -1,8 +1,5 @@
 package com.tistory.devyongsik.crescent.index.indexer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
 import com.tistory.devyongsik.crescent.data.handler.Handler;
@@ -13,21 +10,23 @@ import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.crescent.search.entity.SearchResult;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import com.tistory.devyongsik.utils.FormattedTextBuilder;
-import java.io.IOException;
-import java.util.Map;
-import javax.annotation.PostConstruct;
-import org.apache.lucene.index.CorruptIndexException;
 import org.junit.jupiter.api.Test;
+
+import javax.annotation.PostConstruct;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
 
   @PostConstruct
-  public void init() {
+  public void init() throws Exception{
     super.init();
   }
 
   @Test
-  public void addDocument() throws CorruptIndexException, IOException {
+  public void addDocument() throws Exception {
 
     CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
     Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
@@ -44,7 +43,7 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   }
 
   @Test
-  public void deleteDocument() throws CorruptIndexException, IOException {
+  public void deleteDocument() throws Exception {
 
     CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
     Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
@@ -61,7 +60,7 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   }
 
   @Test
-  public void updateDocument() throws CorruptIndexException, IOException {
+  public void updateDocument() throws Exception {
 
     CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
     Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
@@ -78,7 +77,7 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   }
 
   @Test
-  public void updateNewDocument() throws CorruptIndexException, IOException {
+  public void updateNewDocument() throws Exception {
 
     CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
     Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
@@ -106,7 +105,7 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   }
 
   @Test
-  public void updateNewDocuments() throws CorruptIndexException, IOException {
+  public void updateNewDocuments() throws Exception {
 
     CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
     Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
@@ -134,7 +133,7 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   }
 
   @Test
-  public void updateByFieldValueDocument() throws CorruptIndexException, IOException {
+  public void updateByFieldValueDocument() throws Exception {
 
     CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
     Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
@@ -163,7 +162,7 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   }
 
   @Test
-  public void updateByFieldValueNewDocumentList() throws CorruptIndexException, IOException {
+  public void updateByFieldValueNewDocumentList() throws Exception {
 
     CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
     Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();

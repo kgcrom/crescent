@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Test;
 public class ResourceLoaderTest {
 
 	@Test
-	public void documentRead() {
+	public void documentRead() throws DocumentException {
 		ResourceLoader resourceLoader = new ResourceLoader("collection/test-collections.xml");
 		Document document = resourceLoader.getDocument();
 		
@@ -22,7 +23,7 @@ public class ResourceLoaderTest {
 	}
 	
 	@Test
-	public void readElements() {
+	public void readElements() throws Exception {
 		ResourceLoader resourceLoader = new ResourceLoader("collection/test-collections.xml");
 		Document document = resourceLoader.getDocument();
 		

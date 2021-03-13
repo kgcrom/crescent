@@ -5,7 +5,6 @@ import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField
 import com.tistory.devyongsik.crescent.collection.entity.CrescentDefaultSearchField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
-import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.MatchAllDocsQuery;
@@ -14,6 +13,8 @@ import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 
+import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +131,7 @@ public class CrescentSearchRequestWrapper {
 					
 				lst[i] = new SortField(f.getName(),f.getSortFieldType(),descending);
 			}
-		}//end for
+		}
 
 		if(log.isDebugEnabled()) {
 			for(int i=0; i < lst.length; i++) {
@@ -141,8 +142,8 @@ public class CrescentSearchRequestWrapper {
 		return new Sort(lst);
 	}
 
-	public Query getQuery() throws CrescentInvalidRequestException {
-		
+	public Query getQuery() throws IOException, InvalidParameterException {
+		// TODO Crescent에서 사용될 Exception 정의하고 적절하게 배치하기
 		Query resultQuery = null;
 		
 		String customQueryString = searchRequest.getCustomQuery();
@@ -152,12 +153,11 @@ public class CrescentSearchRequestWrapper {
 			CustomQueryStringParser queryParser = new CustomQueryStringParser();
 			
 			try {
-				
 				resultQuery = queryParser.getQuery(getIndexedFields(), customQueryString, collection.getSearchModeAnalyzer(), regexQueryString);
-			
-			} catch (Exception e) {
-				log.error("Error In getQuery ", e);
-				throw new CrescentInvalidRequestException(e.getMessage());
+			} catch (IOException e) {
+				throw e;
+			} catch (InvalidParameterException e) {
+				throw e;
 			}
 			
 		} else {
@@ -176,7 +176,7 @@ public class CrescentSearchRequestWrapper {
 		return resultQuery;
 	}
 	
-	public Filter getFilter() throws CrescentInvalidRequestException {
+	public Filter getFilter() throws Exception {
 		String filterQueryString = searchRequest.getFilter();
 		
 		if(filterQueryString != null && filterQueryString.length() > 0) {
@@ -192,14 +192,11 @@ public class CrescentSearchRequestWrapper {
 				
 			} catch (Exception e) {
 				log.error("Error In getFilter ", e);
-				throw new CrescentInvalidRequestException(e.getMessage());
+				throw new Exception();
 			}
-			
-		} else {
-			
-			return null;
-		
 		}
+
+		return null;
 	}
 	
 	public List<CrescentCollectionField> getTargetSearchFields() {

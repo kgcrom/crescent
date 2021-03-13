@@ -1,10 +1,9 @@
 package com.tistory.devyongsik.crescent.collection.entity;
 
-import org.apache.lucene.search.BooleanClause.Occur;
-import org.apache.lucene.search.SortField;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.SortField;
 
 @XStreamAlias("field")
 public class CrescentCollectionField implements Cloneable {
@@ -112,18 +111,27 @@ public class CrescentCollectionField implements Cloneable {
 	}
 
 	public boolean isNumeric() {
-		if("string".equals(type.toLowerCase())) return false;
-		if("integer".equals(type.toLowerCase())) return true;
-		if("long".equals(type.toLowerCase())) return true;
+		if("string".equalsIgnoreCase(type)) {
+			return false;
+		} else if("integer".equalsIgnoreCase(type)) {
+			return true;
+		} else if("long".equalsIgnoreCase(type)) {
+			return true;
+		}
 		
 		return false;
 	}
 	
 	public SortField.Type getSortFieldType() {
-		if("string".equals(type.toLowerCase())) return SortField.Type.STRING;
-		if("integer".equals(type.toLowerCase())) return SortField.Type.INT;
-		if("long".equals(type.toLowerCase())) return SortField.Type.LONG;
-		else return SortField.Type.STRING;
+		if("string".equalsIgnoreCase(type)) {
+			return SortField.Type.STRING;
+		} else if("integer".equalsIgnoreCase(type)) {
+			return SortField.Type.INT;
+		} else if("long".equalsIgnoreCase(type)) {
+			return SortField.Type.LONG;
+		}
+
+		return SortField.Type.STRING;
 	}
 	
 	@Override

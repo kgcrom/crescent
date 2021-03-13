@@ -58,6 +58,4 @@ public class CrescentSortField {
 			return false;
 		return true;
 	}
-	
-	
 }

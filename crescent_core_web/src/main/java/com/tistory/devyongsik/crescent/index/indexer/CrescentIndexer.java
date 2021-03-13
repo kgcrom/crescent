@@ -28,12 +28,11 @@ public class CrescentIndexer {
 		this.indexWriterManager = indexWriterManager;
 	}
 
-	public void addDocument(List<Document> documentList, String collectionName) {
+	public void addDocument(List<Document> documentList, String collectionName) throws IOException {
 		
 		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
 		
 		try {
-			
 			log.info("collectionName : {}", collectionName);
 			log.info("add indexing start................");
 			
@@ -48,18 +47,15 @@ public class CrescentIndexer {
 			}
 			
 			log.info("total indexed document count {}", indexingDocumentCount);
-					
 			log.info("end");
-			
 		} catch (IOException e) {
-			
-			log.error("error : ", e);
-			throw new RuntimeException("색인 중 에러가 발생하였습니다. ["+e.getMessage()+"]");
+			log.error("indexer ioexception", e);
+			throw e;
 			
 		}
 	}
 	
-	public void updateDocuments(Term term, List<Document> documents, String collectionName) {
+	public void updateDocuments(Term term, List<Document> documents, String collectionName) throws Exception {
 		
 		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
 		
@@ -74,13 +70,13 @@ public class CrescentIndexer {
 			
 		} catch (IOException e) {
 			
-			log.error("error : ", e);
-			throw new RuntimeException("색인 중 에러가 발생하였습니다. ["+e.getMessage()+"]");
+			log.error("update document ioexception", e);
+			throw new Exception();
 			
 		}
 	}
 	
-	public void updateDocument(Term term, Document document, String collectionName) {
+	public void updateDocument(Term term, Document document, String collectionName) throws Exception {
 		
 		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
 		
@@ -95,13 +91,13 @@ public class CrescentIndexer {
 			
 		} catch (IOException e) {
 			
-			log.error("error : ", e);
-			throw new RuntimeException("색인 중 에러가 발생하였습니다. ["+e.getMessage()+"]");
+			log.error("update document ioexception", e);
+			throw new Exception();
 			
 		}
 	}
 	
-	public void deleteDocument(Query query, String collectionName) {
+	public void deleteDocument(Query query, String collectionName) throws Exception {
 		
 		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
 		
@@ -116,13 +112,13 @@ public class CrescentIndexer {
 			
 		} catch (IOException e) {
 			
-			log.error("error : ", e);
-			throw new RuntimeException("색인 중 에러가 발생하였습니다. ["+e.getMessage()+"]");
+			log.error("delete document ioexception", e);
+			throw new Exception();
 			
 		}
 	}
 	
-	public void commit(String collectionName) {
+	public void commit(String collectionName) throws Exception {
 		
 		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
 		
@@ -135,16 +131,12 @@ public class CrescentIndexer {
 			indexWriter.setCommitData(indexUserData);
 			
 			indexWriter.commit();
-		
 		} catch (CorruptIndexException e) {
-			
-			log.error("error : ", e);
-			throw new RuntimeException("색인 중 에러가 발생하였습니다. ["+e.getMessage()+"]");
-			
+			log.error("commit corruptindex exception", e);
+			throw new Exception();
 		} catch (IOException e) {
-			
-			log.error("error : ", e);
-			throw new RuntimeException("색인 중 에러가 발생하였습니다. ["+e.getMessage()+"]");
+			log.error("commit ioexception", e);
+			throw new Exception();
 		
 		}
 	}

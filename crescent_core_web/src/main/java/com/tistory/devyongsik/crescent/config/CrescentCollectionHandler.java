@@ -9,7 +9,6 @@ import com.tistory.devyongsik.crescent.collection.entity.CrescentSortField;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.util.Version;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -35,16 +34,16 @@ import java.util.Map;
 @Component
 public class CrescentCollectionHandler {
 
-	@Autowired
-	private Environment environment;
-
 	@Value("#{systemProperties['crescentHome'] == null ? 'default' : systemProperties['crescentHome']}")
 	private String crescentHomeLocation = null;
-	
+	private Environment environment;
 	private CrescentCollections crescentCollections = null;
-	
 	private String collectionsXmlLocation = null;
-	
+
+	public CrescentCollectionHandler(Environment environment) {
+		this.environment = environment;
+	}
+
 	@PostConstruct
 	private void init() {
 		String activeProfile = environment.getActiveProfiles().length < 1 ? "local" : environment.getActiveProfiles()[0];
@@ -231,7 +230,7 @@ public class CrescentCollectionHandler {
 		for(CrescentCollection crescentCollection : crescentCollectionList) {
 			Map<String, CrescentCollectionField> fieldMap = crescentCollection.getCrescentFieldByName();
 			if(fieldMap == null) {
-				fieldMap = new HashMap<String, CrescentCollectionField>();
+				fieldMap = new HashMap<>();
 			}
 			
 			List<CrescentCollectionField> fieldList = crescentCollection.getFields();

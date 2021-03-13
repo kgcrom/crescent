@@ -5,7 +5,6 @@ import com.tistory.devyongsik.crescent.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequestValidator;
 import com.tistory.devyongsik.crescent.search.entity.SearchResult;
-import com.tistory.devyongsik.crescent.search.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.crescent.search.searcher.CrescentDocSearcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.Query;
@@ -44,7 +43,7 @@ public class SearchServiceImpl implements SearchService {
 			
 			query = csrw.getQuery();
 		
-		} catch (CrescentInvalidRequestException e) {
+		} catch (Exception e) {
 			SearchResult searchResult = new SearchResult();
 			
 			Map<String, Object> result = new HashMap<String, Object>();

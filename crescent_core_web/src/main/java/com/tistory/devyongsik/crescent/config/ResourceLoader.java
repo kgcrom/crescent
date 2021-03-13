@@ -70,28 +70,28 @@ public class ResourceLoader {
 		return url;
 	}
 	
-	private void buildDocument(InputStream is) {
+	private void buildDocument(InputStream is) throws DocumentException {
 		SAXReader saxReader = new SAXReader();
     	
     	try {
 			document = saxReader.read(is);
 		} catch (DocumentException e) {
-			log.error("error : ", e);
-			throw new RuntimeException(name + ".xml" + " 파일이 존재하지 않거나 Parsing 오류 발생.");
+			log.error("build document {}.xml", name, e);
+			throw e;
 		}
 	}
 	
-	private void buildProperties(InputStream is) {
+	private void buildProperties(InputStream is) throws Exception {
 		properties = new Properties();
 		try {
 			properties.load(is);
 		} catch (IOException e) {
-			log.error("error : ", e);
-			throw new RuntimeException(name + ".properties" + " 파일이 존재하지 않거나 Loading 중 오류 발생.");
+			log.error("build properties {}.properties ", name, e);
+			throw new Exception();
 		}
 	}
 	
-	public Document getDocument() {
+	public Document getDocument() throws DocumentException {
 		if(document == null) {
 			buildDocument(inputStream);
 		}
@@ -99,7 +99,7 @@ public class ResourceLoader {
 		return document;
 	}
 	
-	public Properties getProperties() {
+	public Properties getProperties() throws Exception {
 		if(properties == null) {
 			buildProperties(inputStream);
 		}

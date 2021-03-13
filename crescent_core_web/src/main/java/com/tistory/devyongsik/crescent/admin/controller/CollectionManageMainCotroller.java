@@ -25,7 +25,7 @@ public class CollectionManageMainCotroller {
 	}
 
 	@RequestMapping("/collectionManageMain")
-	public ModelAndView collectionManageMain(@RequestParam(value="collectionName", required=false) String selectedCollectionName) throws Exception {
+	public ModelAndView collectionManageMain(@RequestParam(value="collectionName", required=false) String selectedCollectionName) {
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
@@ -34,7 +34,6 @@ public class CollectionManageMainCotroller {
 		}
 		
 		ModelAndView modelAndView = new ModelAndView();
-		//modelAndView.addObject("crescentCollections", crescentCollections);
 		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
 		
 		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
@@ -48,7 +47,7 @@ public class CollectionManageMainCotroller {
 	}
 	
 	@RequestMapping("/collectionUpdate")
-	public ModelAndView collectionUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView collectionUpdate(HttpServletRequest request, HttpServletResponse response) {
 
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
@@ -68,7 +67,7 @@ public class CollectionManageMainCotroller {
 	}
 	
 	@RequestMapping("/addNewCollection")
-	public ModelAndView addNewCollection() throws Exception {
+	public ModelAndView addNewCollection() {
 		
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -79,13 +78,12 @@ public class CollectionManageMainCotroller {
 	}
 	
 	@RequestMapping("/collectionAdd")
-	public ModelAndView collectionAdd(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView collectionAdd(HttpServletRequest request, HttpServletResponse response) {
 		
 		CrescentCollection selectedCollection = collectionManageServiceImpl.addCollectionInfo(request);
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 	
 		ModelAndView modelAndView = new ModelAndView();
-		//modelAndView.addObject("crescentCollections", crescentCollections);
 		modelAndView.addObject("crescentCollectionList", crescentCollections.getCrescentCollections());
 		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollection.getName()));
 		modelAndView.addObject("selectedCollectionName", selectedCollection.getName());
@@ -98,7 +96,7 @@ public class CollectionManageMainCotroller {
 	}
 	
 	@RequestMapping("/deleteCollection")
-	public ModelAndView deleteCollection(@RequestParam(value="collectionName") String collectionName ) throws Exception {
+	public ModelAndView deleteCollection(@RequestParam(value="collectionName") String collectionName ) {
 		
 		collectionManageServiceImpl.deleteCollectionInfo(collectionName);
 		
