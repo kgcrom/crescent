@@ -64,13 +64,13 @@ subprojects {
         }
     }
 
+    // TODO report-aggregate 적용하기
     task testAndCopyReport(type: Copy) {
         group 'verification'
         description 'copy Jacoco Report file to project_root (For Github Action)'
 
-        project.ext.reportFile =
         from "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
-        into "/github/workspace"
+        into "$rootDir/"
 
         dependsOn('test', 'jacocoTestReport', 'jacocoTestCoverageVerification')
     }
