@@ -64,14 +64,13 @@ subprojects {
         }
     }
 
-    task testAndSendCodacy(type: Exec) {
+    // TODO report-aggregate 적용하기
+    task testAndCopyReport(type: Copy) {
         group 'verification'
-        description 'Run the unit tests and send report to codacy'
+        description 'copy Jacoco Report file to project_root (For Github Action)'
 
-        // set CODACY_PROJECT_TOKEN environment variable
-        workingDir "$rootDir"
-        project.ext.reportFile = "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
-        commandLine './send_codacy.sh', project.ext.reportFile
+        from "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+        into "$rootDir/"
 
         dependsOn('test', 'jacocoTestReport', 'jacocoTestCoverageVerification')
     }
