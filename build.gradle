@@ -64,4 +64,14 @@ subprojects {
         }
     }
 
+    task testAndCopyReport(type: Copy) {
+        group 'verification'
+        description 'copy Jacoco Report file to project_root (For Github Action)'
+
+        project.ext.reportFile =
+        from "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+        into "./"
+
+        dependsOn('test', 'jacocoTestReport', 'jacocoTestCoverageVerification')
+    }
 }
