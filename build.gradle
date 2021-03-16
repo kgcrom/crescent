@@ -64,15 +64,4 @@ subprojects {
         }
     }
 
-    task testAndSendCodacy(type: Exec) {
-        group 'verification'
-        description 'Run the unit tests and send report to codacy'
-
-        // set CODACY_PROJECT_TOKEN environment variable
-        workingDir "$rootDir"
-        project.ext.reportFile = "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
-        commandLine './send_codacy.sh', project.ext.reportFile
-
-        dependsOn('test', 'jacocoTestReport', 'jacocoTestCoverageVerification')
-    }
 }
