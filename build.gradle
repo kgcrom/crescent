@@ -70,7 +70,7 @@ subprojects {
 
         project.ext.reportFile =
         from "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
-        into "./"
+        into "/github/workspace"
 
         dependsOn('test', 'jacocoTestReport', 'jacocoTestCoverageVerification')
     }
