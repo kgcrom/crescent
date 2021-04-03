@@ -1,6 +1,6 @@
 package com.tistory.devyongsik.crescent.query;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.CollectionField;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
@@ -31,7 +31,7 @@ public class CustomQueryStringParser {
   private static final Pattern pattern = Pattern.compile("(.*?)(:)(\".*?\")");
   private Query resultQuery = null;
 
-  protected Query getQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer, String regexQueryString) throws InvalidParameterException, IOException {
+  protected Query getQuery(List<CollectionField> indexedFields, String customQueryString, Analyzer analyzer, String regexQueryString) throws InvalidParameterException, IOException {
     if (resultQuery != null) {
       return this.resultQuery;
     } else {
@@ -39,14 +39,14 @@ public class CustomQueryStringParser {
     }
   }
 
-  private Query getQueryFromCustomQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer, String regexQueryString)
+  private Query getQueryFromCustomQuery(List<CollectionField> indexedFields, String customQueryString, Analyzer analyzer, String regexQueryString)
       throws InvalidParameterException, IOException {
 
     List<QueryAnalysisResult> queryAnalysisResultList = getQueryAnalysisResults(customQueryString);
 
     BooleanQuery resultQuery = new BooleanQuery();
 
-    CrescentCollectionField searchTargetField = null;
+    CollectionField searchTargetField = null;
 
     String fieldName = "";
     Occur occur = Occur.SHOULD;
@@ -68,7 +68,7 @@ public class CustomQueryStringParser {
       isRangeQuery = queryAnalysisResult.isRangeQuery();
 
       //field가 검색 대상에 있는지 확인..
-      for (CrescentCollectionField crescentField : indexedFields) {
+      for (CollectionField crescentField : indexedFields) {
         if (fieldName.equals(crescentField.getName())) {
           any = false;
           searchTargetField = crescentField;

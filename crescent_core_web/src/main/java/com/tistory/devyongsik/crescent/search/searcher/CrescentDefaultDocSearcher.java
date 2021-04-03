@@ -1,7 +1,7 @@
 package com.tistory.devyongsik.crescent.search.searcher;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.CollectionField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.crescent.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.crescent.search.entity.SearchResult;
@@ -105,14 +105,14 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 				
 				CrescentFastVectorHighlighter highlighter = new CrescentFastVectorHighlighter();
 				
-				CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(csrw.getCollectionName());
+				Collection collection = collectionHandler.getCrescentCollections().getCrescentCollection(csrw.getCollectionName());
 				
 				//int docnum = 0;
 				for(int i = startOffset; i < endOffset; i++) {
 					
 					Map<String,String> resultMap = new HashMap<String, String>();
 					
-					for(CrescentCollectionField field : collection.getFields()) {
+					for(CollectionField field : collection.getFields()) {
 						String value = null;
 								
 						if(field.isStore() && !field.isNumeric()) {

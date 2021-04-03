@@ -10,7 +10,7 @@ import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import org.junit.jupiter.api.Test;
 
 
-public class CrescentCollectionFieldTest extends CrescentTestCaseUtil {
+public class CollectionFieldTest extends CrescentTestCaseUtil {
 
 	@PostConstruct
 	public void init() throws Exception {
@@ -20,19 +20,19 @@ public class CrescentCollectionFieldTest extends CrescentTestCaseUtil {
 	@Test
 	public void collectionFieldTest() {
 
-		CrescentCollections crescentCollections = this.collectionHandler.getCrescentCollections();
+		Collections crescentCollections = this.collectionHandler.getCrescentCollections();
 
-		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+		Map<String, Collection> collections = crescentCollections.getCrescentCollectionsMap();
 
-		CrescentCollection sampleCollection = collections.get("sample");
+		Collection sampleCollection = collections.get("sample");
 
 
-		Map<String, CrescentCollectionField> fieldsByName = sampleCollection.getCrescentFieldByName();
+		Map<String, CollectionField> fieldsByName = sampleCollection.getCrescentFieldByName();
 
 		Set<String> fieldNames = fieldsByName.keySet();
 
 		for(String fieldName : fieldNames) {
-			CrescentCollectionField field = fieldsByName.get(fieldName);
+			CollectionField field = fieldsByName.get(fieldName);
 			assertNotNull(field);
 		}
 	}

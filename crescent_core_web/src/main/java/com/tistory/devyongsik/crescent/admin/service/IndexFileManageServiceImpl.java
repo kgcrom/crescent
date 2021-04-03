@@ -4,8 +4,8 @@ import com.tistory.devyongsik.crescent.admin.entity.CrescentTermStats;
 import com.tistory.devyongsik.crescent.admin.entity.HighFreqTermResult;
 import com.tistory.devyongsik.crescent.admin.entity.HighFreqTermResult.TermStatsQueue;
 import com.tistory.devyongsik.crescent.admin.entity.IndexInfo;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.CollectionField;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.index.*;
 import org.apache.lucene.store.Directory;
@@ -25,7 +25,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
   //TODO 호출할때마다 계산하는게 아니라, 색인시간 체크해서 보여주도록
 
   @Override
-  public IndexInfo getIndexInfo(CrescentCollection selectCollection, String selectTopField) throws IOException {
+  public IndexInfo getIndexInfo(Collection selectCollection, String selectTopField) throws IOException {
     IndexInfo indexInfo = new IndexInfo();
 
     Directory directory = FSDirectory.open(new File(selectCollection.getIndexingDirectory()));
@@ -47,7 +47,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
     long totalTermCountByField = 0L;
 
     List<String> fieldNames = new ArrayList<String>();
-    for (CrescentCollectionField field : selectCollection.getFields()) {
+    for (CollectionField field : selectCollection.getFields()) {
       fieldNames.add(field.getName());
 
       totalTermCountByField = directoryReader.getSumTotalTermFreq(field.getName());
@@ -96,7 +96,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
     return indexInfo;
   }
 
-  private HighFreqTermResult getHighFreqTerms(CrescentCollection selectCollection, String selectTopField) throws IOException {
+  private HighFreqTermResult getHighFreqTerms(Collection selectCollection, String selectTopField) throws IOException {
 
     HighFreqTermResult highFreqTermResult = new HighFreqTermResult();
 
@@ -124,7 +124,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
       Terms terms = MultiFields.getTerms(directoryReader, selectTopField);
       TermsEnum termsEnum = terms.iterator(TermsEnum.EMPTY);
       String termText;
-      CrescentCollectionField crescentField = selectCollection.getCrescentFieldByName().get(selectTopField);
+      CollectionField crescentField = selectCollection.getCrescentFieldByName().get(selectTopField);
 
       BytesRef ref;
       while ((ref = termsEnum.next()) != null) {

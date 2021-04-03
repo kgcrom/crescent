@@ -1,6 +1,6 @@
 package com.tistory.devyongsik.crescent.index;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.CollectionField;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Field;
@@ -14,7 +14,7 @@ import org.apache.lucene.index.IndexableField;
 @Slf4j
 public class LuceneFieldBuilder {
 
-	public IndexableField create(CrescentCollectionField collectionField, String value) {
+	public IndexableField create(CollectionField collectionField, String value) {
 
 		FieldType fieldType = new FieldType();
 		fieldType.setIndexed(collectionField.isIndex());

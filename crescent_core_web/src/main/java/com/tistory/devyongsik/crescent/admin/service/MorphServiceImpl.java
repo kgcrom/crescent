@@ -1,7 +1,7 @@
 package com.tistory.devyongsik.crescent.admin.service;
 
 import com.tistory.devyongsik.crescent.admin.entity.MorphToken;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
@@ -31,13 +31,13 @@ public class MorphServiceImpl implements MorphService {
 	public List<MorphToken> getTokens(String keyword, boolean isIndexingMode, String collectionName) throws IOException {
 		StringReader reader = new StringReader(keyword);
 		
-		CrescentCollection crescentCollection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
+		Collection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
 		Analyzer analyzer;
 		
 		if(isIndexingMode) {
-			analyzer = crescentCollection.getIndexingModeAnalyzer();
+			analyzer = collection.getIndexingModeAnalyzer();
 		} else {
-			analyzer = crescentCollection.getSearchModeAnalyzer();
+			analyzer = collection.getSearchModeAnalyzer();
 		}
 		
 		TokenStream stream = analyzer.tokenStream("dummy", reader);

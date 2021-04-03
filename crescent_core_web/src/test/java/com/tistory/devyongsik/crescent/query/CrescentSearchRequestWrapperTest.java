@@ -2,7 +2,7 @@ package com.tistory.devyongsik.crescent.query;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.CollectionField;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import java.util.List;
@@ -50,10 +50,10 @@ public class CrescentSearchRequestWrapperTest extends CrescentTestCaseUtil {
 	@Test
 	public void getSearchFieldNames() {
 		CrescentSearchRequestWrapper searchRequestWrapper = new CrescentSearchRequestWrapper(searchRequest, this.collectionHandler);
-		List<CrescentCollectionField> searchFields = searchRequestWrapper.getTargetSearchFields();
+		List<CollectionField> searchFields = searchRequestWrapper.getTargetSearchFields();
 
 		String result = "[";
-		for(CrescentCollectionField f : searchFields) {
+		for(CollectionField f : searchFields) {
 			result += f.getName() + ", ";
 		}
 		result += "]";

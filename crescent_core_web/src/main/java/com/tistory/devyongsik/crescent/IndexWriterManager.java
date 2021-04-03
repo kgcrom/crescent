@@ -1,6 +1,6 @@
 package com.tistory.devyongsik.crescent;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.index.IndexWriter;
@@ -32,9 +32,9 @@ public class IndexWriterManager {
 	@PostConstruct
 	private void initIndexWriter() throws IOException {
 		
-		for(CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
-			log.info("collection name {}", crescentCollection.getName());
-			String indexDir = crescentCollection.getIndexingDirectory();
+		for(Collection collection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
+			log.info("collection name {}", collection.getName());
+			String indexDir = collection.getIndexingDirectory();
 			log.info("index file dir ; {}", indexDir);
 			
 			Directory dir;
@@ -44,13 +44,13 @@ public class IndexWriterManager {
 				dir = FSDirectory.open(new File(indexDir));
 			}
 
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_44, crescentCollection.getIndexingModeAnalyzer());
+			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_44, collection.getIndexingModeAnalyzer());
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
 
 			IndexWriter indexWriter = new IndexWriter(dir, conf);
-			indexWritersByCollectionName.put(crescentCollection.getName(), indexWriter);
+			indexWritersByCollectionName.put(collection.getName(), indexWriter);
 
-			log.info("index writer for collection {} is initialized...", crescentCollection.getName());
+			log.info("index writer for collection {} is initialized...", collection.getName());
 		}
 	}
 	

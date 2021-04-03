@@ -19,20 +19,20 @@ public class LuceneFieldBuilderTest extends CrescentTestCaseUtil {
 
 	@Test
 	public void create() {
-		CrescentCollections crescentCollections = this.collectionHandler.getCrescentCollections();
+		Collections crescentCollections = this.collectionHandler.getCrescentCollections();
 
-		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+		Map<String, Collection> collections = crescentCollections.getCrescentCollectionsMap();
 
-		CrescentCollection sampleCollection = collections.get("sample");
+		Collection sampleCollection = collections.get("sample");
 
 		
-		Map<String, CrescentCollectionField> fieldsByName = sampleCollection.getCrescentFieldByName();
+		Map<String, CollectionField> fieldsByName = sampleCollection.getCrescentFieldByName();
 		
 		Set<String> fieldNames = fieldsByName.keySet();
 		LuceneFieldBuilder luceneFieldBuilder = new LuceneFieldBuilder();
 		
 		for(String fieldName : fieldNames) {
-			CrescentCollectionField field = fieldsByName.get(fieldName);
+			CollectionField field = fieldsByName.get(fieldName);
 			IndexableField luceneField = luceneFieldBuilder.create(field, "30");
 			
 			System.out.println(luceneField);

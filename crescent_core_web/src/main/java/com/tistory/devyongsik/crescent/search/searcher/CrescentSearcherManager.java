@@ -1,8 +1,8 @@
 package com.tistory.devyongsik.crescent.search.searcher;
 
 import com.tistory.devyongsik.crescent.IndexWriterManager;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.Collections;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.index.IndexWriter;
@@ -34,8 +34,8 @@ public class CrescentSearcherManager {
 	private void indexSearcherInit() throws IOException {
 		log.info("indexSearcherManager init start.....");
 		
-		CrescentCollections collections = collectionHandler.getCrescentCollections();
-		Map<String, CrescentCollection> collectionsMap = collections.getCrescentCollectionsMap();
+		Collections collections = collectionHandler.getCrescentCollections();
+		Map<String, Collection> collectionsMap = collections.getCrescentCollectionsMap();
 		Set<String> collectionNames = collectionsMap.keySet();
 		
 		for(String collectionName : collectionNames) {

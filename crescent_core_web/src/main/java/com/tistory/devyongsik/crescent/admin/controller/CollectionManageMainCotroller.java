@@ -1,8 +1,8 @@
 package com.tistory.devyongsik.crescent.admin.controller;
 
 import com.tistory.devyongsik.crescent.admin.service.CollectionManageService;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.Collections;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,19 +27,19 @@ public class CollectionManageMainCotroller {
 	@RequestMapping("/collectionManageMain")
 	public ModelAndView collectionManageMain(@RequestParam(value="collectionName", required=false) String selectedCollectionName) {
 		
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Collections collections = collectionHandler.getCrescentCollections();
 		
 		if(selectedCollectionName == null) {
-			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
+			selectedCollectionName = collections.getCrescentCollections().get(0).getName();
 		}
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
 		
-		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		List<Collection> collectionList = collections.getCrescentCollections();
 		
-		modelAndView.addObject("crescentCollectionList", crescentCollectionList);
-		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
+		modelAndView.addObject("collectionList", collectionList);
+		modelAndView.addObject("selectedCollection", collections.getCrescentCollection(selectedCollectionName));
 		modelAndView.setViewName("/admin/collectionManageMain");
 		
 		
@@ -49,14 +49,14 @@ public class CollectionManageMainCotroller {
 	@RequestMapping("/collectionUpdate")
 	public ModelAndView collectionUpdate(HttpServletRequest request, HttpServletResponse response) {
 
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Collections collections = collectionHandler.getCrescentCollections();
 		
-		CrescentCollection selectedCollection = collectionManageServiceImpl.updateCollectionInfo(request);
+		Collection selectedCollection = collectionManageServiceImpl.updateCollectionInfo(request);
 		
 		
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("crescentCollectionList", crescentCollections.getCrescentCollections());
-		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollection.getName()));
+		modelAndView.addObject("collectionList", collections.getCrescentCollections());
+		modelAndView.addObject("selectedCollection", collections.getCrescentCollection(selectedCollection.getName()));
 		modelAndView.addObject("selectedCollectionName", selectedCollection.getName());
 		
 		modelAndView.setViewName("/admin/collectionManageMain");
@@ -80,12 +80,12 @@ public class CollectionManageMainCotroller {
 	@RequestMapping("/collectionAdd")
 	public ModelAndView collectionAdd(HttpServletRequest request, HttpServletResponse response) {
 		
-		CrescentCollection selectedCollection = collectionManageServiceImpl.addCollectionInfo(request);
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Collection selectedCollection = collectionManageServiceImpl.addCollectionInfo(request);
+		Collections collections = collectionHandler.getCrescentCollections();
 	
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("crescentCollectionList", crescentCollections.getCrescentCollections());
-		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollection.getName()));
+		modelAndView.addObject("collectionList", collections.getCrescentCollections());
+		modelAndView.addObject("selectedCollection", collections.getCrescentCollection(selectedCollection.getName()));
 		modelAndView.addObject("selectedCollectionName", selectedCollection.getName());
 		
 		
@@ -102,12 +102,12 @@ public class CollectionManageMainCotroller {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
-		String selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
+		Collections collections = collectionHandler.getCrescentCollections();
+		String selectedCollectionName = collections.getCrescentCollections().get(0).getName();
 		
 		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
-		modelAndView.addObject("crescentCollectionList", crescentCollections.getCrescentCollections());
-		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
+		modelAndView.addObject("collectionList", collections.getCrescentCollections());
+		modelAndView.addObject("selectedCollection", collections.getCrescentCollection(selectedCollectionName));
 		
 		modelAndView.setViewName("/admin/collectionManageMain");
 		

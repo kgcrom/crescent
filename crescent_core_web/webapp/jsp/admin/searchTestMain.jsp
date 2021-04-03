@@ -41,7 +41,7 @@
 	          <label class="control-label">Collection Name</label>
 	          <div class="controls">
 	            <select id="col_name" name="col_name">
-	            <c:forEach var="collection" items="${crescentCollectionList}">
+	            <c:forEach var="collection" items="${collectionList}">
 	            	<option value="${collection.name}">${collection.name}</option>
 	            </c:forEach>
 	            </select>

@@ -2,11 +2,11 @@ package com.tistory.devyongsik.crescent.admin.service;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
 
 public interface CollectionManageService {
 	
-	CrescentCollection updateCollectionInfo(HttpServletRequest request);
-	CrescentCollection addCollectionInfo(HttpServletRequest request);
+	Collection updateCollectionInfo(HttpServletRequest request);
+	Collection addCollectionInfo(HttpServletRequest request);
 	void deleteCollectionInfo(String collectionName);
 }

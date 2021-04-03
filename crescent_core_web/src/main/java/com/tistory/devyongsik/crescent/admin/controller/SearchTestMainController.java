@@ -1,7 +1,7 @@
 package com.tistory.devyongsik.crescent.admin.controller;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.Collections;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.crescent.search.entity.RequestBuilder;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
@@ -33,19 +33,19 @@ public class SearchTestMainController {
 
 	@RequestMapping("/searchTestMain")
 	public ModelAndView searchTestMain(@RequestParam(value = "col_name", required = false) String selectedCollectionName) {
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Collections collections = collectionHandler.getCrescentCollections();
 
 		if (selectedCollectionName == null) {
-			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
+			selectedCollectionName = collections.getCrescentCollections().get(0).getName();
 		}
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
 		
-		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		List<Collection> collectionList = collections.getCrescentCollections();
 		
-		modelAndView.addObject("crescentCollectionList", crescentCollectionList);
-		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
+		modelAndView.addObject("collectionList", collectionList);
+		modelAndView.addObject("selectedCollection", collections.getCrescentCollection(selectedCollectionName));
 		modelAndView.setViewName("/admin/searchTestMain");
 		
 		log.debug("search Test main");
@@ -72,20 +72,20 @@ public class SearchTestMainController {
 
 		SearchResult searchResult = searchServiceImpl.search(searchRequest);
 
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Collections collections = collectionHandler.getCrescentCollections();
 
 		String selectedCollectionName = request.getParameter("col_name");
 		if (selectedCollectionName == null) {
-			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
+			selectedCollectionName = collections.getCrescentCollections().get(0).getName();
 		}
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
 		
-		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		List<Collection> collectionList = collections.getCrescentCollections();
 		
-		modelAndView.addObject("crescentCollectionList", crescentCollectionList);
-		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
+		modelAndView.addObject("collectionList", collectionList);
+		modelAndView.addObject("selectedCollection", collections.getCrescentCollection(selectedCollectionName));
 		
 		modelAndView.addObject("searchResult", searchResult);
 		modelAndView.addObject("USER_REQUEST", userRequest);

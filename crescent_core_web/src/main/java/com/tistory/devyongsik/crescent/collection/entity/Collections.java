@@ -9,52 +9,52 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 @XStreamAlias("collections")
-public class CrescentCollections {
+public class Collections {
 
 	@XStreamImplicit(itemFieldName="collection")
-	private List<CrescentCollection> crescentCollections = null;
+	private List<Collection> collections = null;
 
 	@XStreamOmitField
-	private Map<String, CrescentCollection> crescentCollectionsMap = null;
+	private Map<String, Collection> crescentCollectionsMap = null;
 	
 	private void lazyLoadMap() {
 		if(crescentCollectionsMap == null) {
-			crescentCollectionsMap = new HashMap<String, CrescentCollection>();
+			crescentCollectionsMap = new HashMap<String, Collection>();
 			
-			for(CrescentCollection c : crescentCollections) {
+			for(Collection c : collections) {
 				crescentCollectionsMap.put(c.getName(), c);
 			}
 		}
 	}
 	
-	public CrescentCollection getCrescentCollection(String name) {
+	public Collection getCrescentCollection(String name) {
 		lazyLoadMap();
 		
 		return crescentCollectionsMap.get(name); 
 	}
 	
-	public Map<String, CrescentCollection> getCrescentCollectionsMap() {
+	public Map<String, Collection> getCrescentCollectionsMap() {
 		lazyLoadMap();
 		
 		return crescentCollectionsMap;
 	}
 
 	public void setCrescentCollectionsMap(
-			Map<String, CrescentCollection> crescentCollectionsMap) {
+			Map<String, Collection> crescentCollectionsMap) {
 		this.crescentCollectionsMap = crescentCollectionsMap;
 	}
 
-	public List<CrescentCollection> getCrescentCollections() {
-		return crescentCollections;
+	public List<Collection> getCrescentCollections() {
+		return collections;
 	}
 
-	public void setCrescentCollections(List<CrescentCollection> crescentCollections) {
-		this.crescentCollections = crescentCollections;
+	public void setCrescentCollections(List<Collection> collections) {
+		this.collections = collections;
 	}
 
 	@Override
 	public String toString() {
 		return "CrescentCollections [crescentCollections="
-				+ crescentCollections + "]";
+				+ collections + "]";
 	}
 }

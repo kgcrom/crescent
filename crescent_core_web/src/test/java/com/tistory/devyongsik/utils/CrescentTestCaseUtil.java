@@ -1,7 +1,7 @@
 package com.tistory.devyongsik.utils;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.Collections;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.crescent.data.handler.Handler;
 import com.tistory.devyongsik.crescent.data.handler.JsonDataHandler;
@@ -53,8 +53,8 @@ public class CrescentTestCaseUtil {
 		
 		Handler handler = new JsonDataHandler();
 		IndexingRequestForm indexingRequestForm = handler.handledData(bulkIndexingTestText);
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
-		CrescentCollection collection = crescentCollections.getCrescentCollection("sample");
+		Collections collections = collectionHandler.getCrescentCollections();
+		Collection collection = collections.getCrescentCollection("sample");
 		
 		String message = executor.indexing(collection, indexingRequestForm);
 

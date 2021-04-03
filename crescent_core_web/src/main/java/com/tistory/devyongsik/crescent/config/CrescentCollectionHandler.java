@@ -1,11 +1,11 @@
 package com.tistory.devyongsik.crescent.config;
 
 import com.thoughtworks.xstream.XStream;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentAnalyzerHolder;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentSortField;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.AnalyzerHolder;
+import com.tistory.devyongsik.crescent.collection.entity.CollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.Collections;
+import com.tistory.devyongsik.crescent.collection.entity.SortField;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.util.Version;
@@ -33,7 +33,7 @@ import java.util.Map;
 public class CrescentCollectionHandler {
 
 	private String collectionPath;
-	private CrescentCollections crescentCollections;
+	private Collections collections;
 
 	public CrescentCollectionHandler(@Value("${crescent.collection-path}") String collectionPath) {
 		this.collectionPath = collectionPath;
@@ -49,16 +49,16 @@ public class CrescentCollectionHandler {
 
 	private void loadFromXML() {
 		XStream stream = new XStream();
-		stream.processAnnotations(CrescentCollections.class);
-		stream.alias("collections", CrescentCollections.class);
-		stream.addImplicitCollection(CrescentCollections.class, "crescentCollections");
+		stream.processAnnotations(Collections.class);
+		stream.alias("collections", Collections.class);
+		stream.addImplicitCollection(Collections.class, "collections");
 
 		ResourceLoader resourceLoader = new ResourceLoader(collectionPath);
 		InputStream inputStream = resourceLoader.getInputStream();
 
-		crescentCollections = (CrescentCollections) stream.fromXML(inputStream);
+		collections = (Collections) stream.fromXML(inputStream);
 
-		if (crescentCollections == null) {
+		if (collections == null) {
 			String errorMsg = "Crescent Collections is not loaded from xml : [" + collectionPath + "]";
 			log.error(errorMsg);
 
@@ -66,8 +66,8 @@ public class CrescentCollectionHandler {
 		}
 
 		// indexingDirectory가 절대경로가 아닌경우 임의로 경로 수정,  maven local profile에서 사용
-		List<CrescentCollection> list = crescentCollections.getCrescentCollections();
-		for (CrescentCollection collection : list) {
+		List<Collection> list = collections.getCrescentCollections();
+		for (Collection collection : list) {
 			String path = collection.getIndexingDirectory();
 			File file = new File(path);
 			if (!file.isAbsolute()) {
@@ -85,10 +85,10 @@ public class CrescentCollectionHandler {
 	}
 
 	private void makeAnalyzer() {
-		for (CrescentCollection collection : crescentCollections.getCrescentCollections()) {
-			List<CrescentAnalyzerHolder> analyzerHolders = collection.getAnalyzers();
+		for (Collection collection : collections.getCrescentCollections()) {
+			List<AnalyzerHolder> analyzerHolders = collection.getAnalyzers();
 
-			for (CrescentAnalyzerHolder analyzerHolder : analyzerHolders) {
+			for (AnalyzerHolder analyzerHolder : analyzerHolders) {
 				String type = analyzerHolder.getType();
 				String className = analyzerHolder.getClassName();
 				String constructorArgs = analyzerHolder.getConstructorArgs();
@@ -137,8 +137,8 @@ public class CrescentCollectionHandler {
 		}
 	}
 
-	public CrescentCollections getCrescentCollections() {
-		return this.crescentCollections;
+	public Collections getCrescentCollections() {
+		return this.collections;
 	}
 	
 	public void writeToXML() {
@@ -147,7 +147,7 @@ public class CrescentCollectionHandler {
 		URL collectionXmlUrl = resourceLoader.getURL();
 
 		XStream stream = new XStream();
-		stream.processAnnotations(CrescentCollections.class);
+		stream.processAnnotations(Collections.class);
 
 		log.debug("collectionXmlUrl : {}", collectionXmlUrl);
 
@@ -161,7 +161,7 @@ public class CrescentCollectionHandler {
 			FileOutputStream fos = new FileOutputStream(collectionsXmlFile, false);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos, Charset.forName("utf-8")));
 
-			stream.toXML(this.crescentCollections, bw);
+			stream.toXML(this.collections, bw);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			log.error("error : ", e);
@@ -175,46 +175,46 @@ public class CrescentCollectionHandler {
 	}
 
 	private void makeFieldsMap() {
-		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		List<Collection> collections = this.collections.getCrescentCollections();
 		
-		if(crescentCollectionList.size() == 0) {
+		if(collections.size() == 0) {
 			String errorMsg = "There are no Crescent collections!!";
 			log.error(errorMsg);
 			
 			throw new IllegalStateException(errorMsg);
 		}
 		
-		for(CrescentCollection crescentCollection : crescentCollectionList) {
-			Map<String, CrescentCollectionField> fieldMap = crescentCollection.getCrescentFieldByName();
+		for(Collection collection : collections) {
+			Map<String, CollectionField> fieldMap = collection.getCrescentFieldByName();
 			if(fieldMap == null) {
 				fieldMap = new HashMap<>();
 			}
 			
-			List<CrescentCollectionField> fieldList = crescentCollection.getFields();
-			for(CrescentCollectionField field : fieldList) {
+			List<CollectionField> fieldList = collection.getFields();
+			for(CollectionField field : fieldList) {
 				fieldMap.put(field.getName(), field);
 			}
 			
-			crescentCollection.setCrescentFieldByName(fieldMap);
+			collection.setCrescentFieldByName(fieldMap);
 		}
 	}
 	
 	private void makeAddtionalFields() {
-		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		List<Collection> collections = this.collections.getCrescentCollections();
 		
-		for(CrescentCollection crescentCollection : crescentCollectionList) {
-			List<CrescentSortField> crescentSortFieldList = crescentCollection.getSortFields();
-			Map<String, CrescentCollectionField> fieldMap = crescentCollection.getCrescentFieldByName();
+		for(Collection collection : collections) {
+			List<SortField> sortFieldList = collection.getSortFields();
+			Map<String, CollectionField> fieldMap = collection.getCrescentFieldByName();
 			
-			for(CrescentSortField sortField : crescentSortFieldList) {
-				CrescentCollectionField field = fieldMap.get(sortField.getSource());
+			for(SortField sortField : sortFieldList) {
+				CollectionField field = fieldMap.get(sortField.getSource());
 				
 				if(field == null) {
 					throw new IllegalStateException("정렬 필드 설정에 필요한 원본(source) 필드가 없습니다.");
 				}
 				
 				try {
-					CrescentCollectionField newSortField = (CrescentCollectionField)field.clone();
+					CollectionField newSortField = (CollectionField)field.clone();
 					
 					newSortField.setAnalyze(false);
 					newSortField.setIndex(true);

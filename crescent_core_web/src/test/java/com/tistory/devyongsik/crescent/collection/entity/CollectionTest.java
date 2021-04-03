@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import org.junit.jupiter.api.Test;
 
-public class CrescentCollectionTest extends CrescentTestCaseUtil {
+public class CollectionTest extends CrescentTestCaseUtil {
 
 	@PostConstruct
 	public void init() throws Exception {
@@ -19,11 +19,11 @@ public class CrescentCollectionTest extends CrescentTestCaseUtil {
 
 	@Test
 	public void collectionTest() {
-		CrescentCollections crescentCollections = this.collectionHandler.getCrescentCollections();
+		Collections crescentCollections = this.collectionHandler.getCrescentCollections();
 
-		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+		Map<String, Collection> collections = crescentCollections.getCrescentCollectionsMap();
 
-		CrescentCollection sampleCollection = collections.get("sample");
+		Collection sampleCollection = collections.get("sample");
 		
 		assertNotNull(sampleCollection);
 		

@@ -1,6 +1,6 @@
 package com.tistory.devyongsik.crescent.index.indexer;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
 import com.tistory.devyongsik.crescent.index.LuceneDocumentBuilder;
 import com.tistory.devyongsik.crescent.index.entity.IndexingCommand;
 import com.tistory.devyongsik.crescent.index.entity.IndexingRequestForm;
@@ -24,7 +24,7 @@ public class CrescentIndexerExecutor {
 		this.crescentIndexer = crescentIndexer;
 	}
 
-	public String indexing(CrescentCollection collection, IndexingRequestForm indexingRequestForm) throws Exception {
+	public String indexing(Collection collection, IndexingRequestForm indexingRequestForm) throws Exception {
 		
 		log.info("indexingRequestForm : {}", indexingRequestForm);
 		

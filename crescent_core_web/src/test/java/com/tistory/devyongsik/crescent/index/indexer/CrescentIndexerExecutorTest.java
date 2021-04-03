@@ -1,7 +1,7 @@
 package com.tistory.devyongsik.crescent.index.indexer;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.Collections;
 import com.tistory.devyongsik.crescent.data.handler.Handler;
 import com.tistory.devyongsik.crescent.data.handler.JsonDataHandler;
 import com.tistory.devyongsik.crescent.index.entity.IndexingRequestForm;
@@ -28,10 +28,10 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   @Test
   public void addDocument() throws Exception {
 
-    CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
-    Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+    Collections crescentCollections = collectionHandler.getCrescentCollections();
+    Map<String, Collection> collections = crescentCollections.getCrescentCollectionsMap();
 
-    CrescentCollection sampleCollection = collections.get("sample");
+    Collection sampleCollection = collections.get("sample");
 
     Handler handler = new JsonDataHandler();
     IndexingRequestForm indexingRequestForm = handler
@@ -45,10 +45,10 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   @Test
   public void deleteDocument() throws Exception {
 
-    CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
-    Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+    Collections crescentCollections = collectionHandler.getCrescentCollections();
+    Map<String, Collection> collections = crescentCollections.getCrescentCollectionsMap();
 
-    CrescentCollection sampleCollection = collections.get("sample");
+    Collection sampleCollection = collections.get("sample");
 
     Handler handler = new JsonDataHandler();
     IndexingRequestForm indexingRequestForm = handler
@@ -62,10 +62,10 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   @Test
   public void updateDocument() throws Exception {
 
-    CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
-    Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+    Collections crescentCollections = collectionHandler.getCrescentCollections();
+    Map<String, Collection> collections = crescentCollections.getCrescentCollectionsMap();
 
-    CrescentCollection sampleCollection = collections.get("sample");
+    Collection sampleCollection = collections.get("sample");
 
     Handler handler = new JsonDataHandler();
     IndexingRequestForm indexingRequestForm = handler
@@ -79,10 +79,10 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   @Test
   public void updateNewDocument() throws Exception {
 
-    CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
-    Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+    Collections crescentCollections = collectionHandler.getCrescentCollections();
+    Map<String, Collection> collections = crescentCollections.getCrescentCollectionsMap();
 
-    CrescentCollection sampleCollection = collections.get("sample");
+    Collection sampleCollection = collections.get("sample");
 
     Handler handler = new JsonDataHandler();
     IndexingRequestForm indexingRequestForm = handler
@@ -107,10 +107,10 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   @Test
   public void updateNewDocuments() throws Exception {
 
-    CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
-    Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+    Collections crescentCollections = collectionHandler.getCrescentCollections();
+    Map<String, Collection> collections = crescentCollections.getCrescentCollectionsMap();
 
-    CrescentCollection sampleCollection = collections.get("sample");
+    Collection sampleCollection = collections.get("sample");
 
     Handler handler = new JsonDataHandler();
     IndexingRequestForm indexingRequestForm = handler
@@ -135,10 +135,10 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   @Test
   public void updateByFieldValueDocument() throws Exception {
 
-    CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
-    Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+    Collections crescentCollections = collectionHandler.getCrescentCollections();
+    Map<String, Collection> collections = crescentCollections.getCrescentCollectionsMap();
 
-    CrescentCollection sampleCollection = collections.get("sample");
+    Collection sampleCollection = collections.get("sample");
 
     Handler handler = new JsonDataHandler();
     IndexingRequestForm indexingRequestForm = handler
@@ -164,10 +164,10 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
   @Test
   public void updateByFieldValueNewDocumentList() throws Exception {
 
-    CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
-    Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+    Collections crescentCollections = collectionHandler.getCrescentCollections();
+    Map<String, Collection> collections = crescentCollections.getCrescentCollectionsMap();
 
-    CrescentCollection sampleCollection = collections.get("sample");
+    Collection sampleCollection = collections.get("sample");
 
     Handler handler = new JsonDataHandler();
     IndexingRequestForm indexingRequestForm = handler
