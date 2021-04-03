@@ -1,6 +1,6 @@
 package com.tistory.devyongsik.crescent.search.highlight;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.CollectionField;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -20,7 +20,7 @@ public class CrescentHighlighter {
 
 	private SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<b>","</b>");
 
-	public String getBestFragment(CrescentCollectionField field, String value, Query query, Analyzer analyzer) throws Exception {
+	public String getBestFragment(CollectionField field, String value, Query query, Analyzer analyzer) throws Exception {
 		String fragment = "";
 
 		log.debug("fieldName : {}", field.getName());

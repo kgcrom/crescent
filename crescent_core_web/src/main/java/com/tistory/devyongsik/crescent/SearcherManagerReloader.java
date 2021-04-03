@@ -1,6 +1,6 @@
 package com.tistory.devyongsik.crescent;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.crescent.search.searcher.CrescentSearcherManager;
 import lombok.extern.slf4j.Slf4j;
@@ -34,16 +34,13 @@ public class SearcherManagerReloader implements SmartLifecycle {
   }
 
   private void reloadStart() {
+    List<Collection> collections = crescentCollectionHandler.getCrescentCollections().getCrescentCollections();
 
-    List<CrescentCollection> crescentCollectionList = crescentCollectionHandler.getCrescentCollections().getCrescentCollections();
+    log.info("reloader start.....[{}]", collections);
 
-    log.info("reloader start.....[{}]", crescentCollectionList);
-
-    for (CrescentCollection collection : crescentCollectionList) {
-
+    for (Collection collection : collections) {
       ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
       execList.add(exec);
-
       exec.scheduleWithFixedDelay(new Reloader(collection.getName()), 0, Integer.parseInt(collection.getSearcherReloadScheduleMin()), TimeUnit.MINUTES);
     }
   }
@@ -54,10 +51,8 @@ public class SearcherManagerReloader implements SmartLifecycle {
 
       log.info("Reloader Shutdown.. {}", rList.toString());
     }
-
-    List<CrescentCollection> crescentCollectionList = crescentCollectionHandler.getCrescentCollections().getCrescentCollections();
-
-    for (CrescentCollection collection : crescentCollectionList) {
+    List<Collection> collections = crescentCollectionHandler.getCrescentCollections().getCrescentCollections();
+    for (Collection collection : collections) {
       IndexWriter indexWriter = indexWriterManager.getIndexWriter(collection.getName());
 
       try {

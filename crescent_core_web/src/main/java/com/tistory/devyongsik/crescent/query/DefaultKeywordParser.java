@@ -1,6 +1,6 @@
 package com.tistory.devyongsik.crescent.query;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.CollectionField;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class DefaultKeywordParser {
 
-	protected Query parse(List<CrescentCollectionField> searchFields, String keyword, Analyzer analyzer) throws IOException {
+	protected Query parse(List<CollectionField> searchFields, String keyword, Analyzer analyzer) throws IOException {
 	
 		log.debug("search fields : {}", searchFields);
 		
@@ -33,7 +33,7 @@ public class DefaultKeywordParser {
 			ArrayList<String> analyzedTokenList = analyzedTokenList(analyzer, keywords[i]);
 
 			//필드만큼 돌아간다..
-			for(CrescentCollectionField field : searchFields) {
+			for(CollectionField field : searchFields) {
 				if(analyzedTokenList.size() == 0) { //색인되어 나온 것이 없으면
 					Term t = new Term(field.getName(), keywords[i]);
 					Query query = new TermQuery(t);

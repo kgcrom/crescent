@@ -2,7 +2,7 @@ package com.tistory.devyongsik.crescent.admin.controller;
 
 import com.tistory.devyongsik.crescent.admin.entity.IndexInfo;
 import com.tistory.devyongsik.crescent.admin.service.IndexFileManageService;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,14 +35,14 @@ public class IndexFileManageController {
 
 		List<String> collectionNames = new ArrayList<String>();
 
-		for (CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
-			collectionNames.add(crescentCollection.getName());
+		for (Collection collection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
+			collectionNames.add(collection.getName());
 		}
 
 		if (selectCollectionName == null) {
 			selectCollectionName = collectionNames.get(0);
 		}
-		CrescentCollection selectCollection = collectionHandler
+		Collection selectCollection = collectionHandler
 				.getCrescentCollections()
 				.getCrescentCollection(selectCollectionName);
 

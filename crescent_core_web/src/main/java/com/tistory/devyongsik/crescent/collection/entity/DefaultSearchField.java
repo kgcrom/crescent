@@ -4,7 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 @XStreamAlias("defaultSearchField")
-public class CrescentDefaultSearchField {
+public class DefaultSearchField {
 
 	@XStreamAsAttribute
 	private String name;
@@ -38,7 +38,7 @@ public class CrescentDefaultSearchField {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CrescentDefaultSearchField other = (CrescentDefaultSearchField) obj;
+		DefaultSearchField other = (DefaultSearchField) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

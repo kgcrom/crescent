@@ -1,8 +1,8 @@
 package com.tistory.devyongsik.crescent.query;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentDefaultSearchField;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.CollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.DefaultSearchField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -32,11 +32,11 @@ public class CrescentSearchRequestWrapper {
 	//디폴트로 몇 페이지까지 검색 넘어갈 수 있도록?
 	private final int DEFAULT_HITS_PAGE = 5;
 	
-	private List<CrescentCollectionField> searchFields = new ArrayList<CrescentCollectionField>();
-	private List<CrescentCollectionField> indexedFields = new ArrayList<CrescentCollectionField>();
+	private List<CollectionField> searchFields = new ArrayList<CollectionField>();
+	private List<CollectionField> indexedFields = new ArrayList<CollectionField>();
 
-	private CrescentCollection collection = null;
-	private Map<String, CrescentCollectionField> collectionFieldsMap = null;
+	private Collection collection = null;
+	private Map<String, CollectionField> collectionFieldsMap = null;
 
 	public CrescentSearchRequestWrapper(SearchRequest searchRequest, CrescentCollectionHandler collectionHandler) {
 		this.searchRequest = searchRequest;	
@@ -127,7 +127,7 @@ public class CrescentSearchRequestWrapper {
 				}
 			} else {
 
-				CrescentCollectionField f = collectionFieldsMap.get(part);
+				CollectionField f = collectionFieldsMap.get(part);
 					
 				lst[i] = new SortField(f.getName(),f.getSortFieldType(),descending);
 			}
@@ -199,7 +199,7 @@ public class CrescentSearchRequestWrapper {
 		return null;
 	}
 	
-	public List<CrescentCollectionField> getTargetSearchFields() {
+	public List<CollectionField> getTargetSearchFields() {
 		
 		if(searchFields.size() > 0) {
 			return searchFields;
@@ -208,7 +208,7 @@ public class CrescentSearchRequestWrapper {
 		if(searchRequest.getSearchField() != null && !"".equals(searchRequest.getSearchField())) { 
 			String[] requestSearchField = searchRequest.getSearchField().split(",");
 			for(String fieldName : requestSearchField) {
-				CrescentCollectionField field = collectionFieldsMap.get(fieldName);
+				CollectionField field = collectionFieldsMap.get(fieldName);
 				if(field == null) {
 					throw new IllegalStateException("There is no Field in Collection [" + searchRequest.getCollectionName() + "] [" + fieldName + "]");
 				}
@@ -217,7 +217,7 @@ public class CrescentSearchRequestWrapper {
 			}
 			
 		} else {//검색 대상 필드가 지정되어 있지 않으면..
-			for(CrescentDefaultSearchField f : collection.getDefaultSearchFields()) {
+			for(DefaultSearchField f : collection.getDefaultSearchFields()) {
 				searchFields.add(collectionFieldsMap.get(f.getName()));
 			}
 		}
@@ -225,13 +225,13 @@ public class CrescentSearchRequestWrapper {
 		return searchFields;
 	}
 	
-	public List<CrescentCollectionField> getIndexedFields() {
+	public List<CollectionField> getIndexedFields() {
 		if(indexedFields.size() > 0) {
 			return indexedFields;
 		}
 		
 		for(String fieldName : collectionFieldsMap.keySet()) {
-			CrescentCollectionField f = collectionFieldsMap.get(fieldName);
+			CollectionField f = collectionFieldsMap.get(fieldName);
 			if(f.isIndex()) {
 				indexedFields.add(f);
 			}

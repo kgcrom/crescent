@@ -1,11 +1,11 @@
 package com.tistory.devyongsik.crescent.admin.service;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentAnalyzerHolder;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentDefaultSearchField;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentSortField;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.AnalyzerHolder;
+import com.tistory.devyongsik.crescent.collection.entity.CollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.Collections;
+import com.tistory.devyongsik.crescent.collection.entity.DefaultSearchField;
+import com.tistory.devyongsik.crescent.collection.entity.SortField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -27,9 +27,9 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 	}
 
 	@Override
-	public CrescentCollection updateCollectionInfo(HttpServletRequest request) {
+	public Collection updateCollectionInfo(HttpServletRequest request) {
 		
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Collections collections = collectionHandler.getCrescentCollections();
 		
 		String selectedCollectionName = request.getParameter("collectionName");
 
@@ -44,16 +44,16 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		String indexingModeAnalyzerConstArgs = request.getParameter("indexingModeAnalyzerConstArgs");
 		String searchModeAnalyzerConstArgs = request.getParameter("searchModeAnalyzerConstArgs");
 		
-		CrescentCollection selectedCollection = crescentCollections.getCrescentCollection(selectedCollectionName);
+		Collection selectedCollection = collections.getCrescentCollection(selectedCollectionName);
 		
-		List<CrescentAnalyzerHolder> analyzerHolderList = new ArrayList<CrescentAnalyzerHolder>();
-		CrescentAnalyzerHolder indexingModeAnalyzerHolder = new CrescentAnalyzerHolder();
+		List<AnalyzerHolder> analyzerHolderList = new ArrayList<AnalyzerHolder>();
+		AnalyzerHolder indexingModeAnalyzerHolder = new AnalyzerHolder();
 		indexingModeAnalyzerHolder.setClassName(indexingModeAnalyzer);
 		indexingModeAnalyzerHolder.setConstructorArgs(indexingModeAnalyzerConstArgs);
 		indexingModeAnalyzerHolder.setType(indexingModeAnalyzerType);
 		analyzerHolderList.add(indexingModeAnalyzerHolder);
 		
-		CrescentAnalyzerHolder searchModeAnalyzerHolder = new CrescentAnalyzerHolder();
+		AnalyzerHolder searchModeAnalyzerHolder = new AnalyzerHolder();
 		searchModeAnalyzerHolder.setClassName(searchModeAnalyzer);
 		searchModeAnalyzerHolder.setConstructorArgs(searchModeAnalyzerConstArgs);
 		searchModeAnalyzerHolder.setType(searchModeAnalyzerType);
@@ -76,7 +76,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			log.debug("searchModeAnalyzerConstArgs : {} ", request.getParameter("searchModeAnalyzerConstArgs"));
 		}
 
-		List<CrescentCollectionField> crescentCollectionFieldList = selectedCollection.getFields();
+		List<CollectionField> collectionFields = selectedCollection.getFields();
 
 		//추가되는 필드명을 모은다.
 		@SuppressWarnings("unchecked")
@@ -92,15 +92,15 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		log.debug("add field name list : {}", addFieldNameList);
 
 		for(String fieldName :addFieldNameList) {
-			CrescentCollectionField crescentField = new CrescentCollectionField();
+			CollectionField crescentField = new CollectionField();
 			crescentField.setName(fieldName);
 			
-			if(!crescentCollectionFieldList.contains(crescentField)) {
-				crescentCollectionFieldList.add(crescentField);
+			if(!collectionFields.contains(crescentField)) {
+				collectionFields.add(crescentField);
 			}
 		}
 				
-		for(CrescentCollectionField crescentField : crescentCollectionFieldList) {
+		for(CollectionField crescentField : collectionFields) {
 
 			crescentField.setAnalyze("on".equals(request.getParameter(crescentField.getName()+"-analyze")) ? true : false);
 			crescentField.setIndex("on".equals(request.getParameter(crescentField.getName()+"-index")) ? true : false);
@@ -117,7 +117,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 
 			//sort field 처리
 			if("on".equals(request.getParameter(crescentField.getName()+"-sortField"))) {
-				CrescentSortField sortField = new CrescentSortField();
+				SortField sortField = new SortField();
 				sortField.setSource(crescentField.getName());
 				sortField.setDest(crescentField.getName()+"_sort");
 
@@ -128,7 +128,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 
 			//default search field 처리
 			if("on".equals(request.getParameter(crescentField.getName()+"-defaultSearchField"))) {
-				CrescentDefaultSearchField defaultSearchField = new CrescentDefaultSearchField();
+				DefaultSearchField defaultSearchField = new DefaultSearchField();
 				defaultSearchField.setName(crescentField.getName());
 
 				if(!selectedCollection.getDefaultSearchFields().contains(defaultSearchField)) {
@@ -155,22 +155,22 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		}
 			
 		collectionHandler.writeToXML();
-		collectionHandler.reloadCollectionsXML();
+		collectionHandler.loadCollection();
 		
-		crescentCollections = collectionHandler.getCrescentCollections();
-		selectedCollection = crescentCollections.getCrescentCollection(selectedCollectionName);
+		collections = collectionHandler.getCrescentCollections();
+		selectedCollection = collections.getCrescentCollection(selectedCollectionName);
 		
 		return selectedCollection;
 	}
 	
 	
 	@Override
-	public CrescentCollection addCollectionInfo(HttpServletRequest request) {
+	public Collection addCollectionInfo(HttpServletRequest request) {
 		String selectedCollectionName = request.getParameter("collectionName");
 
 		log.debug("selectedCollectionName : " + selectedCollectionName);
 		
-		CrescentCollection newCollection = new CrescentCollection();
+		Collection newCollection = new Collection();
 		newCollection.setName(selectedCollectionName);
 		newCollection.setIndexingDirectory(request.getParameter("indexingDirectory"));
 		
@@ -185,14 +185,14 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		String indexingModeAnalyzerConstArgs = request.getParameter("indexingModeAnalyzerConstArgs");
 		String searchModeAnalyzerConstArgs = request.getParameter("searchModeAnalyzerConstArgs");
 		
-		List<CrescentAnalyzerHolder> analyzerHolderList = new ArrayList<CrescentAnalyzerHolder>();
-		CrescentAnalyzerHolder indexingModeAnalyzerHolder = new CrescentAnalyzerHolder();
+		List<AnalyzerHolder> analyzerHolderList = new ArrayList<AnalyzerHolder>();
+		AnalyzerHolder indexingModeAnalyzerHolder = new AnalyzerHolder();
 		indexingModeAnalyzerHolder.setClassName(indexingModeAnalyzer);
 		indexingModeAnalyzerHolder.setConstructorArgs(indexingModeAnalyzerConstArgs);
 		indexingModeAnalyzerHolder.setType(indexingModeAnalyzerType);
 		analyzerHolderList.add(indexingModeAnalyzerHolder);
 		
-		CrescentAnalyzerHolder searchModeAnalyzerHolder = new CrescentAnalyzerHolder();
+		AnalyzerHolder searchModeAnalyzerHolder = new AnalyzerHolder();
 		searchModeAnalyzerHolder.setClassName(searchModeAnalyzer);
 		searchModeAnalyzerHolder.setConstructorArgs(searchModeAnalyzerConstArgs);
 		searchModeAnalyzerHolder.setType(searchModelAnalyzerType);
@@ -224,12 +224,12 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			}
 		}
 		
-		List<CrescentCollectionField> newCollectionFieldList = new ArrayList<CrescentCollectionField>();
-		List<CrescentSortField> sortFieldList = new ArrayList<CrescentSortField>();
-		List<CrescentDefaultSearchField> defaultSearchFieldList = new ArrayList<CrescentDefaultSearchField>();
+		List<CollectionField> newCollectionFieldList = new ArrayList<CollectionField>();
+		List<SortField> sortFieldList = new ArrayList<SortField>();
+		List<DefaultSearchField> defaultSearchFieldList = new ArrayList<DefaultSearchField>();
 		
 		for(String fieldName : fieldNameList) {
-			CrescentCollectionField newCollectionField = new CrescentCollectionField();
+			CollectionField newCollectionField = new CollectionField();
 			
 			newCollectionField.setName(fieldName);
 			newCollectionField.setAnalyze("on".equals(request.getParameter(fieldName+"-analyze")) ? true : false);
@@ -247,7 +247,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			
 			//sort field 처리			
 			if("on".equals(request.getParameter(fieldName+"-sortField"))) {
-				CrescentSortField sortField = new CrescentSortField();
+				SortField sortField = new SortField();
 				sortField.setSource(fieldName);
 				sortField.setDest(fieldName+"_sort");
 
@@ -256,7 +256,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			
 			//default search field 처리
 			if("on".equals(request.getParameter(fieldName+"-defaultSearchField"))) {
-				CrescentDefaultSearchField defaultSearchField = new CrescentDefaultSearchField();
+				DefaultSearchField defaultSearchField = new DefaultSearchField();
 				defaultSearchField.setName(fieldName);
 				defaultSearchFieldList.add(defaultSearchField);
 			}
@@ -287,7 +287,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		
 		collectionHandler.getCrescentCollections().getCrescentCollections().add(newCollection);
 		collectionHandler.writeToXML();
-		collectionHandler.reloadCollectionsXML();
+		collectionHandler.loadCollection();
 		
 		return newCollection;
 	}
@@ -295,8 +295,8 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 	@Override
 	public void deleteCollectionInfo(String collectionName) {
 
-		CrescentCollections collections = collectionHandler.getCrescentCollections();
-		List<CrescentCollection> collectionList = collections.getCrescentCollections();
+		Collections collections = collectionHandler.getCrescentCollections();
+		List<Collection> collectionList = collections.getCrescentCollections();
 		
 		int targetIndex = -1;
 		
@@ -315,6 +315,6 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		}
 		
 		collectionHandler.writeToXML();
-		collectionHandler.reloadCollectionsXML();
+		collectionHandler.loadCollection();
 	}
 }

@@ -10,7 +10,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 @XStreamAlias("collection")
-public class CrescentCollection {
+public class Collection {
 	
 	@XStreamAsAttribute
 	private String name;
@@ -20,13 +20,13 @@ public class CrescentCollection {
 	private String searcherReloadScheduleMin;
 	
 	@XStreamOmitField
-	private Map<String, CrescentCollectionField> crescentFieldByName;
+	private Map<String, CollectionField> crescentFieldByName;
 	
-	private List<CrescentCollectionField> fields;
-	private List<CrescentDefaultSearchField> defaultSearchFields;
-	private List<CrescentSortField> sortFields;
+	private List<CollectionField> fields;
+	private List<DefaultSearchField> defaultSearchFields;
+	private List<SortField> sortFields;
 	
-	private List<CrescentAnalyzerHolder> analyzers;
+	private List<AnalyzerHolder> analyzers;
 	
 	@XStreamOmitField
 	private Analyzer indexingModeAnalyzer;
@@ -51,10 +51,10 @@ public class CrescentCollection {
 	}
 	
 	
-	public List<CrescentAnalyzerHolder> getAnalyzers() {
+	public List<AnalyzerHolder> getAnalyzers() {
 		return analyzers;
 	}
-	public void setAnalyzers(List<CrescentAnalyzerHolder> analyzers) {
+	public void setAnalyzers(List<AnalyzerHolder> analyzers) {
 		this.analyzers = analyzers;
 	}
 	public String getName() {
@@ -63,23 +63,23 @@ public class CrescentCollection {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<CrescentCollectionField> getFields() {
+	public List<CollectionField> getFields() {
 		return fields;
 	}
-	public void setFields(List<CrescentCollectionField> fields) {
+	public void setFields(List<CollectionField> fields) {
 		this.fields = fields;
 	}
-	public List<CrescentDefaultSearchField> getDefaultSearchFields() {
+	public List<DefaultSearchField> getDefaultSearchFields() {
 		return defaultSearchFields;
 	}
 	public void setDefaultSearchFields(
-			List<CrescentDefaultSearchField> defaultSearchFields) {
+			List<DefaultSearchField> defaultSearchFields) {
 		this.defaultSearchFields = defaultSearchFields;
 	}
-	public List<CrescentSortField> getSortFields() {
+	public List<SortField> getSortFields() {
 		return sortFields;
 	}
-	public void setSortFields(List<CrescentSortField> sortFields) {
+	public void setSortFields(List<SortField> sortFields) {
 		this.sortFields = sortFields;
 	}
 	
@@ -90,11 +90,11 @@ public class CrescentCollection {
 		this.indexingDirectory = indexingDirectory;
 	}
 	
-	public Map<String, CrescentCollectionField> getCrescentFieldByName() {
+	public Map<String, CollectionField> getCrescentFieldByName() {
 		return crescentFieldByName;
 	}
 	public void setCrescentFieldByName(
-			Map<String, CrescentCollectionField> crescentFieldByName) {
+			Map<String, CollectionField> crescentFieldByName) {
 		this.crescentFieldByName = crescentFieldByName;
 	}
 	public String getSearcherReloadScheduleMin() {

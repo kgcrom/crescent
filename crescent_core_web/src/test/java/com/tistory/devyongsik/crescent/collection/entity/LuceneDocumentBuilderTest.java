@@ -31,14 +31,14 @@ public class LuceneDocumentBuilderTest extends CrescentTestCaseUtil {
 		
 		docList.add(doc);
 		
-		CrescentCollections crescentCollections = this.collectionHandler.getCrescentCollections();
+		Collections crescentCollections = this.collectionHandler.getCrescentCollections();
 
-		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+		Map<String, Collection> collections = crescentCollections.getCrescentCollectionsMap();
 
-		CrescentCollection sampleCollection = collections.get("sample");
+		Collection sampleCollection = collections.get("sample");
 		
 		
-		Map<String, CrescentCollectionField> fieldsByName = sampleCollection.getCrescentFieldByName();
+		Map<String, CollectionField> fieldsByName = sampleCollection.getCrescentFieldByName();
 		
 		List<Document> luceneDocuments = LuceneDocumentBuilder.buildDocumentList(docList, fieldsByName);
 		

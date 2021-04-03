@@ -2,8 +2,8 @@ package com.tistory.devyongsik.crescent.search.entity;
 
 import java.util.Map;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.CollectionField;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -13,7 +13,7 @@ public class SearchRequestValidator {
 	
 	public boolean isValid(SearchRequest searchRequest, CrescentCollectionHandler collectionHandler) throws Exception {
 		
-		CrescentCollection collection = collectionHandler.getCrescentCollections()
+		Collection collection = collectionHandler.getCrescentCollections()
 													.getCrescentCollection(searchRequest.getCollectionName());
 		
 		if(collection == null) {
@@ -65,9 +65,9 @@ public class SearchRequestValidator {
 				}
 				
 				part = part.substring( 0, idx ).trim(); //part = field
-				Map<String, CrescentCollectionField> collectionFields = collection.getCrescentFieldByName();
+				Map<String, CollectionField> collectionFields = collection.getCrescentFieldByName();
 				
-				CrescentCollectionField f = collectionFields.get(part);
+				CollectionField f = collectionFields.get(part);
 				
 				if(f == null) {
 					log.error("don't exist field: {}", String.join(", ", parts));

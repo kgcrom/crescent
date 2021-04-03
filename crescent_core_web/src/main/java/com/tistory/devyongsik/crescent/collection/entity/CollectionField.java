@@ -6,7 +6,7 @@ import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.SortField;
 
 @XStreamAlias("field")
-public class CrescentCollectionField implements Cloneable {
+public class CollectionField implements Cloneable {
 	@XStreamAsAttribute
 	private String name;
 	
@@ -163,7 +163,7 @@ public class CrescentCollectionField implements Cloneable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CrescentCollectionField other = (CrescentCollectionField) obj;
+		CollectionField other = (CollectionField) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

@@ -1,6 +1,6 @@
 package com.tistory.devyongsik.crescent.admin.controller;
 
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.crescent.data.handler.Handler;
 import com.tistory.devyongsik.crescent.data.handler.JsonDataHandler;
@@ -56,7 +56,7 @@ public class UpdateController {
 			reader.close();
 			IndexingRequestForm indexingRequestForm = handler.handledData(text.toString());
 			
-			CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
+			Collection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
 			String message = crescentIndexerExecutor.indexing(collection, indexingRequestForm);
 			
 			Writer writer = null;

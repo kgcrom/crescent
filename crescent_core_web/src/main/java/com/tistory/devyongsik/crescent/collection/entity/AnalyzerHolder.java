@@ -4,7 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 @XStreamAlias("analyzer")
-public class CrescentAnalyzerHolder {
+public class AnalyzerHolder {
 
 	@XStreamAsAttribute
 	private String type;

@@ -3,8 +3,8 @@ package com.tistory.devyongsik.crescent.admin.controller;
 import com.tistory.devyongsik.crescent.admin.entity.MorphResult;
 import com.tistory.devyongsik.crescent.admin.entity.MorphToken;
 import com.tistory.devyongsik.crescent.admin.service.MorphService;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
+import com.tistory.devyongsik.crescent.collection.entity.Collection;
+import com.tistory.devyongsik.crescent.collection.entity.Collections;
 import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -36,19 +36,19 @@ public class MorphAdminMainController {
 	@RequestMapping("/morphMain")
 	public ModelAndView morphMain(@RequestParam(value="col_name", required=false) String selectedCollectionName) {
 		
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Collections collections = collectionHandler.getCrescentCollections();
 		
 		if(selectedCollectionName == null) {
-			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
+			selectedCollectionName = collections.getCrescentCollections().get(0).getName();
 		}
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
 		
-		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		List<Collection> collectionList = collections.getCrescentCollections();
 		
-		modelAndView.addObject("crescentCollectionList", crescentCollectionList);
-		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
+		modelAndView.addObject("collectionList", collectionList);
+		modelAndView.addObject("selectedCollection", collections.getCrescentCollection(selectedCollectionName));
 		
 		modelAndView.setViewName("/admin/morphMain");
 
@@ -58,19 +58,19 @@ public class MorphAdminMainController {
 	@RequestMapping("/doMorphTest")
 	public ModelAndView morphTest(@RequestParam(value="keyword") String keyword
 								, @RequestParam(value="col_name", required=false) String selectedCollectionName) throws Exception {
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Collections collections = collectionHandler.getCrescentCollections();
 		
 		if(selectedCollectionName == null) {
-			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
+			selectedCollectionName = collections.getCrescentCollections().get(0).getName();
 		}
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
 		
-		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		List<Collection> collectionList = collections.getCrescentCollections();
 		
-		modelAndView.addObject("crescentCollectionList", crescentCollectionList);
-		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
+		modelAndView.addObject("collectionList", collectionList);
+		modelAndView.addObject("selectedCollection", collections.getCrescentCollection(selectedCollectionName));
 		
 		
 		log.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
@@ -94,10 +94,10 @@ public class MorphAdminMainController {
 		
 		log.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
 		
-		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Collections collections = collectionHandler.getCrescentCollections();
 		
 		if(selectedCollectionName == null) {
-			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
+			selectedCollectionName = collections.getCrescentCollections().get(0).getName();
 		}
 		
 		List<MorphToken> resultTokenListIndexingMode = morphServiceImpl.getTokens(keyword, true, selectedCollectionName);

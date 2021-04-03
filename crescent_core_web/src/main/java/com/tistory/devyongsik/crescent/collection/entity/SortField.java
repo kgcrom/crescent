@@ -4,7 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 @XStreamAlias("sortField")
-public class CrescentSortField {
+public class SortField {
 
 	@XStreamAsAttribute
 	private String source;
@@ -27,7 +27,7 @@ public class CrescentSortField {
 	
 	@Override
 	public String toString() {
-		return "CrescentSortField [source=" + source + ", dest=" + dest + "]";
+		return "SortField [source=" + source + ", dest=" + dest + "]";
 	}
 	@Override
 	public int hashCode() {
@@ -45,7 +45,7 @@ public class CrescentSortField {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CrescentSortField other = (CrescentSortField) obj;
+		SortField other = (SortField) obj;
 		if (dest == null) {
 			if (other.dest != null)
 				return false;
