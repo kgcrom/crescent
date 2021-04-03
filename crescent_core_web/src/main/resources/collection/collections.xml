@@ -8,9 +8,8 @@
       <analyzer type="search" className="org.apache.lucene.analysis.en.EnglishAnalyzer"
         constructor-args="4.4"/>
     </analyzers>
-    <indexingDirectory>d:/Programming/Java/crescent_index/sample</indexingDirectory>
+    <indexingDirectory>./data/sample</indexingDirectory>
     <searcherReloadScheduleMin>50</searcherReloadScheduleMin>
-    <!-- indexingDirectory>/data1/lucene_index/sample</indexingDirectory -->
     <fields>
       <field name="board_id" store="true" index="true" type="LONG" analyze="false"
         termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
@@ -37,9 +36,8 @@
       <analyzer type="search" className="org.apache.lucene.analysis.en.EnglishAnalyzer"
         constructor-args="4.4"/>
     </analyzers>
-    <indexingDirectory>d:/Programming/Java/crescent_index/sample_wiki</indexingDirectory>
+    <indexingDirectory>./data/sample_wiki</indexingDirectory>
     <searcherReloadScheduleMin>50</searcherReloadScheduleMin>
-    <!-- indexingDirectory>/data1/lucene_index/sample_wiki</indexingDirectory -->
     <fields>
       <field name="wiki_idx" store="true" index="true" type="long" analyze="false"
         termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>

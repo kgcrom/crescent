@@ -1,3 +1,5 @@
 spring:
   thymeleaf:
     cache: false
+crescent:
+  collection-path: collection/collections.xml

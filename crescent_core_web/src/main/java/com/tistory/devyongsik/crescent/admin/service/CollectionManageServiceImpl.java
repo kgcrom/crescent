@@ -155,7 +155,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		}
 			
 		collectionHandler.writeToXML();
-		collectionHandler.reloadCollectionsXML();
+		collectionHandler.loadCollection();
 		
 		crescentCollections = collectionHandler.getCrescentCollections();
 		selectedCollection = crescentCollections.getCrescentCollection(selectedCollectionName);
@@ -287,7 +287,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		
 		collectionHandler.getCrescentCollections().getCrescentCollections().add(newCollection);
 		collectionHandler.writeToXML();
-		collectionHandler.reloadCollectionsXML();
+		collectionHandler.loadCollection();
 		
 		return newCollection;
 	}
@@ -315,6 +315,6 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		}
 		
 		collectionHandler.writeToXML();
-		collectionHandler.reloadCollectionsXML();
+		collectionHandler.loadCollection();
 	}
 }
