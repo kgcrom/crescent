@@ -111,7 +111,7 @@
           <label class="control-label">Collection Name</label>
           <div class="controls">
             <select id="collectionName" name="collectionName" onChange="javascript:changeCollection();">
-            <c:forEach var="collection" items="${crescentCollectionList}">
+            <c:forEach var="collection" items="${collectionList}">
             	<option value="${collection.name}">${collection.name}</option>
             </c:forEach>
             </select>

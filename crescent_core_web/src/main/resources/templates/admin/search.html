@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div id="headerContainer"></div>
+<script>
+  includeHTML(document.querySelector('#headerContainer'), 'header');
+  function includeHTML(divContainer, urlHTML) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4) {
+        if (this.status == 200) { divContainer.innerHTML = this.responseText; }
+        if (this.status == 404) { divContainer.innerHTML = "Page not found."; }
+      }
+    }
+    xhttp.open("GET", urlHTML, true);
+    xhttp.send();
+  }
+</script>
+<body>
+<nav th:insert="admin/fragments/header"></nav>
+<div class="container">
+  <!-- Page Content goes here -->
+  <h1>Search</h1>
+  <div class="input-field col s12">
+    <select id="collection_list">
+      <option value="" disabled selected>Choose your option</option>
+    </select>
+    <label>Select Collection</label>
+  </div>
+  <div class="row">
+    <form class="col s12">
+      <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="title:sample title 3" id="query" type="text" class="validate">
+          <label for="query">Query</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="board_id:3" id="filter_query" type="text" class="validate">
+          <label for="filter_query">Filter Query</label>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="row">
+    <div class="col s12">
+      <button id="submit_query" class="btn waves-effect waves-light" type="submit" name="action">Submit
+        <i class="material-icons right">send</i>
+      </button>
+    </div>
+  </div>
+<!--  TODO JSON beauty viewer-->
+  <div class="row">
+    <form class="col s12">
+      <div class="row">
+        <div class="input-field col s12">
+          <textarea id="response" class="materialize-textarea"></textarea>
+          <label for="response"></label>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript" src="/js/materialize.min.js"></script>
+<script type="text/javascript" src="/js/utils.js"></script>
+<script>
+  let collectionInfo;
+  document.addEventListener("DOMContentLoaded", () => {
+    get("/api/collections").then((response) => {
+      collectionInfo = JSON.parse(response);
+      let select = document.getElementById("collection_list");
+
+      for (const i in collectionInfo) {
+        let option = document.createElement("option");
+        option.value = collectionInfo[i].name;
+        option.text = collectionInfo[i].name;
+        select.add(option, null);
+      }
+
+      // indexing directory, reload schedule, default search field, index/search analyzer[class name]
+      // name, occur(should, must), type, termoffset, termposition, termvector, boolean => indexed, stored,
+
+      M.FormSelect.init(select, null);
+    })
+  });
+
+  const button = document.getElementById("submit_query");
+  button.addEventListener("click", () => {
+    const collectionName = document.getElementById("collection_list").value;
+    if (collectionName === "") {
+      return;
+    }
+
+    const query = document.getElementById("query");
+    const filterQuery = document.getElementById("filter_query");
+
+    get(`/api/v1/search?collectionName=${collectionName}&q=${query.value}&fq=${filterQuery.value}`)
+    .then((response) => {
+      document.getElementById("response").value = response;
+    });
+  })
+</script>
+</body>
+</html>

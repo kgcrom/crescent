@@ -1,77 +1,78 @@
-/*
-=== 프로젝트 프라퍼티 ===
-  - -Pprofile=값 : 프로젝트 프로필. 없으면 기본 dev
-*/
-
 ext {
-    DEFAULT_PROFILE = 'local'
-    webProjects = ['crescent_core_web']
-
-    javaVersion = '1.7'
-    javaEncoding = 'UTF-8'
-    tmpDir = System.getProperty('java.io.tmpdir')
-}
-
-allprojects {
-    if (!project.hasProperty('profile') || !profile) {
-        ext.profile = DEFAULT_PROFILE
-    }
+    javaVersion = "17"
+    javaEncoding = "UTF-8"
 }
 
 subprojects {
-    apply plugin: 'java'
-
-    buildDir = 'target'
-
-    task hello << {
-        println "${project.name} - ${profile}"
-    }
+    apply plugin: "java"
+    apply plugin: "jacoco"
+    buildDir = "target"
 
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
-    [compileJava, compileTestJava]*.options*.encoding = javaEncoding
 
     repositories {
         maven {
-            url "https://github.com/need4spd/need4spd-maven-repo/raw/master/snapshots"
-        }
-        maven {
             url "http://repository.springsource.com/maven/bundles/release"
+            allowInsecureProtocol = true
         }
         maven {
             url "http://repository.springsource.com/maven/bundles/external"
+            allowInsecureProtocol = true
         }
         mavenCentral()
     }
 
-    sourceSets {
-        // SQL Mapper의 *.xml때문에 java 디렉토리를 resource에 추가해야한다.
-        main {
-            resources {
-                srcDir "${project.projectDir}/src/main/resources-${profile}"
-                //srcDir "${project.projectDir}/src/main/java"
-            }
-        }
-    }
-
-    task compile(dependsOn: ['compileJava', 'compileTestJava']) {
-        description = 'Compile all main/test sources'
-        group = 'build'
+    task compile(dependsOn: ["compileJava", "compileTestJava"]) {
+        description = "Compile all main/test sources"
+        group = "build"
         doLast {
-            println 'Compiling java/test sources....'
+            println "Compiling java/test sources...."
         }
     }
 
     test {
-        jvmArgs = ['-ea', '-Xmx256m']
+        jvmArgs = ["-ea", "-Xmx256m"]
         logging.captureStandardOutput(LogLevel.INFO)
         //testReport = false
     }
-}
 
-//configure Web Projects
-configure(subprojects.findAll { webProjects.contains(it.name) }) {
-    apply plugin: 'war'
+    jacoco {
+        toolVersion = "0.8.8"
+    }
 
-    webAppDirName = 'webapp'
+    jacocoTestReport {
+        reports {
+            html.enabled true
+            xml.enabled true
+            csv.enabled false
+        }
+    }
+
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                element = "CLASS"
+
+//        TODO ratio가 0.5 넘으면 limit 설정
+//        limit {
+//          counter = "BRANCH"
+//          value = "COVEREDRATIO"
+//          minimum = 0.60
+//        }
+            }
+        }
+        dependsOn("test", "jacocoTestReport")
+    }
+
+    // TODO report-aggregate 적용하기
+    task testAndCopyReport(type: Copy) {
+        group "verification"
+        description "copy Jacoco Report file to project_root (For Github Action)"
+
+        from "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+        into "$rootDir/"
+
+        dependsOn("test", "jacocoTestReport", "jacocoTestCoverageVerification")
+    }
 }

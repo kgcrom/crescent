@@ -1,0 +1,22 @@
+GET localhost:8080/api/v1/search?collectionName=sample&q=title:sample title 3&fq=
+Accept: application/json
+
+###
+GET localhost:8080/api/v1/search?collectionName=sample&fq=board_id:3
+Accept: application/json
+
+###
+GET localhost:8080/api/v1/search?collectionName=sample&q=*:*
+Accept: application/json
+
+###
+POST localhost:8080/api/v1/internal/index_mock
+
+###
+# Analyzer
+GET localhost:8080/api/v1/analyzers
+Accept: application/json
+
+###
+GET localhost:8080/api/v1/analyzers/tokens?class_name=org.apache.lucene.analysis.en.EnglishAnalyzer&text=the fox jumped over the lazy dog
+Accept: application/json

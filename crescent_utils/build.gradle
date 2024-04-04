@@ -1,62 +1,45 @@
-apply plugin: 'eclipse'
+plugins {
+  id "net.ltgt.errorprone" version "2.0.1"
+}
+group = "org.crescent"
+version = "0.0.1"
 
-group = 'com.tistory.devyongsik'
-version = '0.5-SNAPSHOT'
+def versions = [
+    slf4j  : "1.7.25",
+]
+
+configurations {
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+}
 
 dependencies {
-	compile(
-		[group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'],
-		[group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.3'],
-		[group: 'commons-pool', name: 'commons-pool', version: '1.6'],
-		[group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.0.6.v20130930'],
-		[group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'],
-		[group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'],	
-		[group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
-		[group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3'],
-		[group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3']
-	)
+  errorprone("com.google.errorprone:error_prone_core:2.14.0")
+  errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
 
-	testRuntime(
-       [group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'],
-       [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.3'],
-	   [group: 'commons-pool', name: 'commons-pool', version: '1.6'],
-	   [group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.0.6.v20130930'],
-	   [group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'],
-	   [group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'],	
-	   [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
-	   [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3'],
-	   [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3']
-    )
+  implementation("commons-dbcp:commons-dbcp:1.4")
+  implementation("com.thoughtworks.xstream:xstream:1.4.19")
+  implementation("commons-pool:commons-pool:1.6")
+  implementation("org.eclipse.jetty:jetty-server:9.0.6.v20130930")
+  implementation("com.fasterxml.jackson.core:jackson-core:2.2.3")
+  implementation("com.fasterxml.jackson.core:jackson-databind:2.2.3")
+  implementation("com.fasterxml.jackson.core:jackson-annotations:2.2.3")
+  implementation("javax.xml.bind:jaxb-api:2.3.1")
+  implementation("org.slf4j:slf4j-api:${versions.slf4j}")
+
+  testImplementation("commons-dbcp:commons-dbcp:1.4")
+  testImplementation("com.thoughtworks.xstream:xstream:1.4.19")
+  testImplementation("commons-pool:commons-pool:1.6")
+  testImplementation("org.eclipse.jetty:jetty-server:9.0.6.v20130930")
+  testImplementation("com.fasterxml.jackson.core:jackson-core:2.2.3")
+  testImplementation("com.fasterxml.jackson.core:jackson-databind:2.2.3")
+  testImplementation("com.fasterxml.jackson.core:jackson-annotations:2.2.3")
+  testImplementation("javax.xml.bind:jaxb-api:2.3.1")
 
 }
 
-tasks.eclipse.dependsOn cleanEclipse
-
-eclipse {
-	classpath {
-		downloadSources=true
-	}
-
-	jdt {
-		file {
-			withProperties { 
-				properties -> properties.setProperty("encoding//src/main/java", "utf-8")
-					      properties.setProperty("encoding//src/main/resources", "utf-8")
-					      properties.setProperty("encoding//src/test/java", "utf-8")
-					      properties.setProperty("encoding//src/test/resources", "utf-8")
-			}		
-		}
-	}
-
-	project {
-    	natures 'com.google.gwt.eclipse.core.gwtNature'
-    	natures 'org.springframework.ide.eclipse.core.springnature'
-    	buildCommand 'org.springframework.ide.eclipse.core.springbuilder'
-  	}
+test {
+  useJUnitPlatform()
 }
 
-eclipseJdt << {
-        File f = file('.settings/org.eclipse.core.resources.prefs')
-        f.write('eclipse.preferences.version=1\n')
-        f.append('encoding/<project>=utf-8')
-    }

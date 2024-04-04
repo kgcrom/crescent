@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div id="headerContainer"></div>
+<script>
+  includeHTML(document.querySelector("#headerContainer"), "header");
+  function includeHTML(divContainer, urlHTML) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4) {
+        if (this.status == 200) { divContainer.innerHTML = this.responseText; }
+        if (this.status == 404) { divContainer.innerHTML = "Page not found."; }
+      }
+    }
+    xhttp.open("GET", urlHTML, true);
+    xhttp.send();
+  }
+</script>
+<body>
+<nav th:insert="admin/fragments/header"></nav>
+<div class="container">
+  <!-- Page Content goes here -->
+  <h1>Collections</h1>
+
+  <div class="input-field col s12">
+    <select id="collection_list">
+      <option value="" disabled selected>Choose your option</option>
+    </select>
+    <label>Select Collection</label>
+  </div>
+  <div class="row" id="collection_info1">
+    <div class="col s6" id="directory"></div>
+    <div class="col s6" id="interval"></div>
+  </div>
+  <div class="row">
+    <div class="col s12" id="analyzer">Indexing Analyzer</div>
+  </div>
+  <div class="row">
+    <div class="col s6" id="search_field"></div>
+  </div>
+  <div class="row">
+    <table>
+      <thead>
+      <thead>
+      <tr>
+        <td>name</td>
+        <td>type</td>
+        <td>required</td>
+        <td>indexed</td>
+        <td>stored</td>
+        <td>doc values</td>
+      </tr>
+      </thead>
+      <tbody id="field_info">
+      </tbody>
+    </table>
+  </div>
+<!--  <div class="row">-->
+<!--    <div class="col s3 offset-s9">-->
+<!--      <button class="btn waves-effect waves-light" type="submit" name="action">Save-->
+<!--        <i class="material-icons right">send</i>-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  </div>-->
+</div>
+<script type="text/javascript" src="/js/materialize.min.js"></script>
+<script type="text/javascript" src="/js/utils.js"></script>
+<script>
+  let collectionInfo;
+  document.addEventListener("DOMContentLoaded", () => {
+    get("/api/collections").then((response) => {
+      collectionInfo = JSON.parse(response);
+      let select = document.getElementById("collection_list");
+
+      for (const i in collectionInfo) {
+        let option = document.createElement("option");
+        option.value = collectionInfo[i].name;
+        option.text = collectionInfo[i].name;
+        select.add(option, null);
+      }
+
+      // indexing directory, reload schedule, default search field, index/search analyzer[class name]
+      // name, occur(should, must), type, termoffset, termposition, termvector, boolean => indexed, stored,
+
+      M.FormSelect.init(select, null);
+    })
+  });
+
+  const collectionSelected = document.getElementById("collection_list");
+  collectionSelected.addEventListener("change", () => {
+    const selected = collectionSelected.value;
+    let selectedCollection = collectionInfo.filter((v) => v.name == selected)[0];
+    let directory = document.getElementById("directory");
+    removeAllChildNodes(directory);
+    directory.appendChild(createInput(selectedCollection.indexing_directory, true));
+    directory.appendChild(createLabel("Indexing Directory"));
+
+    let interval = document.getElementById("interval");
+    removeAllChildNodes(interval);
+    interval.appendChild(createInput(selectedCollection.flush_interval, true));
+    interval.appendChild(createLabel("Flush Interval(sec)"));
+
+    let analyzer = document.getElementById("analyzer");
+    removeAllChildNodes(analyzer);
+    analyzer.appendChild(createInput(selectedCollection.analyzers.map(v => v.type + " => " + v.class_name).join(", "), true));
+    analyzer.appendChild(createLabel("Analyzer (indexing, query)"));
+
+    let searchField = document.getElementById("search_field");
+    removeAllChildNodes(searchField);
+    searchField.appendChild(createInput(selectedCollection.default_search_fields.map(v => v.name).join(", "), true));
+    searchField.appendChild(createLabel("Default Search Field"));
+
+
+    let fieldInfo = document.getElementById("field_info");
+    const rowCount = fieldInfo.childElementCount;
+    for (let i = 0; i < rowCount; i++) {
+      fieldInfo.deleteRow(0);
+    }
+    selectedCollection.fields.forEach(f => {
+      let tr = document.createElement("tr");
+      // name
+      tr.appendChild(createTextTd(f.name));
+      // type
+      tr.appendChild(createTextTd(f.type));
+      // required
+      tr.appendChild(createCheckboxTd(true, "required"));
+      // indexed
+      tr.appendChild(createCheckboxTd(f.indexed, "indexed"));
+      // stored
+      tr.appendChild(createCheckboxTd(f.stored, "stored"));
+      // doc values
+      tr.appendChild(createCheckboxTd(f.doc_values, "docValues"));
+
+      fieldInfo.appendChild(tr);
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- for production -->
+<collections>
+  <collection name="sample">
+    <analyzers>
+      <analyzer type="indexing" className="org.apache.lucene.analysis.en.EnglishAnalyzer"/>
+      <analyzer type="search" className="org.apache.lucene.analysis.en.EnglishAnalyzer"/>
+    </analyzers>
+    <indexingDirectory>crescent_index/sample</indexingDirectory>
+    <flushInterval>1</flushInterval>
+    <!-- indexingDirectory>/data1/lucene_index/sample</indexingDirectory -->
+    <fields>
+      <field name="board_id" stored="true" indexed="true" type="LONG" termposition="false" termoffset="false" must="false" termvector="false"/>
+      <field name="title" stored="true" indexed="true" type="STRING" termposition="false" termoffset="false" must="false" termvector="false"/>
+      <field name="dscr" stored="true" indexed="true" type="STRING" termposition="false" termoffset="false" must="true" termvector="true"/>
+      <field name="creuser" stored="true" indexed="true" type="STRING" termposition="false" termoffset="false" must="false" termvector="false"/>
+    </fields>
+    <defaultSearchFields>
+      <defaultSearchField name="title"/>
+      <defaultSearchField name="dscr"/>
+    </defaultSearchFields>
+    <sortFields>
+      <sortField source="title" dest="title_sort"/>
+      <sortField source="board_id" dest="board_id_sort"/>
+    </sortFields>
+  </collection>
+  <collection name="sample_wiki">
+    <analyzers>
+      <analyzer type="indexing" className="org.apache.lucene.analysis.en.EnglishAnalyzer"/>
+      <analyzer type="search" className="org.apache.lucene.analysis.en.EnglishAnalyzer"/>
+    </analyzers>
+    <indexingDirectory>crescent_index/sample_wiki</indexingDirectory>
+    <flushInterval>1</flushInterval>
+    <!-- indexingDirectory>/data1/lucene_index/sample_wiki</indexingDirectory -->
+    <fields>
+      <field name="wiki_idx" stored="true" indexed="true" type="long" termposition="false" termoffset="false" must="false" termvector="false"/>
+      <field name="space_idx" stored="true" indexed="true" type="long" termposition="false" termoffset="false" must="false" termvector="false"/>
+      <field name="wiki_text" stored="true" indexed="true" type="string" termposition="false" termoffset="false" must="true" termvector="true"/>
+      <field name="wiki_title" stored="true" indexed="true" type="string" termposition="false" termoffset="false" must="true" termvector="false"/>
+      <field name="ins_user" stored="true" indexed="true" type="string" termposition="false" termoffset="false" must="false" termvector="false"/>
+      <field name="ins_date" stored="true" indexed="true" type="long" termposition="false" termoffset="false" must="false" termvector="false"/>
+    </fields>
+    <defaultSearchFields>
+      <defaultSearchField name="wiki_title"/>
+      <defaultSearchField name="wiki_text"/>
+    </defaultSearchFields>
+    <sortFields>
+      <sortField source="ins_date" dest="ins_date_sort"/>
+      <sortField source="wiki_idx" dest="wiki_idx_sort"/>
+    </sortFields>
+  </collection>
+</collections>
