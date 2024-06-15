@@ -1,8 +1,8 @@
 import net.ltgt.gradle.errorprone.errorprone
 
 val luceneVersion = "8.9.0"
-val slf4jVersion = "1.7.25"
-val logbackVersion = "1.2.3"
+val slf4jVersion = "2.0.12"
+val logbackVersion = "1.4.7"
 
 dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
