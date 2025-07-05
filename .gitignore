@@ -15,3 +15,4 @@ crescent_core_web/webapp/crescent_index
 **/*.iml
 .idea
 atlassian-ide-plugin.xml
+/build
