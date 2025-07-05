@@ -1,8 +1,10 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.2.5"
-    id("io.spring.dependency-management") version "1.1.5"
-    id("net.ltgt.errorprone") version "3.0.1"
+    kotlin("jvm") version "2.1.0" apply false
+    kotlin("plugin.spring") version "2.1.0" apply false
+    id("org.springframework.boot") version "3.2.5" apply false
+    id("io.spring.dependency-management") version "1.1.5" apply false
+    id("net.ltgt.errorprone") version "3.0.1" apply false
     jacoco
 }
 
@@ -25,10 +27,16 @@ allprojects {
 
 subprojects {
     apply(plugin = "java")
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
     apply(plugin = "jacoco")
-    apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "net.ltgt.errorprone")
+    
+    // Only apply Spring Boot plugin to crescent_core_web
+    if (name == "crescent_core_web") {
+        apply(plugin = "org.springframework.boot")
+    }
 
     tasks.withType<Test> {
         useJUnitPlatform()
@@ -40,6 +48,13 @@ subprojects {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        compilerOptions {
+            freeCompilerArgs.addAll("-Xjsr305=strict")
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        }
+    }
+
     configurations {
         val annotationProcessor by getting
         val compileOnly by getting {
@@ -48,7 +63,13 @@ subprojects {
     }
 
     dependencies {
-        errorprone("com.google.errorprone:error_prone_core:2.24.0")
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        
+        // Add errorprone only if the plugin is applied
+        if (plugins.hasPlugin("net.ltgt.errorprone")) {
+            add("errorprone", "com.google.errorprone:error_prone_core:2.24.0")
+        }
     }
 
     jacoco {
